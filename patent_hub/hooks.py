@@ -7,17 +7,22 @@ app_license = "mit"
 
 
 fixtures = [
-	{"dt": "Role", "filters": [["name", "in", ["Patent Staff"]]]},
+	{"dt": "Role", "filters": [["name", "in", ["Patent Writer"]]]},
 	{"dt": "Workspace", "filters": [["name", "in", ["Patent Hub"]]]},
-	{"dt": "Server Script", "filters": [["name", "in", []]]},
+	{
+		"dt": "Server Script",
+		"filters": [
+			["name", "in", ["Sync Patent Writer and User - Add", "Sync Patent Writer and User - Del"]]
+		],
+	},
 	{"dt": "UOM", "filters": [["name", "in", []]]},
 	{"dt": "UOM Category", "filters": [["name", "in", []]]},
 	{"dt": "UOM Conversion Factor", "filters": [["from_uom", "in", []]]},
 	{"dt": "Warehouse", "filters": [["name", "in", []]]},
 	{"dt": "Item Group", "filters": [["name", "in", []]]},
 	{"dt": "Item", "filters": [["item_code", "in", []]]},
-	# {"dt": "Role Profile", "filters": [["name", "in", []]]},
-	# {"dt": "Module Profile", "filters": [["name", "in", []]]},
+	{"dt": "Role Profile", "filters": [["name", "in", ["Patent Writer"]]]},
+	{"dt": "Module Profile", "filters": [["name", "in", ["Patent Writer"]]]},
 ]
 
 

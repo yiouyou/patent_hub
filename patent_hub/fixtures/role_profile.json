@@ -1,0 +1,17 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Role Profile",
+  "modified": "2025-07-09 12:08:15.843320",
+  "name": "Patent Writer",
+  "role_profile": "Patent Writer",
+  "roles": [
+   {
+    "parent": "Patent Writer",
+    "parentfield": "roles",
+    "parenttype": "Role Profile",
+    "role": "Patent Writer"
+   }
+  ]
+ }
+]

@@ -17,6 +17,7 @@ frappe.ui.form.on('Claims To Docx', {
     });
     frm.add_custom_button(__('+ Docx Proofreading'), () => {
       frappe.new_doc('Docx Proofreading', {}, (doc) => {
+        doc.writer_id = frm.doc.writer_id
         doc.patent_id = frm.doc.patent_id
         doc.scene_to_tech_id = frm.doc.scene_to_tech_id
         doc.tech_to_claims_id = frm.doc.tech_to_claims_id

@@ -6,6 +6,7 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "writer_id",
   "patent_id",
   "scene_to_tech_id",
   "tech_to_claims_id",
@@ -73,12 +74,21 @@
    "fieldname": "done",
    "fieldtype": "Check",
    "label": "Done"
+  },
+  {
+   "fieldname": "writer_id",
+   "fieldtype": "Link",
+   "label": "Writer ID",
+   "no_copy": 1,
+   "options": "Patent Writer",
+   "print_hide": 1,
+   "search_index": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-09 08:49:48.983477",
+ "modified": "2025-07-09 12:06:23.481312",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Docx Proofreading",
@@ -105,7 +115,7 @@
    "print": 1,
    "read": 1,
    "report": 1,
-   "role": "Patent Staff",
+   "role": "Patent Writer",
    "share": 1,
    "write": 1
   }

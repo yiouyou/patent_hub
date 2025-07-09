@@ -6,6 +6,7 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "writer_id",
   "patent_id",
   "scene_to_tech_id",
   "tech_to_claims_id",
@@ -77,12 +78,21 @@
    "options": "Tech To Claims",
    "print_hide": 1,
    "search_index": 1
+  },
+  {
+   "fieldname": "writer_id",
+   "fieldtype": "Link",
+   "label": "Writer ID",
+   "no_copy": 1,
+   "options": "Patent Writer",
+   "print_hide": 1,
+   "search_index": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-09 08:49:25.501042",
+ "modified": "2025-07-09 12:06:04.899704",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Claims To Docx",
@@ -109,7 +119,7 @@
    "print": 1,
    "read": 1,
    "report": 1,
-   "role": "Patent Staff",
+   "role": "Patent Writer",
    "share": 1,
    "write": 1
   }

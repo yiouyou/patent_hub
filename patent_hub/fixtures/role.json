@@ -6,10 +6,10 @@
   "doctype": "Role",
   "home_page": null,
   "is_custom": 0,
-  "modified": "2025-07-09 00:09:02.974941",
-  "name": "Patent Staff",
+  "modified": "2025-07-09 12:01:53.564725",
+  "name": "Patent Writer",
   "restrict_to_domain": null,
-  "role_name": "Patent Staff",
+  "role_name": "Patent Writer",
   "two_factor_auth": 0
  }
 ]

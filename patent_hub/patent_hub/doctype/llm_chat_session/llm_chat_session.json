@@ -70,7 +70,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-09 00:10:26.738563",
+ "modified": "2025-07-09 12:02:47.776272",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "LLM Chat Session",
@@ -109,7 +109,7 @@
    "print": 1,
    "read": 1,
    "report": 1,
-   "role": "Patent Staff",
+   "role": "Patent Writer",
    "share": 1,
    "write": 1
   }

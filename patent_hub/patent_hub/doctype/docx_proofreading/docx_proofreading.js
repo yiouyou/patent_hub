@@ -17,6 +17,7 @@ frappe.ui.form.on('Docx Proofreading', {
     });
     frm.add_custom_button(__('+ Upload Final Docx'), () => {
       frappe.new_doc('Upload Final Docx', {}, (doc) => {
+        doc.writer_id = frm.doc.writer_id
         doc.patent_id = frm.doc.patent_id
         doc.scene_to_tech_id = frm.doc.scene_to_tech_id
         doc.tech_to_claims_id = frm.doc.tech_to_claims_id

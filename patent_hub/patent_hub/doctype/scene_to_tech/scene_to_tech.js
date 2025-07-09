@@ -17,6 +17,7 @@ frappe.ui.form.on('Scene To Tech', {
     });
     frm.add_custom_button(__('+ Tech To Claims'), () => {
       frappe.new_doc('Tech To Claims', {}, (doc) => {
+        doc.writer_id = frm.doc.writer_id
         doc.patent_id = frm.doc.patent_id
         doc.scene_to_tech_id = frm.doc.scene_to_tech_id
         doc.save();

@@ -1,59 +1,76 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "field:patent_id",
- "creation": "2025-07-08 04:04:33.920352",
+ "autoname": "field:writer_id",
+ "creation": "2025-07-09 11:39:17.050047",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "full_name",
+  "phone",
+  "email",
+  "adress",
+  "note",
+  "section_break_uzvu",
   "writer_id",
-  "patent_name",
-  "s3_uri",
-  "section_break_bpvy",
-  "patent_id"
+  "amended_from"
  ],
  "fields": [
   {
-   "fieldname": "patent_name",
+   "fieldname": "full_name",
    "fieldtype": "Data",
-   "label": "Patent Name"
+   "label": "Full Name"
   },
   {
-   "fieldname": "patent_id",
+   "fieldname": "phone",
    "fieldtype": "Data",
-   "label": "Patent ID",
-   "read_only": 1,
-   "unique": 1
+   "label": "Phone"
   },
   {
-   "fieldname": "s3_uri",
+   "fieldname": "email",
    "fieldtype": "Data",
-   "label": "S3 URI",
+   "label": "Email"
+  },
+  {
+   "fieldname": "adress",
+   "fieldtype": "Data",
+   "label": "Adress"
+  },
+  {
+   "fieldname": "note",
+   "fieldtype": "Small Text",
+   "label": "Note"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Patent Writer",
    "print_hide": 1,
    "read_only": 1,
-   "unique": 1
+   "search_index": 1
   },
   {
-   "fieldname": "section_break_bpvy",
+   "fieldname": "section_break_uzvu",
    "fieldtype": "Section Break"
   },
   {
    "fieldname": "writer_id",
-   "fieldtype": "Link",
+   "fieldtype": "Data",
    "label": "Writer ID",
-   "no_copy": 1,
-   "options": "Patent Writer",
    "print_hide": 1,
-   "search_index": 1
+   "read_only": 1,
+   "unique": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-09 12:04:48.163809",
+ "modified": "2025-07-09 12:26:34.424304",
  "modified_by": "Administrator",
  "module": "Patent Hub",
- "name": "Patent",
+ "name": "Patent Writer",
  "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
@@ -70,22 +87,17 @@
    "write": 1
   },
   {
-   "create": 1,
-   "delete": 1,
    "email": 1,
    "export": 1,
    "print": 1,
    "read": 1,
    "report": 1,
    "role": "Patent Writer",
-   "share": 1,
-   "write": 1
+   "share": 1
   }
  ],
- "quick_entry": 1,
  "row_format": "Dynamic",
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": [],
- "track_changes": 1
+ "states": []
 }
