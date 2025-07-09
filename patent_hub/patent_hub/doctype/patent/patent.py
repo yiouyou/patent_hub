@@ -13,7 +13,8 @@ class Patent(Document):
 	def before_insert(self):
 		if not self.patent_name:
 			frappe.throw(_("Patent Name is required to generate Patent ID"))
-		safe_name = re.sub(r"[^\w\s-]", "", self.patent_name).replace(" ", "_")
+		clean_name = re.sub(r"[^\w\s-]", "", self.patent_name)
+		safe_name = re.sub(r"\s", "_", clean_name).replace("-", "_")
 		self.patent_id = make_autoname(f"PAT-{safe_name}-.##")
 		try:
 			api_key = frappe.get_single("API KEY")
