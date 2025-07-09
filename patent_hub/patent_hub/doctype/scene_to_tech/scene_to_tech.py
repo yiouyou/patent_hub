@@ -6,8 +6,6 @@ from frappe import _
 from frappe.model.document import Document
 from frappe.model.naming import make_autoname
 
-from patent_hub.config.s3_bucket import S3_BUCKET_NAME
-
 
 class SceneToTech(Document):
 	def before_insert(self):
