@@ -1,0 +1,138 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:upload_final_docx_id",
+ "creation": "2025-07-09 04:16:11.795319",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "patent_id",
+  "scene_to_tech_id",
+  "tech_to_claims_id",
+  "claims_to_docx_id",
+  "docx_proofreading_id",
+  "final_docx",
+  "upload_to_s3",
+  "final_docx_list",
+  "is_done",
+  "section_break_pxpt",
+  "upload_final_docx_id"
+ ],
+ "fields": [
+  {
+   "fieldname": "patent_id",
+   "fieldtype": "Link",
+   "label": "Patent ID",
+   "no_copy": 1,
+   "options": "Patent",
+   "print_hide": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "final_docx",
+   "fieldtype": "Attach",
+   "label": "Final Docx"
+  },
+  {
+   "fieldname": "upload_to_s3",
+   "fieldtype": "Button",
+   "label": "Upload To S3"
+  },
+  {
+   "fieldname": "final_docx_list",
+   "fieldtype": "Table",
+   "label": "Final Docx List",
+   "options": "File List"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_done",
+   "fieldtype": "Int",
+   "hidden": 1,
+   "label": "Is Done"
+  },
+  {
+   "fieldname": "section_break_pxpt",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "upload_final_docx_id",
+   "fieldtype": "Data",
+   "label": "Upload Final Docx ID",
+   "read_only": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "scene_to_tech_id",
+   "fieldtype": "Link",
+   "label": "Scene To Tech ID",
+   "no_copy": 1,
+   "options": "Scene To Tech",
+   "print_hide": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "tech_to_claims_id",
+   "fieldtype": "Link",
+   "label": "Tech To Claims ID",
+   "options": "Tech To Claims"
+  },
+  {
+   "fieldname": "claims_to_docx_id",
+   "fieldtype": "Link",
+   "label": "Claims To Docx ID",
+   "no_copy": 1,
+   "options": "Claims To Docx",
+   "print_hide": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "docx_proofreading_id",
+   "fieldtype": "Link",
+   "label": "Docx Proofreading ID",
+   "no_copy": 1,
+   "options": "Docx Proofreading",
+   "print_hide": 1,
+   "search_index": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-07-09 08:50:07.885884",
+ "modified_by": "Administrator",
+ "module": "Patent Hub",
+ "name": "Upload Final Docx",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Patent Staff",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

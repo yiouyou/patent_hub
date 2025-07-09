@@ -1,0 +1,121 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:chat_id",
+ "creation": "2025-07-08 08:41:42.203439",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_ayar",
+  "llm_provider",
+  "chat_messages",
+  "llm_settings",
+  "temperature",
+  "sys_prompt",
+  "section_break_rtoe",
+  "chat_id"
+ ],
+ "fields": [
+  {
+   "fieldname": "llm_provider",
+   "fieldtype": "Select",
+   "label": "LLm Provider",
+   "options": "Anthropic\nDeepSeek\nOpenAI\nGemini"
+  },
+  {
+   "default": "0",
+   "fieldname": "temperature",
+   "fieldtype": "Float",
+   "label": "Temperature",
+   "non_negative": 1,
+   "placeholder": "0",
+   "precision": "1"
+  },
+  {
+   "fieldname": "chat_messages",
+   "fieldtype": "Table",
+   "label": "Chat Messages",
+   "options": "LLM Chat Message",
+   "permlevel": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "sys_prompt",
+   "fieldtype": "Small Text",
+   "label": "Sys Prompt"
+  },
+  {
+   "fieldname": "section_break_rtoe",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "chat_id",
+   "fieldtype": "Data",
+   "label": "Chat ID",
+   "print_hide": 1,
+   "read_only": 1,
+   "unique": 1
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "llm_settings",
+   "fieldtype": "Section Break",
+   "label": "LLM Settings"
+  },
+  {
+   "fieldname": "section_break_ayar",
+   "fieldtype": "Section Break"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-07-09 00:10:26.738563",
+ "modified_by": "Administrator",
+ "module": "Patent Hub",
+ "name": "LLM Chat Session",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "permlevel": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Patent Staff",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

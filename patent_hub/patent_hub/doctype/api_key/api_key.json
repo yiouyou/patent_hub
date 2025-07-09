@@ -1,0 +1,83 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-07-09 10:12:06.338173",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "anthropic_api_key",
+  "openai_api_key",
+  "gemini_api_key",
+  "deepseek_api_key",
+  "section_break_mlfz",
+  "s3_bucket_name",
+  "aws_access_key_id",
+  "aws_secret_access_key"
+ ],
+ "fields": [
+  {
+   "fieldname": "anthropic_api_key",
+   "fieldtype": "Password",
+   "label": "ANTHROPIC_API_KEY"
+  },
+  {
+   "fieldname": "aws_access_key_id",
+   "fieldtype": "Password",
+   "label": "AWS Access key ID"
+  },
+  {
+   "fieldname": "aws_secret_access_key",
+   "fieldtype": "Password",
+   "label": "AWS Secret access key"
+  },
+  {
+   "fieldname": "openai_api_key",
+   "fieldtype": "Password",
+   "label": "OPENAI_API_KEY"
+  },
+  {
+   "fieldname": "gemini_api_key",
+   "fieldtype": "Password",
+   "label": "GEMINI_API_KEY"
+  },
+  {
+   "fieldname": "deepseek_api_key",
+   "fieldtype": "Password",
+   "label": "DEEPSEEK_API_KEY"
+  },
+  {
+   "fieldname": "section_break_mlfz",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "s3_bucket_name",
+   "fieldtype": "Data",
+   "label": "S3_BUCKET_NAME"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2025-07-09 10:19:19.227113",
+ "modified_by": "Administrator",
+ "module": "Patent Hub",
+ "name": "API KEY",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

@@ -1,0 +1,81 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:patent_id",
+ "creation": "2025-07-08 04:04:33.920352",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "patent_name",
+  "s3_uri",
+  "section_break_bpvy",
+  "patent_id"
+ ],
+ "fields": [
+  {
+   "fieldname": "patent_name",
+   "fieldtype": "Data",
+   "label": "Patent Name"
+  },
+  {
+   "fieldname": "patent_id",
+   "fieldtype": "Data",
+   "label": "Patent ID",
+   "read_only": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "s3_uri",
+   "fieldtype": "Data",
+   "label": "S3 URI",
+   "print_hide": 1,
+   "read_only": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "section_break_bpvy",
+   "fieldtype": "Section Break"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-07-09 08:48:37.819448",
+ "modified_by": "Administrator",
+ "module": "Patent Hub",
+ "name": "Patent",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Patent Staff",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "quick_entry": 1,
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

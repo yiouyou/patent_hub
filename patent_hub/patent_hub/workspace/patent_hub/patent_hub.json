@@ -1,0 +1,64 @@
+{
+ "charts": [],
+ "content": "[{\"id\":\"_yXyjdfnM0\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Patent Hub</span>\",\"col\":12}},{\"id\":\"Jgpg0JOtQR\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"r88KEH8LEi\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>\u9009\u9898</b></span>\",\"col\":12}},{\"id\":\"yUKV_q7F4X\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"New Chat\",\"col\":6}},{\"id\":\"lM8vBRMQ_P\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"jSX71-cPLm\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Scene</b><b>\u2192 Tech\uff08\u5e94\u7528\u573a\u666f</b><b>\u2192 \u6280\u672f\u4ea4\u5e95</b><b>\uff09</b></span>\",\"col\":6}},{\"id\":\"NY1CzWefp8\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Tech \u2192 Claims\uff08\u6280\u672f\u4ea4\u5e95</b><b></b><b>\u2192 \u4e13\u5229\u6587\u6863</b><b>\uff09</b></span>\",\"col\":6}},{\"id\":\"gf8YH5lcOa\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Scene To Tech\",\"col\":6}},{\"id\":\"2bX6kFMchd\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Tech To Claims\",\"col\":6}},{\"id\":\"YafJAuB8rp\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"IGcZcEiOJ_\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Claims</b><b>\u2192 Docx </b><b>\uff08\u4e13\u5229\u6587\u6863</b><b>\u2192 Docx</b><b>\uff09</b></span>\",\"col\":6}},{\"id\":\"iLnhTxR1bj\",\"type\":\"spacer\",\"data\":{\"col\":6}},{\"id\":\"R6-tVPrNFO\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Claims To Docx\",\"col\":6}},{\"id\":\"7kC3n3iAxh\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"HoQMm-zLGF\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Docx Proofreading</b><b>\uff08Docx</b><b>\u6821\u7a3f</b><b>\uff09</b></span>\",\"col\":6}},{\"id\":\"6OvVgQ3vlt\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Upload Final Docx</b><b>\uff08\u4e0a\u4f20\u6700\u7ec8Docx</b><b>\uff09</b></span>\",\"col\":6}},{\"id\":\"bVjCE7vJas\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Docx Proofreading\",\"col\":6}},{\"id\":\"pgADyguAhW\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Upload Final Docx\",\"col\":6}}]",
+ "creation": "2025-07-08 23:18:33.951123",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "dashboard-list",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "Patent Hub",
+ "links": [],
+ "modified": "2025-07-09 05:38:01.139817",
+ "modified_by": "Administrator",
+ "module": "Patent Hub",
+ "name": "Patent Hub",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [
+  {
+   "document_type": "Scene To Tech",
+   "label": "Scene To Tech",
+   "quick_list_filter": "[[\"Scene To Tech\",\"is_done\",\"=\",0,false]]"
+  },
+  {
+   "document_type": "Docx Proofreading",
+   "label": "Docx Proofreading",
+   "quick_list_filter": "[]"
+  },
+  {
+   "document_type": "Tech To Claims",
+   "label": "Tech To Claims",
+   "quick_list_filter": "[[\"Tech To Claims\",\"is_done\",\"=\",0,false]]"
+  },
+  {
+   "document_type": "Claims To Docx",
+   "label": "Claims To Docx",
+   "quick_list_filter": "[[\"Claims To Docx\",\"is_done\",\"=\",0,false]]"
+  },
+  {
+   "document_type": "Upload Final Docx",
+   "label": "Upload Final Docx",
+   "quick_list_filter": "[[\"Upload Final Docx\",\"is_done\",\"=\",0,false]]"
+  }
+ ],
+ "roles": [],
+ "sequence_id": 3.0,
+ "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "New",
+   "label": "New Chat",
+   "link_to": "LLM Chat Session",
+   "stats_filter": "[]",
+   "type": "DocType"
+  }
+ ],
+ "title": "Patent Hub"
+}
