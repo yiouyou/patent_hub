@@ -1,0 +1,115 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-07-10 05:06:41.246972",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "markdown",
+  "section_break_nwua",
+  "column_break_uuvb",
+  "is_done",
+  "column_break_twqg",
+  "cost",
+  "column_break_oqyw",
+  "time_s",
+  "section_break_bcgj",
+  "generated_files",
+  "section_break_tudu",
+  "md_to_docx_id"
+ ],
+ "fields": [
+  {
+   "fieldname": "markdown",
+   "fieldtype": "Long Text",
+   "label": "Markdown"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_done",
+   "fieldtype": "Check",
+   "label": "Is Done",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_tudu",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "md_to_docx_id",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "MD To Docx ID",
+   "read_only": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "generated_files",
+   "fieldtype": "Table",
+   "label": "Generated Files",
+   "options": "File List",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "cost",
+   "fieldtype": "Data",
+   "label": "Cost",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "time_s",
+   "fieldtype": "Data",
+   "label": "Time(s)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_nwua",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_twqg",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_oqyw",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_bcgj",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_uuvb",
+   "fieldtype": "Column Break",
+   "read_only": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-07-10 14:28:23.400747",
+ "modified_by": "Administrator",
+ "module": "Patent Hub",
+ "name": "MD To Docx",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

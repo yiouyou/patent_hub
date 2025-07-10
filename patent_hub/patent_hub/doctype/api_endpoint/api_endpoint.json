@@ -1,0 +1,72 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-07-10 05:46:33.160302",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "server_ip_port",
+  "server_work_dir",
+  "md_to_docx",
+  "scene_to_tech",
+  "tech_to_claims",
+  "claims_to_docx"
+ ],
+ "fields": [
+  {
+   "fieldname": "server_ip_port",
+   "fieldtype": "Data",
+   "label": "Server IP Port"
+  },
+  {
+   "fieldname": "md_to_docx",
+   "fieldtype": "Data",
+   "label": "MD To Docx"
+  },
+  {
+   "fieldname": "scene_to_tech",
+   "fieldtype": "Data",
+   "label": "Scene To Tech"
+  },
+  {
+   "fieldname": "tech_to_claims",
+   "fieldtype": "Data",
+   "label": "Tech To Claims"
+  },
+  {
+   "fieldname": "claims_to_docx",
+   "fieldtype": "Data",
+   "label": "Claims To Docx"
+  },
+  {
+   "fieldname": "server_work_dir",
+   "fieldtype": "Data",
+   "label": "Server Work Dir"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2025-07-10 07:12:21.272948",
+ "modified_by": "Administrator",
+ "module": "Patent Hub",
+ "name": "API Endpoint",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

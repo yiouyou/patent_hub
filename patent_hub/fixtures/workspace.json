@@ -1,7 +1,7 @@
 [
  {
   "charts": [],
-  "content": "[{\"id\":\"_yXyjdfnM0\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Patent Hub</span>\",\"col\":12}},{\"id\":\"Jgpg0JOtQR\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"r88KEH8LEi\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>选题</b></span>\",\"col\":12}},{\"id\":\"yUKV_q7F4X\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"New Chat\",\"col\":6}},{\"id\":\"lM8vBRMQ_P\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"jSX71-cPLm\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Scene</b><b>→ Tech（应用场景</b><b>→ 技术交底</b><b>）</b></span>\",\"col\":6}},{\"id\":\"NY1CzWefp8\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Tech → Claims（技术交底</b><b></b><b>→ 专利文档</b><b>）</b></span>\",\"col\":6}},{\"id\":\"gf8YH5lcOa\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Scene To Tech\",\"col\":6}},{\"id\":\"2bX6kFMchd\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Tech To Claims\",\"col\":6}},{\"id\":\"YafJAuB8rp\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"IGcZcEiOJ_\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Claims</b><b>→ Docx </b><b>（专利文档</b><b>→ Docx</b><b>）</b></span>\",\"col\":6}},{\"id\":\"iLnhTxR1bj\",\"type\":\"spacer\",\"data\":{\"col\":6}},{\"id\":\"R6-tVPrNFO\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Claims To Docx\",\"col\":6}},{\"id\":\"7kC3n3iAxh\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"HoQMm-zLGF\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Docx Proofreading</b><b>（Docx</b><b>校稿</b><b>）</b></span>\",\"col\":6}},{\"id\":\"6OvVgQ3vlt\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Upload Final Docx</b><b>（上传最终Docx</b><b>）</b></span>\",\"col\":6}},{\"id\":\"bVjCE7vJas\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Docx Proofreading\",\"col\":6}},{\"id\":\"pgADyguAhW\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Upload Final Docx\",\"col\":6}}]",
+  "content": "[{\"id\":\"_yXyjdfnM0\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Patent Hub</span>\",\"col\":12}},{\"id\":\"Jgpg0JOtQR\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"r88KEH8LEi\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>选题</b></span>\",\"col\":12}},{\"id\":\"yUKV_q7F4X\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"New Chat\",\"col\":6}},{\"id\":\"aaxnrBAFD4\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Md To Docx\",\"col\":6}},{\"id\":\"lM8vBRMQ_P\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"jSX71-cPLm\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Scene</b><b>→ Tech（应用场景</b><b>→ 技术交底</b><b>）</b></span>\",\"col\":6}},{\"id\":\"NY1CzWefp8\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Tech → Claims（技术交底</b><b></b><b>→ 专利文档</b><b>）</b></span>\",\"col\":6}},{\"id\":\"gf8YH5lcOa\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Scene To Tech\",\"col\":6}},{\"id\":\"2bX6kFMchd\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Tech To Claims\",\"col\":6}},{\"id\":\"YafJAuB8rp\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"IGcZcEiOJ_\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Claims</b><b>→ Docx </b><b>（专利文档</b><b>→ Docx</b><b>）</b></span>\",\"col\":6}},{\"id\":\"iLnhTxR1bj\",\"type\":\"spacer\",\"data\":{\"col\":6}},{\"id\":\"R6-tVPrNFO\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Claims To Docx\",\"col\":6}},{\"id\":\"7kC3n3iAxh\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"HoQMm-zLGF\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Docx Proofreading</b><b>（Docx</b><b>校稿</b><b>）</b></span>\",\"col\":6}},{\"id\":\"6OvVgQ3vlt\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Upload Final Docx</b><b>（上传最终Docx</b><b>）</b></span>\",\"col\":6}},{\"id\":\"bVjCE7vJas\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Docx Proofreading\",\"col\":6}},{\"id\":\"pgADyguAhW\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Upload Final Docx\",\"col\":6}}]",
   "custom_blocks": [],
   "docstatus": 0,
   "doctype": "Workspace",
@@ -12,7 +12,7 @@
   "is_hidden": 0,
   "label": "Patent Hub",
   "links": [],
-  "modified": "2025-07-09 05:38:01.139817",
+  "modified": "2025-07-10 15:11:30.704217",
   "module": "Patent Hub",
   "name": "Patent Hub",
   "number_cards": [],
@@ -64,6 +64,23 @@
   "roles": [],
   "sequence_id": 3.0,
   "shortcuts": [
+   {
+    "color": "Grey",
+    "doc_view": "New",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "Md To Docx",
+    "link_to": "MD To Docx",
+    "parent": "Patent Hub",
+    "parentfield": "shortcuts",
+    "parenttype": "Workspace",
+    "report_ref_doctype": null,
+    "restrict_to_domain": null,
+    "stats_filter": "[]",
+    "type": "DocType",
+    "url": null
+   },
    {
     "color": "Grey",
     "doc_view": "New",
