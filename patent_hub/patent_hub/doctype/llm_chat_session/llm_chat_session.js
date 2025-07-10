@@ -1,5 +1,7 @@
 frappe.ui.form.on('LLM Chat Session', {
   refresh(frm) {
+    // console.log('temperature:', frm.doc.temperature);
+    // console.log('sys_prompt:', frm.doc.sys_prompt);
     // 清理旧的按钮
     frm.custom_buttons = {};
     
@@ -10,6 +12,7 @@ frappe.ui.form.on('LLM Chat Session', {
         async () => {
           try {
             frm.doc.chat_messages = [];
+            frm.temp_chat_messages = []; // 清空临时消息
             if (frm.session_manager) {
               frm.session_manager.temp_messages = [];
             }
@@ -33,7 +36,8 @@ frappe.ui.form.on('LLM Chat Session', {
 
     frm.add_custom_button('Export Chat', () => {
       try {
-        const all_messages = frm.doc.chat_messages || [];
+        // 使用临时消息或文档消息
+        const all_messages = frm.temp_chat_messages || frm.doc.chat_messages || [];
         
         if (all_messages.length === 0) {
           frappe.msgprint('No messages to export');
@@ -91,6 +95,11 @@ frappe.ui.form.on('LLM Chat Session', {
       // frm.latest_attachment = null;
     }
 
+    // 初始化临时消息存储
+    if (!frm.temp_chat_messages) {
+      frm.temp_chat_messages = [...(frm.doc.chat_messages || [])];
+    }
+
     // 创建聊天容器
     frm.chat_container = $(`
       <div class="chat-container">
@@ -131,12 +140,38 @@ frappe.ui.form.on('LLM Chat Session', {
     // const attachBtn = frm.chat_container.find('.chat-btn.attach');
     const sendBtn = frm.chat_container.find('.chat-btn.send');
 
+    // 消息同步函数
+    function sync_messages_to_doc() {
+      try {
+        // 清空现有消息
+        frm.doc.chat_messages = [];
+        
+        // 同步临时消息到文档
+        if (frm.temp_chat_messages && frm.temp_chat_messages.length > 0) {
+          frm.temp_chat_messages.forEach(msg => {
+            frm.add_child('chat_messages', {
+              role: msg.role,
+              message: msg.message,
+              attachment: msg.attachment,
+              timestamp: msg.timestamp
+            });
+          });
+          frm.dirty();
+        }
+        
+        console.log('Messages synced to document:', frm.temp_chat_messages.length);
+      } catch (error) {
+        console.error('Error syncing messages to document:', error);
+      }
+    }
+
     // 渲染消息函数
     function render_messages() {
       if (!chat_inner.length) return;
       
       chat_inner.empty();
-      const all_messages = frm.doc.chat_messages || [];
+      // 使用临时消息进行渲染
+      const all_messages = frm.temp_chat_messages || [];
 
       if (all_messages.length === 0) {
         chat_inner.html(`
@@ -205,18 +240,44 @@ frappe.ui.form.on('LLM Chat Session', {
 
     // 将 render_messages 函数绑定到 frm 对象
     frm.render_messages = render_messages;
+    // 将同步函数绑定到 frm 对象
+    frm.sync_messages_to_doc = sync_messages_to_doc;
 
-    // 简化的会话管理器
+    // 优化的会话管理器
     frm.session_manager = {
-      auto_save_interval: null,
+      auto_save_timeout: null,
       
       init() {
         // 页面离开时确保保存
         if (!frm.beforeunload_handler) {
           frm.beforeunload_handler = () => {
-            // 这里可以添加必要的清理逻辑
+            this.saveMessages();
           };
           $(window).on('beforeunload', frm.beforeunload_handler);
+        }
+      },
+      
+      // 延迟自动保存
+      scheduleAutoSave() {
+        if (this.auto_save_timeout) {
+          clearTimeout(this.auto_save_timeout);
+        }
+        
+        this.auto_save_timeout = setTimeout(() => {
+          this.saveMessages();
+        }, 1000); // 1秒后自动保存
+      },
+      
+      // 保存消息到文档
+      saveMessages() {
+        try {
+          if (frm.temp_chat_messages && frm.temp_chat_messages.length > 0) {
+            sync_messages_to_doc();
+            this.showSaveIndicator();
+            console.log('Auto-saved messages:', frm.temp_chat_messages.length);
+          }
+        } catch (error) {
+          console.error('Error auto-saving messages:', error);
         }
       },
       
@@ -234,9 +295,9 @@ frappe.ui.form.on('LLM Chat Session', {
       },
       
       destroy() {
-        if (this.auto_save_interval) {
-          clearInterval(this.auto_save_interval);
-          this.auto_save_interval = null;
+        if (this.auto_save_timeout) {
+          clearTimeout(this.auto_save_timeout);
+          this.auto_save_timeout = null;
         }
       }
     };
@@ -410,7 +471,7 @@ frappe.ui.form.on('LLM Chat Session', {
       sendBtn.prop('disabled', true);
       // attachBtn.prop('disabled', true);
 
-      // 添加用户消息（不包含附件）
+      // 添加用户消息到临时存储
       const userMessage = {
         role: 'user',
         message,
@@ -418,8 +479,12 @@ frappe.ui.form.on('LLM Chat Session', {
         timestamp: frappe.datetime.now_datetime()
       };
       
-      frm.add_child('chat_messages', userMessage);
-      frm.dirty();
+      // 确保临时消息数组存在
+      if (!frm.temp_chat_messages) {
+        frm.temp_chat_messages = [];
+      }
+      
+      frm.temp_chat_messages.push(userMessage);
       
       // 清空输入框
       input.val('').trigger('input');
@@ -429,13 +494,24 @@ frappe.ui.form.on('LLM Chat Session', {
       const thinking = show_thinking();
 
       try {
-        // 调用AI API（不传递附件）
+        // 准备历史对话数据（排除刚添加的用户消息）
+        const chat_history = frm.temp_chat_messages.slice(0, -1);
+        
+        // 获取系统提示词（如果文档中有相关字段）
+        const sys_prompt = frm.doc.sys_prompt || null;
+
+        // 调用新的AI API
         const response = await new Promise((resolve, reject) => {
           frappe.call({
             method: 'patent_hub.api.anthropic_chat.anthropic_call',
             args: {
-              prompt: message,
-              attachment_path: null // 附件路径设为空
+              user_prompt: message || "",  // 字符串
+              sys_prompt: sys_prompt || "",  // 字符串
+              chat_history: chat_history,  // 数组
+              temperature: frm.doc.temperature,
+              attachment_path: null,
+              // model: frm.doc.model,  // 字符串
+              // max_tokens: frm.doc.max_tokens,  // 整数
             },
             callback: resolve,
             error: reject
@@ -451,9 +527,12 @@ frappe.ui.form.on('LLM Chat Session', {
             timestamp: frappe.datetime.now_datetime()
           };
           
-          frm.add_child('chat_messages', assistantMessage);
-          frm.dirty();
+          // 添加到临时存储
+          frm.temp_chat_messages.push(assistantMessage);
           render_messages();
+          
+          // 触发自动保存
+          frm.session_manager.scheduleAutoSave();
           
         } else {
           console.error('Invalid response:', response);
@@ -529,11 +608,22 @@ frappe.ui.form.on('LLM Chat Session', {
     };
   },
 
+  // 文档保存前同步消息
+  before_save(frm) {
+    if (frm.sync_messages_to_doc) {
+      frm.sync_messages_to_doc();
+    }
+  },
+
   // 新文档加载时重置状态
   onload(frm) {
     if (frm.is_new()) {
       frm.rendered_chat_ui = false;
+      frm.temp_chat_messages = [];
       // frm.latest_attachment = null;
+    } else {
+      // 加载现有文档时，初始化临时消息
+      frm.temp_chat_messages = [...(frm.doc.chat_messages || [])];
     }
   },
 

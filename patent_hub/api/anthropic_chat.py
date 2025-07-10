@@ -1,5 +1,6 @@
 import base64
 import io
+import json
 import mimetypes
 import os
 
@@ -167,40 +168,114 @@ def create_content_block(prompt, attachment_path=None):
 	return content
 
 
+def build_conversation_messages(chat_history, user_prompt, attachment_path=None):
+	"""构建对话消息列表，支持多轮对话"""
+	messages = []
+	# 处理历史消息
+	if chat_history:
+		for msg in chat_history:
+			role = msg.get("role")
+			message_text = msg.get("message", "")
+			msg_attachment = msg.get("attachment")
+			if role in ["user", "assistant"] and message_text:
+				if role == "user":
+					# 用户消息可能包含附件
+					content = create_content_block(message_text, msg_attachment)
+				else:
+					# 助手消息只包含文本
+					content = [{"type": "text", "text": message_text}]
+				messages.append({"role": role, "content": content})
+	# 添加当前用户消息
+	if user_prompt:
+		user_content = create_content_block(user_prompt, attachment_path)
+		messages.append({"role": "user", "content": user_content})
+	return messages
+
+
 @frappe.whitelist()
 def anthropic_call(
-	prompt, attachment_path=None, model="claude-sonnet-4-20250514", max_tokens=8192, temperature=0.0
+	user_prompt=None,
+	sys_prompt=None,
+	chat_history=None,
+	temperature=0.0,
+	attachment_path=None,
+	model="claude-sonnet-4-20250514",
+	max_tokens=8192,
 ):
 	"""
-	调用 Anthropic API，支持文本和附件
+	调用 Anthropic API，支持系统提示词和多轮对话
+	Args:
+		user_prompt (str): 用户输入的消息
+		sys_prompt (str): 系统提示词
+		chat_history (list): 历史对话记录，格式为 [{"role": "user/assistant", "message": "...", "attachment": "..."}]
+		temperature (float): 温度参数
+		attachment_path (str): 当前消息的附件路径
+		model (str): 使用的模型
+		max_tokens (int): 最大token数
+	Returns:
+		str: AI的回复内容
 	"""
-	# 添加输入验证
-	if not prompt and not attachment_path:
-		frappe.throw("请提供消息内容或附件")
+	# 输入验证
+	if not user_prompt and not attachment_path:
+		frappe.throw("请提供用户消息内容或附件")
+	# 处理数组/对象
+	if chat_history:
+		if isinstance(chat_history, str):
+			try:
+				chat_history = json.loads(chat_history)
+			except:
+				chat_history = []
+	else:
+		chat_history = []
+	# 处理浮点数
+	if temperature:
+		try:
+			temperature = float(temperature)
+		except (ValueError, TypeError):
+			temperature = 0.0
+	else:
+		temperature = 0.0
+	# 处理整数
+	if max_tokens:
+		try:
+			max_tokens = int(max_tokens)
+		except (ValueError, TypeError):
+			max_tokens = 8192
+	else:
+		max_tokens = 8192
+	# frappe.msgprint(f"temperature {temperature} ({type(temperature).__name__})", alert=True)
+	# frappe.msgprint(f"sys_prompt {sys_prompt} ({type(sys_prompt).__name__})", alert=True)
+	# 合规检查
 	if not isinstance(max_tokens, int) or max_tokens < 1 or max_tokens > 8192:
 		frappe.throw("max_tokens 必须是1-8192之间的整数")
 	if not isinstance(temperature, (int, float)) or temperature < 0 or temperature > 1:
 		frappe.throw("temperature 必须在0-1之间")
-	api_key = frappe.get_single("API KEY")
+	# 获取API密钥
+	api_key = frappe.get_single("NGS API KEY")
 	ANTHROPIC_API_KEY = api_key.get_password("anthropic_api_key")
 	if not ANTHROPIC_API_KEY:
 		frappe.throw("Anthropic API Key 未配置")
+	# API配置
 	url = "https://api.anthropic.com/v1/messages"
 	headers = {
 		"x-api-key": ANTHROPIC_API_KEY,
 		"Content-Type": "application/json",
 		"anthropic-version": "2023-06-01",
 	}
-	# 创建内容块
-	content = create_content_block(prompt, attachment_path)
-	if not content:
-		frappe.throw("请提供有效的消息内容或附件")
+	# 构建对话消息
+	messages = build_conversation_messages(chat_history, user_prompt, attachment_path)
+	if not messages:
+		frappe.throw("请提供有效的消息内容")
+	# 构建请求数据
 	data = {
 		"model": model,
 		"max_tokens": max_tokens,
 		"temperature": temperature,
-		"messages": [{"role": "user", "content": content}],
+		"messages": messages,
 	}
+	# 添加系统提示词（如果提供）
+	if sys_prompt and sys_prompt.strip():
+		data["system"] = sys_prompt.strip()
 	try:
 		response = requests.post(url, json=data, headers=headers, timeout=60)
 		if response.status_code == 200:
