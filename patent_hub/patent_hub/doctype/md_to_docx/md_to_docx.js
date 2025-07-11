@@ -1,7 +1,6 @@
 frappe.ui.form.on('MD To Docx', {
     refresh: function (frm) {
         setup_clickable_column(frm);
-
         // ✅ 运行任务按钮
         frm.add_custom_button(__('▶️ Run'), async function () {
             try {
@@ -43,7 +42,6 @@ frappe.ui.form.on('MD To Docx', {
                 }, 6);
             }
         });
-
         // 🔁 刷新预览链接按钮
         frm.add_custom_button(__('🔁 刷新预览链接'), async function () {
             if (frm.is_dirty()) {
@@ -58,7 +56,6 @@ frappe.ui.form.on('MD To Docx', {
             await frm.reload_doc();
             frappe.show_alert({ message: '✅ 已刷新预览链接', indicator: 'blue' }, 5);
         });
-
         // 🔔 实时事件绑定
         if (!frm._realtime_bound) {
             frappe.realtime.on('md_to_docx_done', data => {
