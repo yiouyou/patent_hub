@@ -25,5 +25,5 @@ class Patent(Document):
 			frappe.throw(_("Cloud Storage Settings DocType not found or not configured."))
 		except Exception as e:
 			frappe.throw(_(f"Error retrieving S3 Bucket Name from settings: {e}"))
-		self.s3_uri = f"{S3_BUCKET_NAME}/{self.patent_id}/"
+		self.s3_uri = f"s3://{S3_BUCKET_NAME}/{self.patent_id}/"
 		self.name = self.patent_id

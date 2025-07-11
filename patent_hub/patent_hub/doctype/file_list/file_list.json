@@ -6,21 +6,51 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "file_s3_url"
+  "s3_url",
+  "column_break_avke",
+  "signed_url",
+  "section_break_ibpn",
+  "signed_url_generated_at",
+  "type"
  ],
  "fields": [
   {
-   "fieldname": "file_s3_url",
+   "fieldname": "column_break_avke",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "signed_url",
+   "fieldtype": "Small Text",
+   "in_list_view": 1,
+   "label": "Signed URL"
+  },
+  {
+   "fieldname": "s3_url",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "File S3 URL"
+   "label": "S3 URL"
+  },
+  {
+   "fieldname": "type",
+   "fieldtype": "Select",
+   "label": "Type",
+   "options": "\ntxt\ndocx\npdf\nmd\npng\nmmd"
+  },
+  {
+   "fieldname": "signed_url_generated_at",
+   "fieldtype": "Datetime",
+   "label": "Signed URL Generated At"
+  },
+  {
+   "fieldname": "section_break_ibpn",
+   "fieldtype": "Section Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-07-09 03:37:30.767195",
+ "modified": "2025-07-11 07:07:43.738173",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "File List",

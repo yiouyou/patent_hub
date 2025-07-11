@@ -10,9 +10,16 @@
   "patent_id",
   "scene_to_tech_id",
   "tech",
-  "run",
-  "result_file",
+  "section_break_szqr",
   "is_done",
+  "column_break_mudk",
+  "is_running",
+  "column_break_pmik",
+  "cost",
+  "column_break_dhrv",
+  "time_s",
+  "section_break_wmos",
+  "result_file",
   "section_break_pwas",
   "tech_to_claims_id"
  ],
@@ -27,11 +34,6 @@
    "search_index": 1
   },
   {
-   "fieldname": "run",
-   "fieldtype": "Button",
-   "label": "Run"
-  },
-  {
    "fieldname": "tech",
    "fieldtype": "Long Text",
    "label": "Tech"
@@ -40,14 +42,15 @@
    "fieldname": "result_file",
    "fieldtype": "Table",
    "label": "Result File",
-   "options": "File List"
+   "options": "File List",
+   "read_only": 1
   },
   {
    "default": "0",
    "fieldname": "is_done",
-   "fieldtype": "Int",
-   "hidden": 1,
-   "label": "Is Done"
+   "fieldtype": "Check",
+   "label": "Is Done",
+   "read_only": 1
   },
   {
    "fieldname": "section_break_pwas",
@@ -77,12 +80,52 @@
    "options": "Patent Writer",
    "print_hide": 1,
    "search_index": 1
+  },
+  {
+   "fieldname": "section_break_szqr",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_mudk",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_running",
+   "fieldtype": "Check",
+   "label": "Is Running",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_pmik",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "cost",
+   "fieldtype": "Data",
+   "label": "Cost",
+   "read_only": 1
+  },
+  {
+   "fieldname": "time_s",
+   "fieldtype": "Data",
+   "label": "Time(s)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_wmos",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_dhrv",
+   "fieldtype": "Column Break",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-09 12:05:48.290090",
+ "modified": "2025-07-11 02:39:34.375455",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Tech To Claims",

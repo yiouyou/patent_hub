@@ -23,7 +23,7 @@
  "fields": [
   {
    "fieldname": "markdown",
-   "fieldtype": "Long Text",
+   "fieldtype": "Text",
    "label": "Markdown"
   },
   {
@@ -103,7 +103,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-11 02:20:13.221174",
+ "modified": "2025-07-11 04:18:14.626313",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "MD To Docx",

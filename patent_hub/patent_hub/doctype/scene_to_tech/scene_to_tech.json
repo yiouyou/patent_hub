@@ -9,9 +9,16 @@
   "writer_id",
   "patent_id",
   "scene",
-  "run",
-  "file_list1",
+  "section_break_zlda",
   "is_done",
+  "column_break_nori",
+  "is_running",
+  "column_break_iuds",
+  "cost",
+  "column_break_loer",
+  "time_s",
+  "section_break_dnbd",
+  "file_list1",
   "section_break_vseg",
   "scene_to_tech_id"
  ],
@@ -31,11 +38,6 @@
    "label": "Scene"
   },
   {
-   "fieldname": "run",
-   "fieldtype": "Button",
-   "label": "Run"
-  },
-  {
    "fieldname": "file_list1",
    "fieldtype": "Table",
    "label": "File List",
@@ -45,9 +47,9 @@
   {
    "default": "0",
    "fieldname": "is_done",
-   "fieldtype": "Int",
-   "hidden": 1,
-   "label": "Is Done"
+   "fieldtype": "Check",
+   "label": "Is Done",
+   "read_only": 1
   },
   {
    "fieldname": "section_break_vseg",
@@ -68,12 +70,53 @@
    "options": "Patent Writer",
    "print_hide": 1,
    "search_index": 1
+  },
+  {
+   "fieldname": "section_break_zlda",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_nori",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_running",
+   "fieldtype": "Check",
+   "label": "Is Running",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_iuds",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "cost",
+   "fieldtype": "Data",
+   "label": "Cost",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_loer",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "time_s",
+   "fieldtype": "Data",
+   "label": "Time(s)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_dnbd",
+   "fieldtype": "Section Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-09 12:05:31.135896",
+ "modified": "2025-07-11 02:33:54.444307",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Scene To Tech",

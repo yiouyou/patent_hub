@@ -11,6 +11,7 @@
   "deepseek_api_key",
   "section_break_mlfz",
   "s3_bucket_name",
+  "aws_region",
   "aws_access_key_id",
   "aws_secret_access_key"
  ],
@@ -53,13 +54,18 @@
    "fieldname": "s3_bucket_name",
    "fieldtype": "Data",
    "label": "S3_BUCKET_NAME"
+  },
+  {
+   "fieldname": "aws_region",
+   "fieldtype": "Data",
+   "label": "AWS Region"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2025-07-09 10:19:19.227113",
+ "modified": "2025-07-11 03:16:47.474734",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "API KEY",
