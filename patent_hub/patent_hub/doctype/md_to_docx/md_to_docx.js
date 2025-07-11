@@ -79,48 +79,6 @@ frappe.ui.form.on('MD To Docx', {
 });
 
 
-// function setup_clean_url_clicks(frm) {
-//     let grid = frm.fields_dict['generated_files'].grid;
-//     grid.wrapper.off('click.clean-url').on('click.clean-url', '.grid-body .grid-row [data-fieldname="signed_url"]', function(e) {
-//         e.preventDefault();
-//         e.stopPropagation();
-//         let $cell = $(this);
-//         let $row = $cell.closest('.grid-row');
-//         let row_index = $row.index();
-//         // 从文档数据获取URL（最可靠的方式）
-//         let url = frm.doc.generated_files[row_index].signed_url;
-//         if (!url) {
-//             frappe.msgprint('没有找到URL');
-//             return;
-//         }
-//         // 清理URL - 移除任何不需要的前缀
-//         url = url.toString().trim();
-//         // 使用正则表达式提取正确的URL
-//         let urlMatch = url.match(/(https?:\/\/[^\s]+)/);
-//         if (urlMatch) {
-//             url = urlMatch[1];
-//         }
-//         try {
-//             new URL(url);
-//             window.open(url, '_blank', 'noopener,noreferrer');
-//         } catch (error) {
-//             frappe.msgprint({
-//                 title: '链接错误',
-//                 message: `无法打开链接: ${url}`,
-//                 indicator: 'red'
-//             });
-//         }
-//     });
-//     // 添加样式
-//     setTimeout(() => {
-//         grid.wrapper.find('.grid-body .grid-row [data-fieldname="signed_url"]').css({
-//             'cursor': 'pointer',
-//             'color': '#007bff',
-//             'text-decoration': 'underline'
-//         });
-//     }, 100);
-// }
-
 function setup_clickable_column(frm) {
     let grid_wrapper = frm.fields_dict['generated_files'].grid.wrapper;
     // 移除之前的样式和事件
