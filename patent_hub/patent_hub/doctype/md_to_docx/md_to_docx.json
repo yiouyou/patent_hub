@@ -9,6 +9,8 @@
   "section_break_nwua",
   "column_break_uuvb",
   "is_done",
+  "column_break_tahk",
+  "is_running",
   "column_break_twqg",
   "cost",
   "column_break_oqyw",
@@ -84,12 +86,24 @@
    "fieldname": "column_break_uuvb",
    "fieldtype": "Column Break",
    "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "is_running",
+   "fieldtype": "Check",
+   "label": "Is Running",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_tahk",
+   "fieldtype": "Column Break",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-10 14:28:23.400747",
+ "modified": "2025-07-10 22:15:18.671478",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "MD To Docx",
