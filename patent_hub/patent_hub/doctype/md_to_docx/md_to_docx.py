@@ -9,7 +9,8 @@ from frappe.model.naming import make_autoname
 
 class MDToDocx(Document):
 	def before_save(self):
+		user = frappe.session.user
 		# 只有新建时才赋值（也可以根据 is_new 判断）
 		if not self.name or not self.name.startswith("MD2DOCX-"):
-			self.md_to_docx_id = make_autoname("MD2DOCX-.YY.-.MM.-.DD.-.###")
+			self.md_to_docx_id = make_autoname(f"MD2DOCX-{user}-.YY.-.MM.-.DD.-.###")
 			self.name = self.md_to_docx_id
