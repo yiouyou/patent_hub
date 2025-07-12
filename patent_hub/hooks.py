@@ -32,15 +32,15 @@ fixtures = [
 # required_apps = []
 
 # Each item in the list will be shown as an app in the apps page
-# add_to_apps_screen = [
-# 	{
-# 		"name": "patent_hub",
-# 		"logo": "/assets/patent_hub/logo.png",
-# 		"title": "Patent Hub",
-# 		"route": "/patent_hub",
-# 		"has_permission": "patent_hub.api.permission.has_app_permission"
-# 	}
-# ]
+add_to_apps_screen = [
+	{
+		"name": "patent_hub",
+		"logo": "/assets/patent_hub/logo.png",
+		"title": "Patent Hub",
+		"route": "/app/patent_hub",
+		# "has_permission": "patent_hub.api.permission.has_app_permission",
+	}
+]
 
 # Includes in <head>
 # ------------------
