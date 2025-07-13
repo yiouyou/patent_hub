@@ -13,7 +13,7 @@
  "is_hidden": 0,
  "label": "Patent Hub",
  "links": [],
- "modified": "2025-07-13 15:23:03.280919",
+ "modified": "2025-07-13 15:27:13.382789",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Patent Hub",
@@ -23,24 +23,14 @@
  "public": 1,
  "quick_lists": [
   {
-   "document_type": "Review To Revise",
-   "label": "Review To Revise",
+   "document_type": "Patent Writer",
+   "label": "Patent Writer",
    "quick_list_filter": "[]"
   },
   {
    "document_type": "Scene To Tech",
    "label": "Scene To Tech",
    "quick_list_filter": "[[\"Scene To Tech\",\"is_done\",\"=\",0,false]]"
-  },
-  {
-   "document_type": "Docx Proofreading",
-   "label": "Docx Proofreading",
-   "quick_list_filter": "[]"
-  },
-  {
-   "document_type": "Patent Writer",
-   "label": "Patent Writer",
-   "quick_list_filter": "[]"
   },
   {
    "document_type": "Tech To Claims",
@@ -53,9 +43,19 @@
    "quick_list_filter": "[]"
   },
   {
+   "document_type": "Docx Proofreading",
+   "label": "Docx Proofreading",
+   "quick_list_filter": "[[\"Docx Proofreading\",\"is_done\",\"=\",0,false]]"
+  },
+  {
    "document_type": "Claims To Docx",
    "label": "Claims To Docx",
    "quick_list_filter": "[[\"Claims To Docx\",\"is_done\",\"=\",0,false]]"
+  },
+  {
+   "document_type": "Review To Revise",
+   "label": "Review To Revise",
+   "quick_list_filter": "[[\"Review To Revise\",\"is_done\",\"=\",0,false]]"
   },
   {
    "document_type": "Upload Final Docx",

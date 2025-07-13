@@ -12,7 +12,7 @@
   "is_hidden": 0,
   "label": "Patent Hub",
   "links": [],
-  "modified": "2025-07-13 15:23:03.280919",
+  "modified": "2025-07-13 15:27:13.382789",
   "module": "Patent Hub",
   "name": "Patent Hub",
   "number_cards": [],
@@ -20,8 +20,8 @@
   "public": 1,
   "quick_lists": [
    {
-    "document_type": "Review To Revise",
-    "label": "Review To Revise",
+    "document_type": "Patent Writer",
+    "label": "Patent Writer",
     "parent": "Patent Hub",
     "parentfield": "quick_lists",
     "parenttype": "Workspace",
@@ -34,22 +34,6 @@
     "parentfield": "quick_lists",
     "parenttype": "Workspace",
     "quick_list_filter": "[[\"Scene To Tech\",\"is_done\",\"=\",0,false]]"
-   },
-   {
-    "document_type": "Docx Proofreading",
-    "label": "Docx Proofreading",
-    "parent": "Patent Hub",
-    "parentfield": "quick_lists",
-    "parenttype": "Workspace",
-    "quick_list_filter": "[]"
-   },
-   {
-    "document_type": "Patent Writer",
-    "label": "Patent Writer",
-    "parent": "Patent Hub",
-    "parentfield": "quick_lists",
-    "parenttype": "Workspace",
-    "quick_list_filter": "[]"
    },
    {
     "document_type": "Tech To Claims",
@@ -68,12 +52,28 @@
     "quick_list_filter": "[]"
    },
    {
+    "document_type": "Docx Proofreading",
+    "label": "Docx Proofreading",
+    "parent": "Patent Hub",
+    "parentfield": "quick_lists",
+    "parenttype": "Workspace",
+    "quick_list_filter": "[[\"Docx Proofreading\",\"is_done\",\"=\",0,false]]"
+   },
+   {
     "document_type": "Claims To Docx",
     "label": "Claims To Docx",
     "parent": "Patent Hub",
     "parentfield": "quick_lists",
     "parenttype": "Workspace",
     "quick_list_filter": "[[\"Claims To Docx\",\"is_done\",\"=\",0,false]]"
+   },
+   {
+    "document_type": "Review To Revise",
+    "label": "Review To Revise",
+    "parent": "Patent Hub",
+    "parentfield": "quick_lists",
+    "parenttype": "Workspace",
+    "quick_list_filter": "[[\"Review To Revise\",\"is_done\",\"=\",0,false]]"
    },
    {
     "document_type": "Upload Final Docx",
