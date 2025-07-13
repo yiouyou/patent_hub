@@ -166,7 +166,6 @@ def generate_signed_urls(docname: str):
 	)
 	updated = False
 	for file in doc.generated_files:
-		# 检查是否需要重新生成签名URL（如果超过1小时或没有生成过）
 		if file.signed_url_generated_at:
 			if now_datetime() < add_to_date(file.signed_url_generated_at, hours=1):
 				continue  # 已生成，未过期，跳过
@@ -183,7 +182,7 @@ def generate_signed_urls(docname: str):
 			url = client.generate_presigned_url(
 				"get_object",
 				Params={"Bucket": s3_bucket_name, "Key": s3_object_key},  # Use the extracted key
-				ExpiresIn=3600,  # 1小时过期
+				ExpiresIn=3600,
 			)
 			file.signed_url = url
 			file.signed_url_generated_at = now_datetime()

@@ -7,6 +7,7 @@
  "engine": "InnoDB",
  "field_order": [
   "patent_title",
+  "final_markdown",
   "final_docx",
   "generated_files",
   "section_break_ywal",
@@ -113,12 +114,17 @@
   {
    "fieldname": "section_break_brnn",
    "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "final_markdown",
+   "fieldtype": "Attach",
+   "label": "Final Markdown"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-12 23:30:39.253664",
+ "modified": "2025-07-13 06:03:25.849393",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Upload Final Docx",

@@ -8,7 +8,7 @@
  "field_order": [
   "patent_title",
   "review_pdf",
-  "final_docx_tex_s3_url",
+  "final_markdown",
   "section_break_wdpz",
   "is_done",
   "column_break_vxew",
@@ -41,12 +41,6 @@
    "fieldname": "review_pdf",
    "fieldtype": "Attach",
    "label": "Review PDF"
-  },
-  {
-   "fieldname": "final_docx_tex_s3_url",
-   "fieldtype": "Data",
-   "label": "Final Docx Tex S3 URL",
-   "read_only": 1
   },
   {
    "fieldname": "section_break_wdpz",
@@ -176,12 +170,18 @@
    "options": "Docx Proofreading",
    "print_hide": 1,
    "search_index": 1
+  },
+  {
+   "fieldname": "final_markdown",
+   "fieldtype": "Data",
+   "label": "Final Markdown",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-13 05:24:51.307646",
+ "modified": "2025-07-13 06:06:53.218252",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Review To Revise",

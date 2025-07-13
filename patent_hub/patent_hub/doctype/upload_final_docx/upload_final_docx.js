@@ -16,6 +16,10 @@ frappe.ui.form.on('Upload Final Docx', {
       }
     });
     frm.add_custom_button(__('+ Review To Revise'), () => {
+      if (!frm.doc.is_done) {
+        frappe.show_alert({ message: '任务未完成，不能下一步。', indicator: 'red' }, 7);
+        return;
+      }
       frappe.new_doc('Review To Revise', {}, (doc) => {
         doc.writer_id = frm.doc.writer_id
         doc.patent_id = frm.doc.patent_id
@@ -25,6 +29,7 @@ frappe.ui.form.on('Upload Final Docx', {
         doc.docx_proofreading_id = frm.doc.docx_proofreading_id
         doc.patent_title = frm.doc.patent_title
         doc.upload_final_docx_id = frm.doc.upload_final_docx_id
+        doc.final_markdown = "test"
         doc.save();
       });
     });

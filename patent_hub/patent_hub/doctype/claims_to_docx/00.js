@@ -1,37 +1,39 @@
 // Copyright (c) 2025, sz and contributors
 // For license information, please see license.txt
 
-// frappe.ui.form.on("Scene To Tech", {
+// frappe.ui.form.on("Claims To Docx", {
 // 	refresh(frm) {
 
 // 	},
 // });
-frappe.ui.form.on('Scene To Tech', {
+frappe.ui.form.on('Claims To Docx', {
   refresh(frm) {
-    frm.add_custom_button(__('→ Patent'), () => {
-      if (frm.doc.patent_id) {
-        frappe.set_route('Form', 'Patent', frm.doc.patent_id);
+    frm.add_custom_button(__('→ Tech To Claims'), () => {
+      if (frm.doc.tech_to_claims_id) {
+        frappe.set_route('Form', 'Tech To Claims', frm.doc.tech_to_claims_id);
       } else {
-        frappe.msgprint(__('No associated Patent found.'));
+        frappe.msgprint(__('No associated Tech To Claims found.'));
       }
     });
-    frm.add_custom_button(__('+ Tech To Claims'), () => {
+    frm.add_custom_button(__('+ Docx Proofreading'), () => {
       if (!frm.doc.is_done) {
         frappe.show_alert({ message: '任务未完成，不能下一步。', indicator: 'red' }, 7);
         return;
       }
-      frappe.new_doc('Tech To Claims', {}, (doc) => {
+      frappe.new_doc('Docx Proofreading', {}, (doc) => {
         doc.writer_id = frm.doc.writer_id
         doc.patent_id = frm.doc.patent_id
-        doc.patent_title = frm.doc.patent_title
         doc.scene_to_tech_id = frm.doc.scene_to_tech_id
+        doc.tech_to_claims_id = frm.doc.tech_to_claims_id
+        doc.patent_title = frm.doc.patent_title
+        doc.claims_to_docx_id = frm.doc.claims_to_docx_id
         doc.save();
       });
     });
     // ✅ 运行任务按钮
     frm.add_custom_button(__('▶️ Run'), async function () {
       try {
-        // 🟡 先处理未保存的新文档（new-scene-to-tech-xxx）
+        // 🟡 先处理未保存的新文档（new-claims-to-docx-xxx）
         if (frm.is_new()) {
           await frm.save();      // 保存
           await frm.reload_doc();  // 必须刷新获取新 name
@@ -50,14 +52,14 @@ frappe.ui.form.on('Scene To Tech', {
           frappe.show_alert({ message: '任务正在运行中，请稍候完成。', indicator: 'orange' }, 7);
           return;
         }
-        // 🟠 检查 scene 字段
-        if (!frm.doc.scene) {
-          frappe.show_alert({ message: '❗请先填写 Scene 再运行任务。', indicator: 'red' }, 7);
+        // 🟠 检查 claims 字段
+        if (!frm.doc.claims) {
+          frappe.show_alert({ message: '❗请先填写 Claims 再运行任务。', indicator: 'red' }, 7);
           return;
         }
         // 🚀 提交任务
         const res = await frappe.call({
-          method: 'patent_hub.api.run_scene_to_tech.run',
+          method: 'patent_hub.api.run_claims_to_docx.run',
           args: { docname: frm.doc.name },
           freeze: true,
           freeze_message: '任务提交中，请稍候...'
@@ -68,7 +70,10 @@ frappe.ui.form.on('Scene To Tech', {
           throw new Error(res.message?.error || '未知错误');
         }
       } catch (err) {
-        frappe.show_alert({ message: `❌ 提交失败：${err.message}`, indicator: 'red' }, 7);
+        frappe.show_alert({
+          message: `❌ 提交失败：${err.message}`,
+          indicator: 'red'
+        }, 6);
       }
     });
     // 🔁 刷新链接按钮
@@ -77,7 +82,7 @@ frappe.ui.form.on('Scene To Tech', {
         await frm.save();
       }
       await frappe.call({
-        method: 'patent_hub.api.run_scene_to_tech.generate_signed_urls',
+        method: 'patent_hub.api.run_claims_to_docx.generate_signed_urls',
         args: { docname: frm.doc.name },
         freeze: true,
         freeze_message: '生成预览链接中...'
@@ -87,13 +92,13 @@ frappe.ui.form.on('Scene To Tech', {
     });
     // 🔔 实时事件绑定
     if (!frm._realtime_bound) {
-      frappe.realtime.on('scene_to_tech_done', data => {
+      frappe.realtime.on('claims_to_docx_done', data => {
         if (data.docname === frm.doc.name) {
           frappe.show_alert({ message: '📄 文档已生成完成！', indicator: 'blue' }, 7);
           frm.reload_doc();
         }
       });
-      frappe.realtime.on('scene_to_tech_failed', data => {
+      frappe.realtime.on('claims_to_docx_failed', data => {
         if (data.docname === frm.doc.name) {
           frappe.show_alert({ message: `❌ 生成失败：${data.error}`, indicator: 'red' }, 7);
           frm.reload_doc();

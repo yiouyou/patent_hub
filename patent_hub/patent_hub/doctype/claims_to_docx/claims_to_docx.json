@@ -16,6 +16,9 @@
   "cost",
   "column_break_gxha",
   "time_s",
+  "section_break_xbgf",
+  "final_markdown",
+  "final_docx",
   "section_break_lydt",
   "generated_files",
   "section_break_vegx",
@@ -137,12 +140,27 @@
   {
    "fieldname": "section_break_vegx",
    "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "section_break_xbgf",
+   "fieldtype": "Section Break",
+   "label": "Download"
+  },
+  {
+   "fieldname": "final_markdown",
+   "fieldtype": "Button",
+   "label": "Final Markdown"
+  },
+  {
+   "fieldname": "final_docx",
+   "fieldtype": "Button",
+   "label": "Final Docx"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-12 23:25:05.141336",
+ "modified": "2025-07-13 06:37:57.995408",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Claims To Docx",

@@ -8,6 +8,7 @@
  "field_order": [
   "patent_title",
   "markdown_before_tex",
+  "is_done",
   "section_break_wurl",
   "writer_id",
   "patent_id",
@@ -30,7 +31,8 @@
   {
    "fieldname": "markdown_before_tex",
    "fieldtype": "Long Text",
-   "label": "Markdown Before Tex"
+   "label": "Markdown Before Tex",
+   "read_only": 1
   },
   {
    "fieldname": "scene_to_tech_id",
@@ -88,12 +90,18 @@
   {
    "fieldname": "section_break_wurl",
    "fieldtype": "Section Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_done",
+   "fieldtype": "Check",
+   "label": "Is Done"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-12 23:26:25.670314",
+ "modified": "2025-07-13 08:31:48.032419",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Docx Proofreading",

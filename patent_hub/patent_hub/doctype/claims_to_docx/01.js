@@ -19,7 +19,6 @@ frappe.ui.form.on('Claims To Docx', {
         doc.tech_to_claims_id = frm.doc.tech_to_claims_id
         doc.patent_title = frm.doc.patent_title
         doc.claims_to_docx_id = frm.doc.claims_to_docx_id
-        doc.markdown_before_tex = "markdown_before_tex"
         doc.save();
       });
     });
@@ -82,7 +81,7 @@ frappe.ui.form.on('Claims To Docx', {
       });
       await frm.reload_doc();
       frappe.show_alert({ message: '✅ 已刷新链接', indicator: 'blue' }, 7);
-      // 刷新后更新按钮状态
+      // 刷新后更新下载按钮状态
       update_download_buttons(frm);
     });
     // 🔔 实时事件绑定
@@ -106,193 +105,148 @@ frappe.ui.form.on('Claims To Docx', {
       frm._realtime_bound = true;
     }
     setup_clickable_column(frm);
-    update_download_buttons(frm);
-  },
-  // 处理 final_markdown 按钮点击
-  final_markdown: function(frm) {
-    // console.log('final_markdown button clicked');
-    handle_download_click(frm, 'markdown');
-  },
-  // 处理 final_docx 按钮点击
-  final_docx: function(frm) {
-    // console.log('final_docx button clicked');
-    handle_download_click(frm, 'docx');
+    setup_download_buttons(frm);
   }
 });
 
 
-// 检查链接是否过期（1小时）
-function is_url_expired(generated_at) {
-  if (!generated_at) {
-    // console.log('No generated_at timestamp');
-    return true;
-  }
-  // 处理不同的时间格式
-  let generated;
-  if (typeof generated_at === 'string') {
-    // Frappe 通常返回 "YYYY-MM-DD HH:mm:ss" 格式
-    generated = frappe.datetime.str_to_obj(generated_at);
-  } else {
-    generated = new Date(generated_at);
-  }
-  const now = frappe.datetime.now_datetime();
-  const nowObj = frappe.datetime.str_to_obj(now);
-  // 计算时间差（毫秒）
-  const diffMs = nowObj.getTime() - generated.getTime();
-  const diffHours = diffMs / (1000 * 60 * 60);
-  // console.log('Generated at:', generated_at);
-  // console.log('Generated obj:', generated);
-  // console.log('Now:', now);
-  // console.log('Now obj:', nowObj);
-  // console.log(`URL age: ${diffHours.toFixed(2)} hours`);
-  return diffHours >= 1;
-}
-
-
-// 从 s3_url 中找到对应的文件
-function find_file_by_type(files, type) {
-  // console.log('Looking for file type:', type);
-  // console.log('Available files:', files);
-  if (!files || !Array.isArray(files)) return null;
-  for (let file of files) {
-    // console.log('Checking file:', file.s3_url);
-    if (!file.s3_url) continue;
-    if (type === 'markdown') {
-      // final_markdown 以 "c2d/input_text.txt" 结尾
-      if (file.s3_url.endsWith('c2d/input_text.txt')) {
-        // console.log('Found markdown file:', file);
-        return file;
-      }
-    } else if (type === 'docx') {
-      // final_docx 以 "c2d/*.docx" 结尾且不是指定的4个docx
-      if (file.s3_url.includes('c2d/') && file.s3_url.endsWith('.docx')) {
-        const filename = file.s3_url.split('/').pop();
-        const excluded_files = ['abstract.docx', 'claims.docx', 'description.docx', 'figures.docx'];
-        if (!excluded_files.includes(filename)) {
-          // console.log('Found docx file:', file);
-          return file;
-        }
-      }
-    }
-  }
-  console.log('No matching file found for type:', type);
-  return null;
+// 设置下载按钮
+function setup_download_buttons(frm) {
+  // 清除现有按钮
+  frm.remove_custom_button('📄 下载 Markdown');
+  frm.remove_custom_button('📄 下载 Docx');
+  // 添加 Markdown 下载按钮
+  frm.add_custom_button(__('📄 下载 Markdown'), async function () {
+    await handle_download(frm, 'markdown');
+  });
+  // 添加 Docx 下载按钮
+  frm.add_custom_button(__('📄 下载 Docx'), async function () {
+    await handle_download(frm, 'docx');
+  });
+  // 初始化按钮状态
+  update_download_buttons(frm);
 }
 
 
 // 更新下载按钮状态
 function update_download_buttons(frm) {
-  // console.log('Updating download buttons...');
-  const markdown_file = find_file_by_type(frm.doc.generated_files, 'markdown');
-  const docx_file = find_file_by_type(frm.doc.generated_files, 'docx');
-  console.log('Markdown file found:', !!markdown_file);
-  console.log('Docx file found:', !!docx_file);
-  // 更新 markdown 按钮
-  const markdown_field = frm.get_field('final_markdown');
-  if (markdown_field && markdown_field.$input) {
-    const markdown_valid = markdown_file && 
-                          markdown_file.signed_url && 
-                          !is_url_expired(markdown_file.signed_url_generated_at);
-    // console.log('Markdown button valid:', markdown_valid);
-    if (markdown_valid) {
-      markdown_field.$input.removeClass('btn-default').addClass('btn-primary');
-      markdown_field.$input.prop('disabled', false);
-      markdown_field.$input.css('opacity', '1');
-    } else {
-      markdown_field.$input.removeClass('btn-primary').addClass('btn-default');
-      markdown_field.$input.prop('disabled', true);
-      markdown_field.$input.css('opacity', '0.5');
+  const files = frm.doc.generated_files || [];
+  const now = new Date();
+  let markdown_file = null;
+  let docx_file = null;
+  // 查找对应的文件
+  files.forEach(file => {
+    if (file.s3_url) {
+      if (file.s3_url.endsWith('c2d/input_text.txt')) {
+        markdown_file = file;
+      } else if (file.s3_url.includes('c2d/') && file.s3_url.endsWith('.docx')) {
+        // 检查是否是最终的docx文件（排除特定的4个文件）
+        const excluded_files = ['abstract.docx', 'claims.docx', 'description.docx', 'figures.docx'];
+        const filename = file.s3_url.split('/').pop();
+        if (!excluded_files.includes(filename)) {
+          docx_file = file;
+        }
+      }
     }
-  }
-  // 更新 docx 按钮
-  const docx_field = frm.get_field('final_docx');
-  if (docx_field && docx_field.$input) {
-    const docx_valid = docx_file && 
-                      docx_file.signed_url && 
-                      !is_url_expired(docx_file.signed_url_generated_at);
-    // console.log('Docx button valid:', docx_valid);
-    if (docx_valid) {
-      docx_field.$input.removeClass('btn-default').addClass('btn-primary');
-      docx_field.$input.prop('disabled', false);
-      // docx_field.$input.css('opacity', '1');
-    } else {
-      docx_field.$input.removeClass('btn-primary').addClass('btn-default');
-      docx_field.$input.prop('disabled', true);
-      // docx_field.$input.css('opacity', '0.5');
-    }
-  }
+  });
+  // 更新按钮状态
+  update_button_state(frm, '📄 下载 Markdown', markdown_file, now);
+  update_button_state(frm, '📄 下载 Docx', docx_file, now);
 }
 
 
-// 处理下载按钮点击
-async function handle_download_click(frm, type) {
-  // console.log('Handle download click for type:', type);
-  const file = find_file_by_type(frm.doc.generated_files, type);
-  if (!file) {
-    frappe.msgprint({
-      title: '文件未找到',
-      message: `未找到对应的${type === 'markdown' ? 'Markdown' : 'DOCX'}文件`,
-      indicator: 'red'
-    });
+// 更新单个按钮状态
+function update_button_state(frm, button_text, file, now) {
+  const button = frm.custom_buttons[button_text];
+  if (!button) return;
+  const $button = button.parent();
+  if (!file || !file.signed_url || !file.signed_url_generated_at) {
+    // 没有文件或链接，设置为灰色
+    $button.removeClass('btn-primary btn-success').addClass('btn-secondary');
+    $button.prop('disabled', false); // 仍可点击，但会提示刷新
     return;
   }
-  // console.log('Found file:', file);
-  if (!file.signed_url) {
-    frappe.msgprint({
-      title: '链接未生成',
-      message: '请先点击"🔁 刷新链接"按钮生成下载链接',
-      indicator: 'orange'
-    });
+  // 检查链接是否过期（1小时）
+  const generated_time = new Date(file.signed_url_generated_at);
+  const expired = (now - generated_time) > (60 * 60 * 1000); // 1小时
+  if (expired) {
+    // 链接过期，设置为橙色
+    $button.removeClass('btn-primary btn-success').addClass('btn-warning');
+  } else {
+    // 链接有效，设置为绿色
+    $button.removeClass('btn-secondary btn-warning').addClass('btn-success');
+  }
+  $button.prop('disabled', false);
+}
+
+
+// 处理下载
+async function handle_download(frm, file_type) {
+  const files = frm.doc.generated_files || [];
+  const now = new Date();
+  let target_file = null;
+  // 查找目标文件
+  files.forEach(file => {
+    if (file.s3_url) {
+      if (file_type === 'markdown' && file.s3_url.endsWith('c2d/input_text.txt')) {
+        target_file = file;
+      } else if (file_type === 'docx' && file.s3_url.includes('c2d/') && file.s3_url.endsWith('.docx')) {
+        const excluded_files = ['abstract.docx', 'claims.docx', 'description.docx', 'figures.docx'];
+        const filename = file.s3_url.split('/').pop();
+        if (!excluded_files.includes(filename)) {
+          target_file = file;
+        }
+      }
+    }
+  });
+  if (!target_file) {
+    frappe.show_alert({ 
+      message: `❗ 未找到${file_type === 'markdown' ? 'Markdown' : 'Docx'}文件`, 
+      indicator: 'red' 
+    }, 5);
     return;
   }
-  if (is_url_expired(file.signed_url_generated_at)) {
-    console.log('URL expired');
-    frappe.msgprint({
-      title: '链接已过期',
-      message: '下载链接已过期（超过1小时），请先点击"🔁 刷新链接"按钮',
-      indicator: 'orange'
-    });
+  if (!target_file.signed_url || !target_file.signed_url_generated_at) {
+    frappe.show_alert({ 
+      message: '❗ 请先点击"刷新链接"按钮生成下载链接', 
+      indicator: 'orange' 
+    }, 5);
+    return;
+  }
+  // 检查链接是否过期
+  const generated_time = new Date(target_file.signed_url_generated_at);
+  const expired = (now - generated_time) > (60 * 60 * 1000);
+  if (expired) {
+    frappe.show_alert({ 
+      message: '⏰ 下载链接已过期，请先点击"刷新链接"按钮', 
+      indicator: 'orange' 
+    }, 5);
     return;
   }
   // 开始下载
   try {
-    // 从 s3_url 中提取文件名
-    const filename = file.s3_url.split('/').pop();
-    console.log('Starting download for:', filename);
-    console.log('Download URL:', file.signed_url);
+    // 获取文件名
+    const filename = target_file.s3_url.split('/').pop();
+    const display_name = file_type === 'markdown' ? 
+      `${frm.doc.patent_title || 'patent'}_claims.txt` : 
+      `${frm.doc.patent_title || 'patent'}_final.docx`;
+    // 创建下载
+    const link = document.createElement('a');
+    link.href = target_file.signed_url;
+    link.download = display_name;
+    link.target = '_blank';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
     frappe.show_alert({ 
-      message: `正在下载 ${filename}...`, 
-      indicator: 'blue' 
-    }, 3);
-    // 方法1: 使用 window.open (适用于大多数浏览器)
-    const downloadWindow = window.open(file.signed_url, '_blank');
-    // 如果弹窗被阻止，尝试其他方法
-    if (!downloadWindow || downloadWindow.closed || typeof downloadWindow.closed == 'undefined') {
-      console.log('Popup blocked, trying alternative method');
-      // 方法2: 使用隐藏的 a 标签
-      const link = document.createElement('a');
-      link.href = file.signed_url;
-      link.download = filename;
-      link.target = '_blank';
-      link.style.display = 'none';
-      // 添加到 DOM，点击，然后移除
-      document.body.appendChild(link);
-      link.click();
-      // 延迟移除，确保下载开始
-      setTimeout(() => {
-        document.body.removeChild(link);
-      }, 100);
-    }
-    frappe.show_alert({ 
-      message: `✅ ${filename} 下载已开始`, 
+      message: `✅ 开始下载 ${file_type === 'markdown' ? 'Markdown' : 'Docx'} 文件`, 
       indicator: 'green' 
     }, 3);
   } catch (error) {
-    frappe.msgprint({
-      title: '下载失败',
-      message: `下载失败: ${error.message}`,
-      indicator: 'red'
-    });
+    frappe.show_alert({ 
+      message: `❌ 下载失败: ${error.message}`, 
+      indicator: 'red' 
+    }, 5);
   }
 }
 
@@ -337,16 +291,6 @@ function setup_clickable_column(frm) {
         title: '错误',
         message: '无效的URL',
         indicator: 'red'
-      });
-      return;
-    }
-    // 检查链接是否过期
-    const file = frm.doc.generated_files[row_index];
-    if (is_url_expired(file.signed_url_generated_at)) {
-      frappe.msgprint({
-        title: '链接已过期',
-        message: '此链接已过期（超过1小时），请先点击"🔁 刷新链接"按钮',
-        indicator: 'orange'
       });
       return;
     }

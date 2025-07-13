@@ -16,6 +16,10 @@ frappe.ui.form.on('Tech To Claims', {
       }
     });
     frm.add_custom_button(__('+ Claims To Docx'), () => {
+      if (!frm.doc.is_done) {
+        frappe.show_alert({ message: '任务未完成，不能下一步。', indicator: 'red' }, 7);
+        return;
+      }
       frappe.new_doc('Claims To Docx', {}, (doc) => {
         doc.writer_id = frm.doc.writer_id
         doc.patent_id = frm.doc.patent_id
