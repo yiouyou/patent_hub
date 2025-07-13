@@ -17,6 +17,7 @@
   "column_break_gxha",
   "time_s",
   "section_break_xbgf",
+  "markdown_before_tex",
   "final_markdown",
   "final_docx",
   "section_break_lydt",
@@ -155,12 +156,17 @@
    "fieldname": "final_docx",
    "fieldtype": "Button",
    "label": "Final Docx"
+  },
+  {
+   "fieldname": "markdown_before_tex",
+   "fieldtype": "Button",
+   "label": "Markdown Before Tex"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-13 06:37:57.995408",
+ "modified": "2025-07-13 08:35:26.156173",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Claims To Docx",

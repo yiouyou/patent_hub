@@ -12,16 +12,38 @@ frappe.ui.form.on('Claims To Docx', {
         frappe.show_alert({ message: '任务未完成，不能下一步。', indicator: 'red' }, 7);
         return;
       }
-      frappe.new_doc('Docx Proofreading', {}, (doc) => {
-        doc.writer_id = frm.doc.writer_id
-        doc.patent_id = frm.doc.patent_id
-        doc.scene_to_tech_id = frm.doc.scene_to_tech_id
-        doc.tech_to_claims_id = frm.doc.tech_to_claims_id
-        doc.patent_title = frm.doc.patent_title
-        doc.claims_to_docx_id = frm.doc.claims_to_docx_id
-        doc.markdown_before_tex = "markdown_before_tex"
-        doc.save();
-      });
+      // 使用 Promise 处理异步操作
+      get_file_content(frm, 'markdown_before_tex')
+        .then(markdown_before_tex_content => {
+          frappe.new_doc('Docx Proofreading', {}, (doc) => {
+            doc.writer_id = frm.doc.writer_id
+            doc.patent_id = frm.doc.patent_id
+            doc.scene_to_tech_id = frm.doc.scene_to_tech_id
+            doc.tech_to_claims_id = frm.doc.tech_to_claims_id
+            doc.patent_title = frm.doc.patent_title
+            doc.claims_to_docx_id = frm.doc.claims_to_docx_id
+            doc.markdown_before_tex = markdown_before_tex_content || "获取内容失败"
+            doc.save();
+          });
+        })
+        .catch(error => {
+          // 如果获取文件内容失败，仍然创建文档但使用默认值
+          console.warn('获取 markdown_before_tex 内容失败:', error.message);
+          frappe.new_doc('Docx Proofreading', {}, (doc) => {
+            doc.writer_id = frm.doc.writer_id
+            doc.patent_id = frm.doc.patent_id
+            doc.scene_to_tech_id = frm.doc.scene_to_tech_id
+            doc.tech_to_claims_id = frm.doc.tech_to_claims_id
+            doc.patent_title = frm.doc.patent_title
+            doc.claims_to_docx_id = frm.doc.claims_to_docx_id
+            doc.markdown_before_tex = `获取内容失败: ${error.message}`
+            doc.save();
+          });
+          frappe.show_alert({ 
+            message: `⚠️ 无法获取文件内容，已使用默认值创建文档`, 
+            indicator: 'orange'
+          }, 5);
+        });
     });
     // ✅ 运行任务按钮
     frm.add_custom_button(__('▶️ Run'), async function () {
@@ -117,6 +139,10 @@ frappe.ui.form.on('Claims To Docx', {
   final_docx: function(frm) {
     // console.log('final_docx button clicked');
     handle_download_click(frm, 'docx');
+  },
+  // 处理 markdown_before_tex 按钮点击
+  'markdown_before_tex': function(frm) {
+    handle_download_click(frm, 'markdown_before_tex');
   }
 });
 
@@ -163,6 +189,11 @@ function find_file_by_type(files, type) {
         // console.log('Found markdown file:', file);
         return file;
       }
+    } else if (type === 'markdown_before_tex') {
+      // markdown_before_tex 以 "c-tex/input_text.txt" 结尾
+      if (file.s3_url.endsWith('c-tex/input_text.txt')) {
+        return file;
+      }
     } else if (type === 'docx') {
       // final_docx 以 "c2d/*.docx" 结尾且不是指定的4个docx
       if (file.s3_url.includes('c2d/') && file.s3_url.endsWith('.docx')) {
@@ -183,10 +214,29 @@ function find_file_by_type(files, type) {
 // 更新下载按钮状态
 function update_download_buttons(frm) {
   // console.log('Updating download buttons...');
+  const markdown_before_tex_file = find_file_by_type(frm.doc.generated_files, 'markdown_before_tex');
   const markdown_file = find_file_by_type(frm.doc.generated_files, 'markdown');
   const docx_file = find_file_by_type(frm.doc.generated_files, 'docx');
+  console.log('Markdown before tex file found:', !!markdown_before_tex_file);
   console.log('Markdown file found:', !!markdown_file);
   console.log('Docx file found:', !!docx_file);
+  // 更新 markdown_before_tex 按钮
+  const markdown_before_tex_field = frm.get_field('markdown_before_tex');
+  if (markdown_before_tex_field && markdown_before_tex_field.$input) {
+    const markdown_before_tex_valid = markdown_before_tex_file && 
+                                     markdown_before_tex_file.signed_url && 
+                                     !is_url_expired(markdown_before_tex_file.signed_url_generated_at);
+    // console.log('Markdown Before Tex button valid:', markdown_before_tex_valid);
+    if (markdown_before_tex_valid) {
+      markdown_before_tex_field.$input.removeClass('btn-default').addClass('btn-primary');
+      markdown_before_tex_field.$input.prop('disabled', false);
+      markdown_before_tex_field.$input.css('opacity', '1');
+    } else {
+      markdown_before_tex_field.$input.removeClass('btn-primary').addClass('btn-default');
+      markdown_before_tex_field.$input.prop('disabled', true);
+      markdown_before_tex_field.$input.css('opacity', '0.5');
+    }
+  }
   // 更新 markdown 按钮
   const markdown_field = frm.get_field('final_markdown');
   if (markdown_field && markdown_field.$input) {
@@ -229,6 +279,13 @@ async function handle_download_click(frm, type) {
   // console.log('Handle download click for type:', type);
   const file = find_file_by_type(frm.doc.generated_files, type);
   if (!file) {
+    let file_type_name;
+    switch(type) {
+      case 'markdown': file_type_name = 'Markdown'; break;
+      case 'markdown_before_tex': file_type_name = 'Markdown Before Tex'; break;
+      case 'docx': file_type_name = 'DOCX'; break;
+      default: file_type_name = type;
+    }
     frappe.msgprint({
       title: '文件未找到',
       message: `未找到对应的${type === 'markdown' ? 'Markdown' : 'DOCX'}文件`,
@@ -272,7 +329,7 @@ async function handle_download_click(frm, type) {
       // 方法2: 使用隐藏的 a 标签
       const link = document.createElement('a');
       link.href = file.signed_url;
-      link.download = filename;
+      link.download = filename;  // 使用自定义文件名
       link.target = '_blank';
       link.style.display = 'none';
       // 添加到 DOM，点击，然后移除
@@ -280,7 +337,9 @@ async function handle_download_click(frm, type) {
       link.click();
       // 延迟移除，确保下载开始
       setTimeout(() => {
-        document.body.removeChild(link);
+        if (document.body.contains(link)) {
+          document.body.removeChild(link);
+        }
       }, 100);
     }
     frappe.show_alert({ 
@@ -288,6 +347,7 @@ async function handle_download_click(frm, type) {
       indicator: 'green' 
     }, 3);
   } catch (error) {
+    console.error('Download error:', error);
     frappe.msgprint({
       title: '下载失败',
       message: `下载失败: ${error.message}`,
@@ -382,4 +442,29 @@ function apply_clickable_styles(grid_wrapper) {
       $cell.addClass('clickable-url-cell');
     }
   });
+}
+
+
+// 获取文件内容的函数
+async function get_file_content(frm, type) {
+  const file = find_file_by_type(frm.doc.generated_files, type);
+  if (!file) {
+    throw new Error(`未找到 ${type} 文件`);
+  }
+  if (!file.signed_url) {
+    throw new Error('文件链接未生成，请先刷新链接');
+  }
+  if (is_url_expired(file.signed_url_generated_at)) {
+    throw new Error('文件链接已过期，请先刷新链接');
+  }
+  try {
+    const response = await fetch(file.signed_url);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const content = await response.text();
+    return content;
+  } catch (error) {
+    throw new Error(`获取文件内容失败: ${error.message}`);
+  }
 }
