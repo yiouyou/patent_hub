@@ -9,6 +9,8 @@ from frappe.model.naming import make_autoname
 
 class ClaimsToDocx(Document):
 	def before_insert(self):
+		if not self.writer_id:
+			frappe.throw(_("Writer ID is required to generate Claims To Docx"))
 		if not self.patent_id:
 			frappe.throw(_("Patent ID is required to generate Claims To Docx"))
 		if not self.scene_to_tech_id:

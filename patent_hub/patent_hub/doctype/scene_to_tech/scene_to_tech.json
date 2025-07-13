@@ -6,8 +6,7 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "writer_id",
-  "patent_id",
+  "patent_title",
   "scene",
   "section_break_zlda",
   "is_done",
@@ -18,7 +17,10 @@
   "column_break_loer",
   "time_s",
   "section_break_dnbd",
-  "file_list1",
+  "generated_files",
+  "section_break_fjhm",
+  "writer_id",
+  "patent_id",
   "section_break_vseg",
   "scene_to_tech_id"
  ],
@@ -38,18 +40,10 @@
    "label": "Scene"
   },
   {
-   "fieldname": "file_list1",
-   "fieldtype": "Table",
-   "label": "File List",
-   "options": "File List",
-   "read_only": 1
-  },
-  {
    "default": "0",
    "fieldname": "is_done",
    "fieldtype": "Check",
-   "label": "Is Done",
-   "read_only": 1
+   "label": "Is Done"
   },
   {
    "fieldname": "section_break_vseg",
@@ -111,12 +105,28 @@
   {
    "fieldname": "section_break_dnbd",
    "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "patent_title",
+   "fieldtype": "Data",
+   "label": "Patent Title"
+  },
+  {
+   "fieldname": "generated_files",
+   "fieldtype": "Table",
+   "label": "Generated Files",
+   "options": "File List",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_fjhm",
+   "fieldtype": "Section Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-11 02:33:54.444307",
+ "modified": "2025-07-12 23:23:50.680180",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Scene To Tech",

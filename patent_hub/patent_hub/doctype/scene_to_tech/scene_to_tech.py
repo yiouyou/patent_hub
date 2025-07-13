@@ -9,6 +9,8 @@ from frappe.model.naming import make_autoname
 
 class SceneToTech(Document):
 	def before_insert(self):
+		if not self.writer_id:
+			frappe.throw(_("Writer ID is required to generate Scene To Tech"))
 		if not self.patent_id:
 			frappe.throw(_("Patent ID is required to generate Scene To Tech"))
 		_patent_id = self.patent_id.split("-")

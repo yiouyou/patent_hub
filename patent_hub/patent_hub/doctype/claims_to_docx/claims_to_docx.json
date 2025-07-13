@@ -6,21 +6,23 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "writer_id",
-  "patent_id",
-  "scene_to_tech_id",
-  "tech_to_claims_id",
+  "patent_title",
   "claims",
   "section_break_neyj",
   "is_done",
   "column_break_edfr",
-  "is_done_copy",
+  "is_running",
   "column_break_omzn",
   "cost",
   "column_break_gxha",
   "time_s",
   "section_break_lydt",
-  "result_file",
+  "generated_files",
+  "section_break_vegx",
+  "writer_id",
+  "patent_id",
+  "scene_to_tech_id",
+  "tech_to_claims_id",
   "section_break_zpno",
   "claims_to_docx_id"
  ],
@@ -40,18 +42,10 @@
    "label": "Claims"
   },
   {
-   "fieldname": "result_file",
-   "fieldtype": "Table",
-   "label": "Result File",
-   "options": "File List",
-   "read_only": 1
-  },
-  {
    "default": "0",
    "fieldname": "is_done",
    "fieldtype": "Check",
-   "label": "Is Done",
-   "read_only": 1
+   "label": "Is Done"
   },
   {
    "fieldname": "section_break_zpno",
@@ -100,13 +94,6 @@
    "fieldtype": "Column Break"
   },
   {
-   "default": "0",
-   "fieldname": "is_done_copy",
-   "fieldtype": "Check",
-   "label": "Is Done Copy",
-   "read_only": 1
-  },
-  {
    "fieldname": "column_break_omzn",
    "fieldtype": "Column Break"
   },
@@ -127,12 +114,35 @@
   {
    "fieldname": "section_break_lydt",
    "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "patent_title",
+   "fieldtype": "Data",
+   "label": "Patent Title"
+  },
+  {
+   "fieldname": "generated_files",
+   "fieldtype": "Table",
+   "label": "Generated Files",
+   "options": "File List",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "is_running",
+   "fieldtype": "Check",
+   "label": "Is Running",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_vegx",
+   "fieldtype": "Section Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-11 02:39:41.885428",
+ "modified": "2025-07-12 23:25:05.141336",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Claims To Docx",

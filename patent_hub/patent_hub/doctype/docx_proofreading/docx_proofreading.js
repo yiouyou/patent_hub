@@ -22,6 +22,7 @@ frappe.ui.form.on('Docx Proofreading', {
         doc.scene_to_tech_id = frm.doc.scene_to_tech_id
         doc.tech_to_claims_id = frm.doc.tech_to_claims_id
         doc.claims_to_docx_id = frm.doc.claims_to_docx_id
+        doc.patent_title = frm.doc.patent_title
         doc.docx_proofreading_id = frm.doc.docx_proofreading_id
         doc.save();
       });

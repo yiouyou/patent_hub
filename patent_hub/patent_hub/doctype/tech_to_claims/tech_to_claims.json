@@ -6,9 +6,7 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "writer_id",
-  "patent_id",
-  "scene_to_tech_id",
+  "patent_title",
   "tech",
   "section_break_szqr",
   "is_done",
@@ -19,7 +17,11 @@
   "column_break_dhrv",
   "time_s",
   "section_break_wmos",
-  "result_file",
+  "generated_files",
+  "section_break_vqoa",
+  "writer_id",
+  "patent_id",
+  "scene_to_tech_id",
   "section_break_pwas",
   "tech_to_claims_id"
  ],
@@ -39,18 +41,10 @@
    "label": "Tech"
   },
   {
-   "fieldname": "result_file",
-   "fieldtype": "Table",
-   "label": "Result File",
-   "options": "File List",
-   "read_only": 1
-  },
-  {
    "default": "0",
    "fieldname": "is_done",
    "fieldtype": "Check",
-   "label": "Is Done",
-   "read_only": 1
+   "label": "Is Done"
   },
   {
    "fieldname": "section_break_pwas",
@@ -120,12 +114,29 @@
    "fieldname": "column_break_dhrv",
    "fieldtype": "Column Break",
    "read_only": 1
+  },
+  {
+   "fieldname": "patent_title",
+   "fieldtype": "Data",
+   "label": "Patent Title",
+   "read_only": 1
+  },
+  {
+   "fieldname": "generated_files",
+   "fieldtype": "Table",
+   "label": "Generated Files",
+   "options": "File List",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_vqoa",
+   "fieldtype": "Section Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-11 02:39:34.375455",
+ "modified": "2025-07-12 23:24:04.815210",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Tech To Claims",

@@ -6,16 +6,18 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "patent_title",
+  "final_docx",
+  "generated_files",
+  "section_break_ywal",
+  "is_done",
+  "section_break_brnn",
   "writer_id",
   "patent_id",
   "scene_to_tech_id",
   "tech_to_claims_id",
   "claims_to_docx_id",
   "docx_proofreading_id",
-  "final_docx",
-  "upload_to_s3",
-  "final_docx_list",
-  "is_done",
   "section_break_pxpt",
   "upload_final_docx_id"
  ],
@@ -35,21 +37,9 @@
    "label": "Final Docx"
   },
   {
-   "fieldname": "upload_to_s3",
-   "fieldtype": "Button",
-   "label": "Upload To S3"
-  },
-  {
-   "fieldname": "final_docx_list",
-   "fieldtype": "Table",
-   "label": "Final Docx List",
-   "options": "File List"
-  },
-  {
    "default": "0",
    "fieldname": "is_done",
-   "fieldtype": "Int",
-   "hidden": 1,
+   "fieldtype": "Check",
    "label": "Is Done"
   },
   {
@@ -104,12 +94,31 @@
    "options": "Patent Writer",
    "print_hide": 1,
    "search_index": 1
+  },
+  {
+   "fieldname": "patent_title",
+   "fieldtype": "Data",
+   "label": "Patent Title"
+  },
+  {
+   "fieldname": "generated_files",
+   "fieldtype": "Table",
+   "label": "Generated Files",
+   "options": "File List"
+  },
+  {
+   "fieldname": "section_break_ywal",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "section_break_brnn",
+   "fieldtype": "Section Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-09 12:06:41.510355",
+ "modified": "2025-07-12 23:30:39.253664",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Upload Final Docx",

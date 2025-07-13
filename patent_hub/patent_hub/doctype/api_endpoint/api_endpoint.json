@@ -10,7 +10,8 @@
   "md_to_docx",
   "scene_to_tech",
   "tech_to_claims",
-  "claims_to_docx"
+  "claims_to_docx",
+  "review_to_revise"
  ],
  "fields": [
   {
@@ -42,13 +43,18 @@
    "fieldname": "server_work_dir",
    "fieldtype": "Data",
    "label": "Server Work Dir"
+  },
+  {
+   "fieldname": "review_to_revise",
+   "fieldtype": "Data",
+   "label": "Review To Revise"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2025-07-10 07:12:21.272948",
+ "modified": "2025-07-13 00:26:06.123748",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "API Endpoint",

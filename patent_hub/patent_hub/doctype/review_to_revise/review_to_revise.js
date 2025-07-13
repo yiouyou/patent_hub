@@ -1,33 +1,24 @@
 // Copyright (c) 2025, sz and contributors
 // For license information, please see license.txt
 
-// frappe.ui.form.on("Scene To Tech", {
+// frappe.ui.form.on("Review To Revise", {
 // 	refresh(frm) {
 
 // 	},
 // });
-frappe.ui.form.on('Scene To Tech', {
+frappe.ui.form.on('Review To Revise', {
   refresh(frm) {
-    frm.add_custom_button(__('→ Patent'), () => {
-      if (frm.doc.patent_id) {
-        frappe.set_route('Form', 'Patent', frm.doc.patent_id);
+    frm.add_custom_button(__('→ Upload Final Docx'), () => {
+      if (frm.doc.upload_final_docx_id) {
+        frappe.set_route('Form', 'Upload Final Docx', frm.doc.upload_final_docx_id);
       } else {
-        frappe.msgprint(__('No associated Patent found.'));
+        frappe.msgprint(__('No associated Upload Final Docx found.'));
       }
-    });
-    frm.add_custom_button(__('+ Tech To Claims'), () => {
-      frappe.new_doc('Tech To Claims', {}, (doc) => {
-        doc.writer_id = frm.doc.writer_id
-        doc.patent_id = frm.doc.patent_id
-        doc.patent_title = frm.doc.patent_title
-        doc.scene_to_tech_id = frm.doc.scene_to_tech_id
-        doc.save();
-      });
     });
     // ✅ 运行任务按钮
     frm.add_custom_button(__('▶️ Run'), async function () {
       try {
-        // 🟡 先处理未保存的新文档（new-scene-to-tech-xxx）
+        // 🟡 先处理未保存的新文档（new-review-to-revise-xxx）
         if (frm.is_new()) {
           await frm.save();      // 保存
           await frm.reload_doc();  // 必须刷新获取新 name
@@ -46,14 +37,14 @@ frappe.ui.form.on('Scene To Tech', {
           frappe.show_alert({ message: '任务正在运行中，请稍候完成。', indicator: 'orange' }, 7);
           return;
         }
-        // 🟠 检查 scene 字段
-        if (!frm.doc.scene) {
-          frappe.show_alert({ message: '❗请先填写 Scene 再运行任务。', indicator: 'red' }, 7);
+        // 🟠 检查 review_pdf 字段
+        if (!frm.doc.review_pdf || !frm.doc.review_pdf.toLowerCase().endsWith('.pdf')) {
+          frappe.show_alert({ message: '❗请先上传 Review PDF 再运行任务。', indicator: 'red' }, 7);
           return;
         }
         // 🚀 提交任务
         const res = await frappe.call({
-          method: 'patent_hub.api.run_scene_to_tech.run',
+          method: 'patent_hub.api.run_review_to_revise.run',
           args: { docname: frm.doc.name },
           freeze: true,
           freeze_message: '任务提交中，请稍候...'
@@ -64,7 +55,10 @@ frappe.ui.form.on('Scene To Tech', {
           throw new Error(res.message?.error || '未知错误');
         }
       } catch (err) {
-        frappe.show_alert({ message: `❌ 提交失败：${err.message}`, indicator: 'red' }, 7);
+        frappe.show_alert({
+          message: `❌ 提交失败：${err.message}`,
+          indicator: 'red'
+        }, 6);
       }
     });
     // 🔁 刷新链接按钮
@@ -73,7 +67,7 @@ frappe.ui.form.on('Scene To Tech', {
         await frm.save();
       }
       await frappe.call({
-        method: 'patent_hub.api.run_scene_to_tech.generate_signed_urls',
+        method: 'patent_hub.api.run_review_to_revise.generate_signed_urls',
         args: { docname: frm.doc.name },
         freeze: true,
         freeze_message: '生成预览链接中...'
@@ -83,13 +77,13 @@ frappe.ui.form.on('Scene To Tech', {
     });
     // 🔔 实时事件绑定
     if (!frm._realtime_bound) {
-      frappe.realtime.on('scene_to_tech_done', data => {
+      frappe.realtime.on('review_to_revise_done', data => {
         if (data.docname === frm.doc.name) {
           frappe.show_alert({ message: '📄 文档已生成完成！', indicator: 'blue' }, 7);
           frm.reload_doc();
         }
       });
-      frappe.realtime.on('scene_to_tech_failed', data => {
+      frappe.realtime.on('review_to_revise_failed', data => {
         if (data.docname === frm.doc.name) {
           frappe.show_alert({ message: `❌ 生成失败：${data.error}`, indicator: 'red' }, 7);
           frm.reload_doc();
@@ -98,6 +92,20 @@ frappe.ui.form.on('Scene To Tech', {
       frm._realtime_bound = true;
     }
     setup_clickable_column(frm);
+  },
+  validate(frm) {
+    const fieldname = "review_pdf";
+    const maxSizeMB = 10;
+    const fileUrl = frm.doc[fieldname];
+    if (!fileUrl) return;
+    if (!fileUrl.toLowerCase().endsWith(".pdf")) {
+      frappe.throw("请上传 PDF 格式的文件！");
+    }
+    const attachments = frm.get_docinfo()?.attachments || [];
+    const matched = attachments.find(file => file.file_url === fileUrl);
+    if (matched?.file_size && matched.file_size > maxSizeMB * 1024 * 1024) {
+      frappe.throw(`❗上传文件不能超过 ${maxSizeMB}MB，请重新上传。`);
+    }
   }
 });
 

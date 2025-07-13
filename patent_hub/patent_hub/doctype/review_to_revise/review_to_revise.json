@@ -1,0 +1,208 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:review_to_revise_id",
+ "creation": "2025-07-13 00:02:17.086341",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "patent_title",
+  "review_pdf",
+  "final_docx_tex_s3_url",
+  "section_break_wdpz",
+  "is_done",
+  "column_break_vxew",
+  "is_running",
+  "column_break_nzgs",
+  "cost",
+  "column_break_fcrw",
+  "time_s",
+  "section_break_ozuv",
+  "generated_files",
+  "section_break_ewrx",
+  "writer_id",
+  "patent_id",
+  "scene_to_tech_id",
+  "tech_to_claims_id",
+  "claims_to_docx_id",
+  "docx_proofreading_id",
+  "upload_final_docx_id",
+  "section_break_tlez",
+  "review_to_revise_id"
+ ],
+ "fields": [
+  {
+   "fieldname": "patent_title",
+   "fieldtype": "Data",
+   "label": "Patent Title",
+   "read_only": 1
+  },
+  {
+   "fieldname": "review_pdf",
+   "fieldtype": "Attach",
+   "label": "Review PDF"
+  },
+  {
+   "fieldname": "final_docx_tex_s3_url",
+   "fieldtype": "Data",
+   "label": "Final Docx Tex S3 URL",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_wdpz",
+   "fieldtype": "Section Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_done",
+   "fieldtype": "Check",
+   "label": "Is Done"
+  },
+  {
+   "fieldname": "column_break_vxew",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_running",
+   "fieldtype": "Check",
+   "label": "Is Running",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_nzgs",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "cost",
+   "fieldtype": "Data",
+   "label": "Cost",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_fcrw",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "time_s",
+   "fieldtype": "Data",
+   "label": "Time(s)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_ozuv",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "generated_files",
+   "fieldtype": "Table",
+   "label": "Generated Files",
+   "options": "File List"
+  },
+  {
+   "fieldname": "section_break_ewrx",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "writer_id",
+   "fieldtype": "Link",
+   "label": "Writer ID",
+   "no_copy": 1,
+   "options": "Patent Writer",
+   "print_hide": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "patent_id",
+   "fieldtype": "Link",
+   "label": "Patent ID",
+   "no_copy": 1,
+   "options": "Patent",
+   "print_hide": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "section_break_tlez",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "review_to_revise_id",
+   "fieldtype": "Data",
+   "label": "Review To Revise ID",
+   "read_only": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "scene_to_tech_id",
+   "fieldtype": "Link",
+   "label": "Scene To Tech ID",
+   "no_copy": 1,
+   "options": "Scene To Tech",
+   "print_hide": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "tech_to_claims_id",
+   "fieldtype": "Link",
+   "label": "Tech To Claims ID",
+   "no_copy": 1,
+   "options": "Tech To Claims",
+   "print_hide": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "claims_to_docx_id",
+   "fieldtype": "Link",
+   "label": "Claims To Docx ID",
+   "no_copy": 1,
+   "options": "Claims To Docx",
+   "print_hide": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "upload_final_docx_id",
+   "fieldtype": "Link",
+   "label": "Upload Final Docx ID",
+   "no_copy": 1,
+   "options": "Upload Final Docx",
+   "print_hide": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "docx_proofreading_id",
+   "fieldtype": "Link",
+   "label": "Docx Proofreading ID",
+   "no_copy": 1,
+   "options": "Docx Proofreading",
+   "print_hide": 1,
+   "search_index": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-07-13 05:24:51.307646",
+ "modified_by": "Administrator",
+ "module": "Patent Hub",
+ "name": "Review To Revise",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
