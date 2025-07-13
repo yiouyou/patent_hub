@@ -21,9 +21,9 @@ frappe.ui.form.on('Scene To Tech', {
         return;
       }
       frappe.new_doc('Tech To Claims', {}, (doc) => {
+        doc.patent_title = frm.doc.patent_title
         doc.writer_id = frm.doc.writer_id
         doc.patent_id = frm.doc.patent_id
-        doc.patent_title = frm.doc.patent_title
         doc.scene_to_tech_id = frm.doc.scene_to_tech_id
         doc.save();
       });

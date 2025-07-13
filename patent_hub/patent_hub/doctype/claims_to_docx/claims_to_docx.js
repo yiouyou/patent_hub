@@ -16,13 +16,13 @@ frappe.ui.form.on('Claims To Docx', {
       get_file_content(frm, 'markdown_before_tex')
         .then(markdown_before_tex_content => {
           frappe.new_doc('Docx Proofreading', {}, (doc) => {
+            doc.patent_title = frm.doc.patent_title
             doc.writer_id = frm.doc.writer_id
             doc.patent_id = frm.doc.patent_id
             doc.scene_to_tech_id = frm.doc.scene_to_tech_id
             doc.tech_to_claims_id = frm.doc.tech_to_claims_id
-            doc.patent_title = frm.doc.patent_title
             doc.claims_to_docx_id = frm.doc.claims_to_docx_id
-            doc.markdown_before_tex = markdown_before_tex_content || "获取内容失败"
+            doc.markdown_before_tex = markdown_before_tex_content
             doc.save();
           });
         })
@@ -30,11 +30,11 @@ frappe.ui.form.on('Claims To Docx', {
           // 如果获取文件内容失败，仍然创建文档但使用默认值
           console.warn('获取 markdown_before_tex 内容失败:', error.message);
           frappe.new_doc('Docx Proofreading', {}, (doc) => {
+            doc.patent_title = frm.doc.patent_title
             doc.writer_id = frm.doc.writer_id
             doc.patent_id = frm.doc.patent_id
             doc.scene_to_tech_id = frm.doc.scene_to_tech_id
             doc.tech_to_claims_id = frm.doc.tech_to_claims_id
-            doc.patent_title = frm.doc.patent_title
             doc.claims_to_docx_id = frm.doc.claims_to_docx_id
             doc.markdown_before_tex = `${error.message}`
             doc.save();

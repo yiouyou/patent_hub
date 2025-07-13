@@ -21,10 +21,10 @@ frappe.ui.form.on('Tech To Claims', {
         return;
       }
       frappe.new_doc('Claims To Docx', {}, (doc) => {
+        doc.patent_title = frm.doc.patent_title
         doc.writer_id = frm.doc.writer_id
         doc.patent_id = frm.doc.patent_id
         doc.scene_to_tech_id = frm.doc.scene_to_tech_id
-        doc.patent_title = frm.doc.patent_title
         doc.tech_to_claims_id = frm.doc.tech_to_claims_id
         doc.save();
       });

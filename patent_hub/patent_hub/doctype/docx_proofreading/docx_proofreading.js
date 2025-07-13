@@ -21,12 +21,12 @@ frappe.ui.form.on('Docx Proofreading', {
         return;
       }
       frappe.new_doc('Upload Final Docx', {}, (doc) => {
+        doc.patent_title = frm.doc.patent_title
         doc.writer_id = frm.doc.writer_id
         doc.patent_id = frm.doc.patent_id
         doc.scene_to_tech_id = frm.doc.scene_to_tech_id
         doc.tech_to_claims_id = frm.doc.tech_to_claims_id
         doc.claims_to_docx_id = frm.doc.claims_to_docx_id
-        doc.patent_title = frm.doc.patent_title
         doc.docx_proofreading_id = frm.doc.docx_proofreading_id
         doc.save();
       });
