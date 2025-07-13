@@ -196,3 +196,72 @@ def generate_signed_urls(docname: str):
 	if updated:
 		doc.save(ignore_permissions=True)
 	return {"success": True}
+
+
+@frappe.whitelist()
+def get_file_content(docname: str, file_type: str):
+	"""
+	获取指定类型文件的内容
+	Args:
+		docname: Claims To Docx 文档名
+		file_type: 文件类型 (markdown, markdown_before_tex, docx)
+	Returns:
+		文件内容
+	"""
+	try:
+		doc = frappe.get_doc("Claims To Docx", docname)
+		# 找到对应的文件
+		target_file = None
+		for file in doc.generated_files:
+			if not file.s3_url:
+				continue
+			if file_type == "markdown":
+				if file.s3_url.endswith("c2d/input_text.txt"):
+					target_file = file
+					break
+			elif file_type == "markdown_before_tex":
+				if file.s3_url.endswith("c-tex/input_text.txt"):
+					target_file = file
+					break
+			elif file_type == "docx":
+				if file.s3_url.endswith(".docx") and "c2d/" in file.s3_url:
+					filename = file.s3_url.split("/").pop()
+					excluded_files = ["abstract.docx", "claims.docx", "description.docx", "figures.docx"]
+					if filename not in excluded_files:
+						target_file = file
+						break
+		if not target_file:
+			return {"success": False, "error": f"未找到 {file_type} 文件"}
+		if not target_file.signed_url:
+			return {"success": False, "error": "文件链接未生成，请先刷新链接"}
+		# 检查链接是否过期
+		if target_file.signed_url_generated_at:
+			if now_datetime() >= add_to_date(target_file.signed_url_generated_at, hours=1):
+				return {"success": False, "error": "文件链接已过期，请先刷新链接"}
+
+		async def fetch_content():
+			async with httpx.AsyncClient(
+				timeout=30,
+				follow_redirects=True,
+				verify=False,  # 如果有SSL证书问题可以设置为False
+			) as client:
+				response = await client.get(target_file.signed_url)
+				response.raise_for_status()
+				# 根据文件类型处理内容
+				if file_type == "docx":
+					return response.content  # 返回二进制内容
+				else:
+					return response.text  # 返回文本内容
+
+		content = asyncio.run(fetch_content())
+		return {"success": True, "content": content}
+	except httpx.HTTPError as e:
+		logger.error(f"HTTP请求失败: {e}")
+		return {"success": False, "error": f"HTTP请求失败: {e!s}"}
+	except asyncio.TimeoutError:
+		logger.error("请求超时")
+		return {"success": False, "error": "请求超时，请稍后重试"}
+	except Exception as e:
+		logger.error(f"获取文件内容失败: {e}")
+		logger.error(frappe.get_traceback())
+		return {"success": False, "error": f"获取文件内容失败: {e!s}"}

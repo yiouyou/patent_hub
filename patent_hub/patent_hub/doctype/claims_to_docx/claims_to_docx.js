@@ -36,7 +36,7 @@ frappe.ui.form.on('Claims To Docx', {
             doc.tech_to_claims_id = frm.doc.tech_to_claims_id
             doc.patent_title = frm.doc.patent_title
             doc.claims_to_docx_id = frm.doc.claims_to_docx_id
-            doc.markdown_before_tex = `获取内容失败: ${error.message}`
+            doc.markdown_before_tex = `${error.message}`
             doc.save();
           });
           frappe.show_alert({ 
@@ -458,12 +458,21 @@ async function get_file_content(frm, type) {
     throw new Error('文件链接已过期，请先刷新链接');
   }
   try {
-    const response = await fetch(file.signed_url);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+    // 通过后端API获取文件内容
+    const response = await frappe.call({
+      method: 'patent_hub.api.run_claims_to_docx.get_file_content',
+      args: {
+        docname: frm.doc.name,
+        file_type: type
+      },
+      freeze: true,
+      freeze_message: '正在获取文件内容...'
+    });
+    if (response.message && response.message.success) {
+      return response.message.content;
+    } else {
+      throw new Error(response.message?.error || '获取文件内容失败');
     }
-    const content = await response.text();
-    return content;
   } catch (error) {
     throw new Error(`获取文件内容失败: ${error.message}`);
   }
