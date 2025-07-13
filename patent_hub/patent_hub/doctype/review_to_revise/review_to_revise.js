@@ -18,7 +18,7 @@ frappe.ui.form.on('Review To Revise', {
     // ✅ 运行任务按钮
     frm.add_custom_button(__('▶️ Run'), async function () {
       try {
-        // 🟡 先处理未保存的新文档（new-review-to-revise-xxx）
+        // 🟡 先处理未保存的新文档
         if (frm.is_new()) {
           await frm.save();      // 保存
           await frm.reload_doc();  // 必须刷新获取新 name
@@ -67,8 +67,11 @@ frappe.ui.form.on('Review To Revise', {
         await frm.save();
       }
       await frappe.call({
-        method: 'patent_hub.api.run_review_to_revise.generate_signed_urls',
-        args: { docname: frm.doc.name },
+        method: 'patent_hub.api.file_list.generate_signed_urls',
+        args: {
+          doclabel: 'Review To Revise',
+          docname: frm.doc.name,
+        },
         freeze: true,
         freeze_message: '生成预览链接中...'
       });

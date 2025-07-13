@@ -31,7 +31,7 @@ frappe.ui.form.on('Scene To Tech', {
     // ✅ 运行任务按钮
     frm.add_custom_button(__('▶️ Run'), async function () {
       try {
-        // 🟡 先处理未保存的新文档（new-scene-to-tech-xxx）
+        // 🟡 先处理未保存的新文档
         if (frm.is_new()) {
           await frm.save();      // 保存
           await frm.reload_doc();  // 必须刷新获取新 name
@@ -77,8 +77,11 @@ frappe.ui.form.on('Scene To Tech', {
         await frm.save();
       }
       await frappe.call({
-        method: 'patent_hub.api.run_scene_to_tech.generate_signed_urls',
-        args: { docname: frm.doc.name },
+        method: 'patent_hub.api.file_list.generate_signed_urls',
+        args: {
+          doclabel: 'Scene To Tech',
+          docname: frm.doc.name,
+        },
         freeze: true,
         freeze_message: '生成预览链接中...'
       });

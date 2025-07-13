@@ -105,7 +105,8 @@
    "fieldname": "generated_files",
    "fieldtype": "Table",
    "label": "Generated Files",
-   "options": "File List"
+   "options": "File List",
+   "read_only": 1
   },
   {
    "fieldname": "section_break_ywal",
@@ -124,7 +125,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-13 06:03:25.849393",
+ "modified": "2025-07-13 14:11:38.934123",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Upload Final Docx",

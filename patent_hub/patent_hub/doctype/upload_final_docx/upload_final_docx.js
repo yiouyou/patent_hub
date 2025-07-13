@@ -27,14 +27,20 @@ frappe.ui.form.on('Upload Final Docx', {
     // ⬆️ 上传按钮
     frm.add_custom_button(__('⬆️ 上传'), async function () {
       try {
-        // 保存文档（如果有修改）
+        // 🟡 先处理未保存的新文档
         if (frm.is_new()) {
-          await frm.save();
-          await frm.reload_doc();
+          await frm.save();      // 保存
+          await frm.reload_doc();  // 必须刷新获取新 name
         }
+        // 🟡 再处理脏数据（已存在但有修改）
         if (frm.is_dirty()) {
           await frm.save();
-          await frm.reload_doc();
+          await frm.reload_doc();  // 保证最新状态
+        }
+        // 🟢 状态判断
+        if (frm.doc.is_done) {
+          frappe.show_alert({ message: '上传已完成，不可重复运行。', indicator: 'orange' }, 7);
+          return;
         }
         // 检查是否有文件需要上传
         const has_markdown = frm.doc.final_markdown;
@@ -75,9 +81,22 @@ frappe.ui.form.on('Upload Final Docx', {
       if (frm.is_dirty()) {
         await frm.save();
       }
+      // 检查是否有 s3_url
+      const has_s3_files = frm.doc.generated_files && 
+                          frm.doc.generated_files.some(file => file.s3_url);
+      if (!has_s3_files) {
+        frappe.show_alert({ 
+          message: '没有 S3 文件需要生成链接，请先上传文件', 
+          indicator: 'orange' 
+        }, 5);
+        return;
+      }
       await frappe.call({
-        method: 'patent_hub.api.upload_final_docx.generate_signed_urls',
-        args: { docname: frm.doc.name },
+        method: 'patent_hub.api.file_list.generate_signed_urls',
+        args: {
+          doclabel: 'Upload Final Docx',
+          docname: frm.doc.name,
+        },
         freeze: true,
         freeze_message: '生成预览链接中...'
       });
