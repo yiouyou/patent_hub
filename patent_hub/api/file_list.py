@@ -75,6 +75,11 @@ def generate_signed_urls(doclabel: str, docname: str):
 				)
 				file.signed_url = url
 				file.signed_url_generated_at = now_datetime()
+				# file_name
+				_s3_url = file.s3_url
+				fn = _s3_url.split("/")
+				file.file_name = fn[-1]
+				logger.info(f"file_name: {file.file_name}")
 				updated = True
 				logger.info(f"Generated signed URL for: {s3_object_key}")
 			except Exception as e:
