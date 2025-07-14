@@ -74,7 +74,7 @@ def _job(docname, user=None):
 		_title = re.sub(r"[^\w\u4e00-\u9fa5\-]", "", _title)  # 去除标点，保留连字符、中文、字母、数字
 		# 拼接 tmp_folder
 		server_work_dir = api_endpoint.get_password("server_work_dir")
-		tmp_folder = os.path.join(server_work_dir, _title, "md2docx")
+		tmp_folder = os.path.join(server_work_dir, _title, "m2d")
 		# payload
 		payload = {"input": {"md_base64": md_base64, "tmp_folder": tmp_folder}}
 

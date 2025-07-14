@@ -8,6 +8,8 @@
  "field_order": [
   "s3_url",
   "column_break_avke",
+  "file_name",
+  "column_break_txsz",
   "signed_url",
   "section_break_ibpn",
   "signed_url_generated_at",
@@ -44,13 +46,23 @@
   {
    "fieldname": "section_break_ibpn",
    "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_txsz",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "file_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "File Name"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-07-11 07:07:43.738173",
+ "modified": "2025-07-14 02:14:25.342107",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "File List",
