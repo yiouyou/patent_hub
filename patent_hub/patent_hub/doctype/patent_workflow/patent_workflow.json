@@ -8,8 +8,10 @@
  "field_order": [
   "patent_tab",
   "writer_id",
+  "agency_id",
   "section_break_sgac",
   "patent_id",
+  "job_status",
   "preinfo_tab",
   "title_section",
   "patent_title",
@@ -173,7 +175,7 @@
   {
    "fieldname": "patent_tab",
    "fieldtype": "Tab Break",
-   "label": "Writer"
+   "label": "Patent"
   },
   {
    "fieldname": "scene2tech_tab",
@@ -895,12 +897,24 @@
    "fieldtype": "Data",
    "label": "Time(s)",
    "read_only": 1
+  },
+  {
+   "fieldname": "job_status",
+   "fieldtype": "Data",
+   "label": "Job Status",
+   "read_only": 1
+  },
+  {
+   "fieldname": "agency_id",
+   "fieldtype": "Link",
+   "label": "Agency ID",
+   "options": "Patent Agency"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-22 15:32:40.073198",
+ "modified": "2025-07-22 15:43:45.119913",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Patent Workflow",
