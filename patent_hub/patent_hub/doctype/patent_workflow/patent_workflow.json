@@ -1,0 +1,925 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-07-22 11:14:52.728654",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "patent_tab",
+  "writer_id",
+  "section_break_sgac",
+  "patent_id",
+  "preinfo_tab",
+  "title_section",
+  "patent_title",
+  "options",
+  "section_break_rodc",
+  "choose_title2scene",
+  "column_break_vacp",
+  "run_title2scene",
+  "section_break_mvti",
+  "choose_info2scene",
+  "column_break_wmqm",
+  "table_qksh",
+  "run_info2scene",
+  "section_break_cztm",
+  "choose_info2tech",
+  "column_break_afgd",
+  "table_fqra",
+  "run_info2tech",
+  "section_break_jxgk",
+  "is_done_preinfo",
+  "column_break_utxs",
+  "is_running_preinfo",
+  "column_break_bzuz",
+  "cost_preinfo",
+  "column_break_eoeb",
+  "time_s_preinfo",
+  "scene2tech_tab",
+  "innovation_direction_0_column",
+  "scene",
+  "run_scene2tech",
+  "gap_section",
+  "core_problem_analysis",
+  "search_keywords_scene",
+  "prior_art_scene",
+  "piror_solution_digest",
+  "patent_gap_analysis",
+  "design_section",
+  "innovation_direction_0",
+  "design_00",
+  "design_01",
+  "innovation_direction1",
+  "design_10",
+  "design_11",
+  "innovation_evaluation",
+  "tech_section",
+  "patent_specification",
+  "data_validation",
+  "final_tech",
+  "status_section_scene2tech",
+  "is_done_scene2tech",
+  "column_break_mbcf",
+  "is_running_scene2tech",
+  "column_break_icfc",
+  "cost_scene2tech",
+  "column_break_yifb",
+  "time_s_scene2tech",
+  "tech2application_tab",
+  "column_break_wmpp",
+  "tech",
+  "run_tech2application",
+  "section_break_hjub",
+  "disclosure",
+  "search_keywords_tech",
+  "prior_art_tech",
+  "patentability_analysis",
+  "prior_art_analysis",
+  "diff_analysis",
+  "claims_section",
+  "claims_plan",
+  "claims_science_optimized",
+  "claims_insufficiency_analysis",
+  "claims_insufficiency_optimized",
+  "claims_format_corrected",
+  "description_section",
+  "description_initial",
+  "description_innovation_analysis",
+  "description_innovation_optimized",
+  "description_science_analysis",
+  "description_science_optimized",
+  "description_abstract",
+  "application_section",
+  "merged_application",
+  "refined_technical_solution",
+  "final_application",
+  "status_section_tech2application",
+  "is_done_tech2application",
+  "column_break_kxbo",
+  "is_running_tech2application",
+  "column_break_nqrt",
+  "cost_tech2application",
+  "column_break_qvlq",
+  "time_s_tech2application",
+  "align2tex2docx_tab",
+  "application",
+  "run_align2tex2docx",
+  "align_section",
+  "long_text_sodr",
+  "application_align_0",
+  "align_report_1",
+  "application_align_1",
+  "application_align_formatted",
+  "tex_section",
+  "long_text_fwhs",
+  "application_tex",
+  "application_tex_formatted",
+  "docx_section",
+  "table_gqtg",
+  "status_section_align2tex2docx",
+  "is_done_align2tex2docx",
+  "column_break_ogxf",
+  "is_running_align2tex2docx",
+  "column_break_hlkl",
+  "cost_align2tex2docx",
+  "column_break_lobz",
+  "time_s_align2tex2docx",
+  "proofreading_tab",
+  "proofreading_section",
+  "before_tex",
+  "upload_final_docx_section",
+  "attach_xgcu",
+  "review2revise_tab",
+  "table_gurt",
+  "run_review2revise",
+  "reply_review",
+  "revised_application",
+  "section_break_ebdq",
+  "download_reply_review",
+  "download_revised_application",
+  "status_section_review2revise",
+  "is_done_review2revise",
+  "column_break_uusn",
+  "is_running_review2revise",
+  "column_break_lhdd",
+  "cost_review2revise",
+  "column_break_onxd",
+  "time_s_review2revise"
+ ],
+ "fields": [
+  {
+   "fieldname": "patent_id",
+   "fieldtype": "Data",
+   "label": "Patent ID",
+   "read_only": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "patent_title",
+   "fieldtype": "Data",
+   "label": "Patent Title"
+  },
+  {
+   "fieldname": "section_break_sgac",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "writer_id",
+   "fieldtype": "Link",
+   "label": "Writer ID",
+   "options": "Patent Writer"
+  },
+  {
+   "fieldname": "patent_tab",
+   "fieldtype": "Tab Break",
+   "label": "Writer"
+  },
+  {
+   "fieldname": "scene2tech_tab",
+   "fieldtype": "Tab Break",
+   "label": "Scene2Tech"
+  },
+  {
+   "fieldname": "proofreading_tab",
+   "fieldtype": "Tab Break",
+   "label": "Proofreading"
+  },
+  {
+   "fieldname": "review2revise_tab",
+   "fieldtype": "Tab Break",
+   "label": "Review2Revise"
+  },
+  {
+   "fieldname": "align2tex2docx_tab",
+   "fieldtype": "Tab Break",
+   "label": "Align2Tex2Docx"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "section_break_rodc",
+   "fieldtype": "Section Break",
+   "label": "Title2Scene"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "section_break_mvti",
+   "fieldtype": "Section Break",
+   "label": "Info2Scene"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "section_break_cztm",
+   "fieldtype": "Section Break",
+   "label": "Info2Tech"
+  },
+  {
+   "fieldname": "column_break_vacp",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_wmqm",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "run_info2scene",
+   "fieldtype": "Button",
+   "label": "Run Info2Scene"
+  },
+  {
+   "fieldname": "column_break_afgd",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "run_info2tech",
+   "fieldtype": "Button",
+   "label": "Run Info2Tech"
+  },
+  {
+   "fieldname": "run_title2scene",
+   "fieldtype": "Button",
+   "label": "Run Title2Scene"
+  },
+  {
+   "fieldname": "title_section",
+   "fieldtype": "Section Break",
+   "label": "Title"
+  },
+  {
+   "default": "0",
+   "fieldname": "choose_title2scene",
+   "fieldtype": "Check",
+   "label": "Yes"
+  },
+  {
+   "default": "0",
+   "fieldname": "choose_info2scene",
+   "fieldtype": "Check",
+   "label": "Yes"
+  },
+  {
+   "default": "0",
+   "fieldname": "choose_info2tech",
+   "fieldtype": "Check",
+   "label": "Yes"
+  },
+  {
+   "fieldname": "preinfo_tab",
+   "fieldtype": "Tab Break",
+   "label": "PreInfo"
+  },
+  {
+   "fieldname": "innovation_direction_0_column",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "scene",
+   "fieldtype": "Long Text",
+   "label": "Scene"
+  },
+  {
+   "fieldname": "core_problem_analysis",
+   "fieldtype": "Long Text",
+   "label": "core problem analysis",
+   "read_only": 1
+  },
+  {
+   "fieldname": "piror_solution_digest",
+   "fieldtype": "Long Text",
+   "label": "piror solution digest",
+   "read_only": 1
+  },
+  {
+   "fieldname": "patent_gap_analysis",
+   "fieldtype": "Long Text",
+   "label": "patent gap analysis",
+   "read_only": 1
+  },
+  {
+   "fieldname": "innovation_direction_0",
+   "fieldtype": "Long Text",
+   "label": "innovation direction 0",
+   "read_only": 1
+  },
+  {
+   "fieldname": "design_00",
+   "fieldtype": "Long Text",
+   "label": "design 00",
+   "read_only": 1
+  },
+  {
+   "fieldname": "design_01",
+   "fieldtype": "Long Text",
+   "label": "design 01",
+   "read_only": 1
+  },
+  {
+   "fieldname": "innovation_direction1",
+   "fieldtype": "Long Text",
+   "label": "innovation direction1",
+   "read_only": 1
+  },
+  {
+   "fieldname": "design_10",
+   "fieldtype": "Long Text",
+   "label": "design 10",
+   "read_only": 1
+  },
+  {
+   "fieldname": "design_11",
+   "fieldtype": "Long Text",
+   "label": "design 11",
+   "read_only": 1
+  },
+  {
+   "fieldname": "innovation_evaluation",
+   "fieldtype": "Long Text",
+   "label": "innovation evaluation",
+   "read_only": 1
+  },
+  {
+   "fieldname": "patent_specification",
+   "fieldtype": "Long Text",
+   "label": "patent specification",
+   "read_only": 1
+  },
+  {
+   "fieldname": "data_validation",
+   "fieldtype": "Long Text",
+   "label": "data validation",
+   "read_only": 1
+  },
+  {
+   "fieldname": "final_tech",
+   "fieldtype": "Long Text",
+   "label": "final tech",
+   "read_only": 1
+  },
+  {
+   "fieldname": "tech",
+   "fieldtype": "Long Text",
+   "label": "Tech"
+  },
+  {
+   "fieldname": "disclosure",
+   "fieldtype": "Long Text",
+   "label": "disclosure"
+  },
+  {
+   "fieldname": "run_scene2tech",
+   "fieldtype": "Button",
+   "label": "Run Scene2Tech"
+  },
+  {
+   "fieldname": "search_keywords_tech",
+   "fieldtype": "Long Text",
+   "label": "search keywords"
+  },
+  {
+   "fieldname": "prior_art_tech",
+   "fieldtype": "Long Text",
+   "label": "prior art"
+  },
+  {
+   "fieldname": "patentability_analysis",
+   "fieldtype": "Long Text",
+   "label": "patentability analysis"
+  },
+  {
+   "fieldname": "prior_art_analysis",
+   "fieldtype": "Long Text",
+   "label": "prior art analysis"
+  },
+  {
+   "fieldname": "search_keywords_scene",
+   "fieldtype": "Long Text",
+   "label": "search keywords",
+   "read_only": 1
+  },
+  {
+   "fieldname": "prior_art_scene",
+   "fieldtype": "Long Text",
+   "label": "prior art",
+   "read_only": 1
+  },
+  {
+   "fieldname": "diff_analysis",
+   "fieldtype": "Long Text",
+   "label": "diff analysis"
+  },
+  {
+   "fieldname": "claims_plan",
+   "fieldtype": "Long Text",
+   "label": "claims plan"
+  },
+  {
+   "fieldname": "claims_science_optimized",
+   "fieldtype": "Long Text",
+   "label": "claims science optimized"
+  },
+  {
+   "fieldname": "claims_insufficiency_analysis",
+   "fieldtype": "Long Text",
+   "label": "claims insufficiency analysis"
+  },
+  {
+   "fieldname": "claims_insufficiency_optimized",
+   "fieldtype": "Long Text",
+   "label": "claims insufficiency optimized"
+  },
+  {
+   "fieldname": "claims_format_corrected",
+   "fieldtype": "Long Text",
+   "label": "claims format corrected"
+  },
+  {
+   "fieldname": "description_initial",
+   "fieldtype": "Long Text",
+   "label": "description initial"
+  },
+  {
+   "fieldname": "description_innovation_analysis",
+   "fieldtype": "Long Text",
+   "label": "description innovation analysis"
+  },
+  {
+   "fieldname": "description_innovation_optimized",
+   "fieldtype": "Long Text",
+   "label": "description innovation optimized"
+  },
+  {
+   "fieldname": "description_science_analysis",
+   "fieldtype": "Long Text",
+   "label": "description science analysis"
+  },
+  {
+   "fieldname": "description_science_optimized",
+   "fieldtype": "Long Text",
+   "label": "description science optimized"
+  },
+  {
+   "fieldname": "description_abstract",
+   "fieldtype": "Long Text",
+   "label": "description abstract"
+  },
+  {
+   "fieldname": "merged_application",
+   "fieldtype": "Long Text",
+   "label": "merged application"
+  },
+  {
+   "fieldname": "refined_technical_solution",
+   "fieldtype": "Long Text",
+   "label": "refined technical solution",
+   "read_only": 1
+  },
+  {
+   "fieldname": "final_application",
+   "fieldtype": "Long Text",
+   "label": "final application"
+  },
+  {
+   "fieldname": "proofreading_section",
+   "fieldtype": "Section Break",
+   "label": "Proofreading"
+  },
+  {
+   "fieldname": "before_tex",
+   "fieldtype": "Long Text",
+   "label": "Before Tex"
+  },
+  {
+   "fieldname": "upload_final_docx_section",
+   "fieldtype": "Section Break",
+   "label": "Upload"
+  },
+  {
+   "fieldname": "attach_xgcu",
+   "fieldtype": "Attach",
+   "label": "Final Docx"
+  },
+  {
+   "fieldname": "table_gurt",
+   "fieldtype": "Table",
+   "label": "Upload",
+   "options": "Patent Workflow Upload File"
+  },
+  {
+   "fieldname": "run_review2revise",
+   "fieldtype": "Button",
+   "label": "Run Review2Revise"
+  },
+  {
+   "fieldname": "reply_review",
+   "fieldtype": "Long Text",
+   "label": "Reply Review"
+  },
+  {
+   "fieldname": "revised_application",
+   "fieldtype": "Long Text",
+   "label": "Revised Application"
+  },
+  {
+   "fieldname": "table_qksh",
+   "fieldtype": "Table",
+   "options": "Patent Workflow Upload File"
+  },
+  {
+   "fieldname": "table_fqra",
+   "fieldtype": "Table",
+   "options": "Patent Workflow Upload File"
+  },
+  {
+   "fieldname": "download_reply_review",
+   "fieldtype": "Button",
+   "label": "Download Reply Review"
+  },
+  {
+   "fieldname": "download_revised_application",
+   "fieldtype": "Button",
+   "label": "Download Revised Application"
+  },
+  {
+   "fieldname": "application",
+   "fieldtype": "Long Text",
+   "label": "Application"
+  },
+  {
+   "fieldname": "run_align2tex2docx",
+   "fieldtype": "Button",
+   "label": "Run Align2Tex2Docx"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "align_section",
+   "fieldtype": "Section Break",
+   "label": "Align"
+  },
+  {
+   "fieldname": "long_text_sodr",
+   "fieldtype": "Long Text",
+   "label": "align report 0",
+   "read_only": 1
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "tex_section",
+   "fieldtype": "Section Break",
+   "label": "Tex"
+  },
+  {
+   "fieldname": "long_text_fwhs",
+   "fieldtype": "Long Text",
+   "label": "tex report",
+   "read_only": 1
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "docx_section",
+   "fieldtype": "Section Break",
+   "label": "Docx"
+  },
+  {
+   "fieldname": "application_tex",
+   "fieldtype": "Long Text",
+   "label": "application tex",
+   "read_only": 1
+  },
+  {
+   "fieldname": "table_gqtg",
+   "fieldtype": "Table",
+   "options": "Patent Workflow Download File",
+   "read_only": 1
+  },
+  {
+   "fieldname": "application_align_0",
+   "fieldtype": "Long Text",
+   "label": "application align 0",
+   "read_only": 1
+  },
+  {
+   "fieldname": "align_report_1",
+   "fieldtype": "Long Text",
+   "label": "align report 1",
+   "read_only": 1
+  },
+  {
+   "fieldname": "application_align_1",
+   "fieldtype": "Long Text",
+   "label": "application align 1",
+   "read_only": 1
+  },
+  {
+   "fieldname": "application_align_formatted",
+   "fieldtype": "Long Text",
+   "label": "application align formatted",
+   "read_only": 1
+  },
+  {
+   "fieldname": "application_tex_formatted",
+   "fieldtype": "Long Text",
+   "label": "application tex formatted",
+   "read_only": 1
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "gap_section",
+   "fieldtype": "Section Break",
+   "label": "Prior"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "design_section",
+   "fieldtype": "Section Break",
+   "label": "Innovation"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "tech_section",
+   "fieldtype": "Section Break",
+   "label": "Tech"
+  },
+  {
+   "fieldname": "column_break_wmpp",
+   "fieldtype": "Column Break",
+   "read_only": 1
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "application_section",
+   "fieldtype": "Section Break",
+   "label": "Application"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "description_section",
+   "fieldtype": "Section Break",
+   "label": "Description"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "claims_section",
+   "fieldtype": "Section Break",
+   "label": "Claims"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "section_break_hjub",
+   "fieldtype": "Section Break",
+   "label": "Prior"
+  },
+  {
+   "fieldname": "section_break_jxgk",
+   "fieldtype": "Section Break",
+   "label": "Status"
+  },
+  {
+   "fieldname": "column_break_utxs",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_bzuz",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_eoeb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "options",
+   "fieldtype": "Select",
+   "label": "Options",
+   "options": "Title2Scene\nInfo2Scene\nInfo2Tech"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_done_preinfo",
+   "fieldtype": "Check",
+   "label": "is Done"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_running_preinfo",
+   "fieldtype": "Check",
+   "label": "is Running",
+   "read_only": 1
+  },
+  {
+   "fieldname": "cost_preinfo",
+   "fieldtype": "Data",
+   "label": "Cost",
+   "read_only": 1
+  },
+  {
+   "fieldname": "time_s_preinfo",
+   "fieldtype": "Data",
+   "label": "Time(s)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_mbcf",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_icfc",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_yifb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_done_scene2tech",
+   "fieldtype": "Check",
+   "label": "is Done"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_running_scene2tech",
+   "fieldtype": "Check",
+   "label": "is Running",
+   "read_only": 1
+  },
+  {
+   "fieldname": "cost_scene2tech",
+   "fieldtype": "Data",
+   "label": "Cost",
+   "read_only": 1
+  },
+  {
+   "fieldname": "time_s_scene2tech",
+   "fieldtype": "Data",
+   "label": "Times(s)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_kxbo",
+   "fieldtype": "Column Break",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_nqrt",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_qvlq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "status_section_scene2tech",
+   "fieldtype": "Section Break",
+   "label": "Status"
+  },
+  {
+   "fieldname": "column_break_ogxf",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_hlkl",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_lobz",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "status_section_align2tex2docx",
+   "fieldtype": "Section Break",
+   "label": "Status"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_done_align2tex2docx",
+   "fieldtype": "Check",
+   "label": "is Done"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_running_align2tex2docx",
+   "fieldtype": "Check",
+   "label": "is Running"
+  },
+  {
+   "fieldname": "cost_align2tex2docx",
+   "fieldtype": "Data",
+   "label": "Cost"
+  },
+  {
+   "fieldname": "time_s_align2tex2docx",
+   "fieldtype": "Data",
+   "label": "Time(s)"
+  },
+  {
+   "fieldname": "section_break_ebdq",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_uusn",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_lhdd",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_onxd",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "status_section_review2revise",
+   "fieldtype": "Section Break",
+   "label": "Status"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_done_review2revise",
+   "fieldtype": "Check",
+   "label": "is Done"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_running_review2revise",
+   "fieldtype": "Check",
+   "label": "is Running",
+   "read_only": 1
+  },
+  {
+   "fieldname": "cost_review2revise",
+   "fieldtype": "Data",
+   "label": "Cost",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "time_s_review2revise",
+   "fieldtype": "Data",
+   "label": "Time(s)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "tech2application_tab",
+   "fieldtype": "Tab Break",
+   "label": "Tech2Application"
+  },
+  {
+   "fieldname": "run_tech2application",
+   "fieldtype": "Button",
+   "label": "Run Tech2Application"
+  },
+  {
+   "fieldname": "status_section_tech2application",
+   "fieldtype": "Section Break",
+   "label": "Status"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_done_tech2application",
+   "fieldtype": "Check",
+   "label": "is Done"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_running_tech2application",
+   "fieldtype": "Check",
+   "label": "is Running"
+  },
+  {
+   "fieldname": "cost_tech2application",
+   "fieldtype": "Data",
+   "label": "Cost",
+   "read_only": 1
+  },
+  {
+   "fieldname": "time_s_tech2application",
+   "fieldtype": "Data",
+   "label": "Time(s)",
+   "read_only": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-07-22 15:29:50.038861",
+ "modified_by": "Administrator",
+ "module": "Patent Hub",
+ "name": "Patent Workflow",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
