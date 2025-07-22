@@ -43,8 +43,7 @@
    "default": "0",
    "fieldname": "is_done",
    "fieldtype": "Check",
-   "label": "Is Done",
-   "read_only": 1
+   "label": "Is Done"
   },
   {
    "fieldname": "section_break_vseg",
@@ -127,7 +126,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-13 14:51:33.846137",
+ "modified": "2025-07-14 12:03:12.641208",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Scene To Tech",

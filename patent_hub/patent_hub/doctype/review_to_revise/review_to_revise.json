@@ -50,8 +50,7 @@
    "default": "0",
    "fieldname": "is_done",
    "fieldtype": "Check",
-   "label": "Is Done",
-   "read_only": 1
+   "label": "Is Done"
   },
   {
    "fieldname": "column_break_vxew",
@@ -182,7 +181,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-13 15:01:43.775976",
+ "modified": "2025-07-14 12:08:14.555251",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Review To Revise",
