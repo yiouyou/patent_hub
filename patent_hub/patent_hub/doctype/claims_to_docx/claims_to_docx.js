@@ -144,7 +144,7 @@ frappe.ui.form.on('Claims To Docx', {
     handle_download_click(frm, 'docx');
   },
   // 处理 markdown_before_tex 按钮点击
-  'markdown_before_tex': function(frm) {
+  markdown_before_tex: function(frm) {
     handle_download_click(frm, 'markdown_before_tex');
   }
 });

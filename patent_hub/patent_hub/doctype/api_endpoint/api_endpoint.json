@@ -7,11 +7,19 @@
  "field_order": [
   "server_ip_port",
   "server_work_dir",
-  "md_to_docx",
+  "section_break_wwpd",
+  "title2scene",
+  "info2tech",
+  "scene2tech",
+  "tech2appliation",
+  "align2tex2docx",
+  "review2revise",
+  "section_break_ieft",
   "scene_to_tech",
   "tech_to_claims",
   "claims_to_docx",
-  "review_to_revise"
+  "review_to_revise",
+  "md_to_docx"
  ],
  "fields": [
   {
@@ -48,13 +56,51 @@
    "fieldname": "review_to_revise",
    "fieldtype": "Data",
    "label": "Review To Revise"
+  },
+  {
+   "fieldname": "section_break_wwpd",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "title2scene",
+   "fieldtype": "Data",
+   "label": "Title2Scene"
+  },
+  {
+   "fieldname": "info2tech",
+   "fieldtype": "Data",
+   "label": "Info2Tech"
+  },
+  {
+   "fieldname": "scene2tech",
+   "fieldtype": "Data",
+   "label": "Scene2Tech"
+  },
+  {
+   "fieldname": "tech2appliation",
+   "fieldtype": "Data",
+   "label": "Tech2Appliation"
+  },
+  {
+   "fieldname": "align2tex2docx",
+   "fieldtype": "Data",
+   "label": "Align2Tex2Docx"
+  },
+  {
+   "fieldname": "review2revise",
+   "fieldtype": "Data",
+   "label": "Review2Revise"
+  },
+  {
+   "fieldname": "section_break_ieft",
+   "fieldtype": "Section Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2025-07-13 00:26:06.123748",
+ "modified": "2025-07-26 05:14:57.041099",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "API Endpoint",
