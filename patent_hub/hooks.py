@@ -6,6 +6,15 @@ app_email = "zhuosong@gmail.com"
 app_license = "mit"
 
 
+scheduler_events = {
+	"cron": {
+		"*/5 * * * *": [  # 每 5 分钟检查一次
+			"patent_hub.api._utils.reset_all_stuck_tasks"
+		]
+	}
+}
+
+
 fixtures = [
 	{"dt": "Role", "filters": [["name", "in", ["Patent Writer"]]]},
 	{"dt": "Workspace", "filters": [["name", "in", ["Patent Hub"]]]},

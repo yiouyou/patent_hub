@@ -18,7 +18,6 @@ frappe.ui.form.on('Patent Workflow', {
     await run_step_with_status(frm, "review2revise", "patent_hub.api.call_review2revise.run", "Review2Revise");
   },
   refresh(frm) {
-    setTimeout(() => toggle_preinfo_sections(frm), 100);  // 延迟处理确保已渲染
     // 🔔 实时事件绑定
     if (!frm._realtime_bound) {
       const steps = [
@@ -35,76 +34,80 @@ frappe.ui.form.on('Patent Workflow', {
       frm._realtime_bound = true; // 防止重复绑定
     }
   },
-  preinfo_options(frm) {
-    toggle_preinfo_sections(frm);
-  },
   validate(frm) {
   }
 });
 
 
 /**
- * 根据 preinfo_options 字段值，控制预处理相关 section 显示
- * 规则：
- * - 若为空：两个 section 都不显示
- * - 若为 "title2scene"：仅显示 title2scene_section
- * - 若为 "info2tech"：仅显示 info2tech_section
- * @param {frappe.ui.form.Form} frm - 当前表单对象
- */
-function toggle_preinfo_sections(frm) {
-  const opt = (frm.doc.preinfo_options || '').trim().toLowerCase();
-  frm.toggle_display('title2scene_section', opt === 'title2scene');
-  frm.toggle_display('info2tech_section', opt === 'info2tech');
-}
-
-
-/**
- * 根据步骤名映射状态字段（如 title2scene → is_running_preinfo）
+ * 获取与指定步骤相关的所有状态字段名（适用于单独字段）
+ *
+ * 返回字段：
+ * - is_running_field：运行中标志字段
+ * - is_done_field：已完成标志字段
+ * - status_field：状态文字描述字段（如 "Running" / "Done" / "Failed"）
+ * - started_at_field：任务启动时间字段（建议后台也使用）
+ *
  * @param {string} step_name
- * @returns {{is_running_field: string, is_done_field: string}}
+ * @returns {{
+ *   is_running_field: string,
+ *   is_done_field: string,
+ *   status_field: string,
+ *   started_at_field: string
+ * }}
  */
 function get_status_field(step_name) {
-  if (["title2scene", "info2tech"].includes(step_name)) {
-    return {
-      is_running_field: "is_running_preinfo",
-      is_done_field: "is_done_preinfo"
-    };
-  }
   return {
     is_running_field: `is_running_${step_name}`,
-    is_done_field: `is_done_${step_name}`
+    is_done_field: `is_done_${step_name}`,
+    status_field: `status_${step_name}`,
+    started_at_field: `${step_name}_started_at`
   };
 }
 
 
 /**
- * 通用步骤执行器：自动处理 running/done 状态
- * @param {Object} frm - 当前 Frappe form
- * @param {String} step_name - 步骤名（如 "title2scene"）
- * @param {String} method_path - 服务端调用路径
- * @param {String} label - UI 提示名
+ * 通用任务执行器（自动处理状态字段）
+ * @param {frappe.ui.form.Form} frm - 当前 Frappe 表单对象
+ * @param {string} step_name - 步骤名，如 "info2tech"
+ * @param {string} method_path - 后端方法路径
+ * @param {string} label - 前端用户提示名称
  */
 async function run_step_with_status(frm, step_name, method_path, label) {
-  const { is_running_field, is_done_field } = get_status_field(step_name);
+  const {
+    is_running_field,
+    is_done_field,
+    status_field,
+    started_at_field
+  } = get_status_field(step_name);
+
   try {
-    // 开始运行
+    // 启动状态设置
     frm.set_value(is_running_field, 1);
     frm.set_value(is_done_field, 0);
+    frm.set_value(status_field, "Running");
+    frm.set_value(started_at_field, frappe.datetime.now_datetime());
     await frm.save();
+
+    // 调用后端方法
     await frappe.call({
       method: method_path,
       args: { docname: frm.doc.name },
       freeze: true,
       freeze_message: `运行 ${label} 中，请稍候...`
     });
-    await frm.reload_doc(); // 刷新获取运行结果
+
+    // 后端完成后刷新文档
+    await frm.reload_doc();
   } catch (e) {
     frappe.show_alert({
       message: e.message || `运行 ${label} 失败，请查看日志`,
       indicator: 'red'
     }, 7);
-    // 保守处理异常状态
+
+    // 如果请求失败，回滚运行中标志
     await frappe.model.set_value(frm.doctype, frm.docname, is_running_field, 0);
+    await frappe.model.set_value(frm.doctype, frm.docname, status_field, "Failed");
   }
 }
 
