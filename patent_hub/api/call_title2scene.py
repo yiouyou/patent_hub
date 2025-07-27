@@ -11,7 +11,7 @@ import httpx
 from frappe import enqueue
 from frappe.utils import add_to_date, now_datetime
 
-from patent_hub.api._util_compression import decompress_file_from_base64, decompress_json_from_base64
+from patent_hub.api._utils import decompress_file_from_base64, decompress_json_from_base64, generate_step_id
 
 logger = frappe.logger("app.patent_hub.patent_workflow.call_title2scene")
 logger.setLevel(logging.INFO)
@@ -24,6 +24,8 @@ def run(docname):
 	try:
 		logger.info(f"开始处理文档：{docname}")
 		doc = frappe.get_doc("Patent Workflow", docname)
+		doc.preinfo_id = generate_step_id(doc.patent_id, "T2S")
+		doc.save()
 		if not doc:
 			return {"success": False, "error": f"文档 {docname} 不存在"}
 		if doc.is_done_preinfo:
@@ -98,8 +100,9 @@ def _job(docname, user=None):
 		# logger.info(f"解析后的 JSON: {output}")
 		_res = decompress_json_from_base64(output.get("res", ""))
 		doc.scene = _res["scene"]
-		doc.time_s = output.get("TIME(s)", 0.0)
-		doc.cost = output.get("cost", 0)
+		#####
+		doc.time_s_preinfo = output.get("TIME(s)", 0.0)
+		doc.cost_preinfo = output.get("cost", 0)
 		doc.is_done_preinfo = 1
 		doc.is_running_preinfo = 0
 		doc.save()

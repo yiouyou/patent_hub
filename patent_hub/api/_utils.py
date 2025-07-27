@@ -45,3 +45,13 @@ def decompress_file_from_base64(base64_str: str, save_path: str):
 	data = gzip.decompress(compressed)
 	with open(save_path, "wb") as f:
 		f.write(data)
+
+
+from frappe.model.naming import make_autoname
+
+
+def generate_step_id(patent_id: str, prefix: str) -> str:
+	"""
+	使用 Frappe 的 make_autoname 生成 {patent_id}-{prefix}-.#
+	"""
+	return make_autoname(f"{patent_id}-{prefix}-.#")

@@ -39,9 +39,8 @@ frappe.ui.form.on('Patent Workflow', {
     toggle_preinfo_sections(frm);
   },
   validate(frm) {
-  },
+  }
 });
-
 
 
 /**

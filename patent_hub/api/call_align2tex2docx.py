@@ -11,7 +11,7 @@ import httpx
 from frappe import enqueue
 from frappe.utils import add_to_date, now_datetime
 
-from patent_hub.api._util_compression import decompress_file_from_base64, decompress_json_from_base64
+from patent_hub.api._utils import compress_str_to_base64, decompress_json_from_base64, generate_step_id
 
 logger = frappe.logger("app.patent_hub.patent_workflow.call_align2tex2docx")
 logger.setLevel(logging.INFO)
@@ -24,6 +24,8 @@ def run(docname):
 	try:
 		logger.info(f"开始处理文档：{docname}")
 		doc = frappe.get_doc("Patent Workflow", docname)
+		doc.align2tex2docx_id = generate_step_id(doc.patent_id, "A2T2D")
+		doc.save()
 		if not doc:
 			return {"success": False, "error": f"文档 {docname} 不存在"}
 		if doc.is_done_align2tex2docx:
@@ -67,11 +69,7 @@ def _job(docname, user=None):
 		app_name = api_endpoint.align2tex2docx.strip("/")
 		url = f"{base_url}/{app_name}/invoke"
 		logger.info(f"请求 URL：{url}")
-		# review_base64
-		review_base64 = "test"
-		# claims_base64
-		claims_base64 = "test"
-		# 拼接 tmp_folder
+		# input
 		tmp_folder = os.path.join(
 			api_endpoint.get_password("server_work_dir"),
 			re.sub(r"[^\w\u4e00-\u9fa5\-]", "", doc.patent_title),
@@ -80,8 +78,8 @@ def _job(docname, user=None):
 		# payload
 		payload = {
 			"input": {
-				"review_base64": review_base64,
-				"claims_base64": claims_base64,
+				"base64file": compress_str_to_base64(doc.application),
+				"patent_title": doc.patent_title,
 				"tmp_folder": tmp_folder,
 			}
 		}
@@ -102,8 +100,9 @@ def _job(docname, user=None):
 		_application_docx_base64 = _res["application_docx_base64"]
 		_figure_codes = _res["figure_codes"]
 		doc.figure_codes = "\n==========\n".join([str(code) for code in _figure_codes])
-		doc.time_s = output.get("TIME(s)", 0.0)
-		doc.cost = output.get("cost", 0)
+		#####
+		doc.time_s_align2tex2docx = output.get("TIME(s)", 0.0)
+		doc.cost_align2tex2docx = output.get("cost", 0)
 		doc.is_done_align2tex2docx = 1
 		doc.is_running_align2tex2docx = 0
 		doc.save()
@@ -121,3 +120,22 @@ def _job(docname, user=None):
 			frappe.publish_realtime("align2tex2docx_failed", {"error": str(e), "docname": docname}, user=user)
 		except Exception as save_error:
 			logger.error(f"保存失败状态时出错: {save_error!s}")
+
+
+def get_base64_from_attachment(doc, fieldname):
+	file_url = doc.get(fieldname)
+	if not file_url:
+		raise ValueError(f"字段 {fieldname} 为空，未上传文件")
+	# 确定是私有还是公共路径
+	if file_url.startswith("/private/files/"):
+		file_path = os.path.join(
+			frappe.get_site_path("private", "files"), file_url.replace("/private/files/", "")
+		)
+	elif file_url.startswith("/files/"):
+		file_path = os.path.join(frappe.get_site_path("public", "files"), file_url.replace("/files/", ""))
+	else:
+		raise ValueError(f"未知文件路径格式：{file_url}")
+	# 读取并转换为 base64 字符串
+	with open(file_path, "rb") as f:
+		encoded_bytes = base64.b64encode(f.read())
+		return encoded_bytes.decode("utf-8")

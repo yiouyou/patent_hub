@@ -31,12 +31,8 @@
   "column_break_eoeb",
   "time_s_preinfo",
   "title2scene_section",
-  "choose_title2scene",
-  "column_break_vacp",
   "call_title2scene",
   "info2tech_section",
-  "choose_info2tech",
-  "column_break_afgd",
   "table_upload_info2tech",
   "call_info2tech",
   "section_break_prwl",
@@ -111,7 +107,7 @@
   "refined_technical_solution",
   "final_application",
   "section_break_enjb",
-  "tech2applicaiton_id",
+  "tech2application_id",
   "align2tex2docx_tab",
   "application",
   "call_align2tex2docx",
@@ -206,26 +202,6 @@
    "fieldname": "align2tex2docx_tab",
    "fieldtype": "Tab Break",
    "label": "Align2Tex2Docx"
-  },
-  {
-   "fieldname": "column_break_vacp",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "column_break_afgd",
-   "fieldtype": "Column Break"
-  },
-  {
-   "default": "0",
-   "fieldname": "choose_title2scene",
-   "fieldtype": "Check",
-   "label": "Yes"
-  },
-  {
-   "default": "0",
-   "fieldname": "choose_info2tech",
-   "fieldtype": "Check",
-   "label": "Yes"
   },
   {
    "fieldname": "preinfo_tab",
@@ -858,11 +834,6 @@
    "fieldtype": "Section Break"
   },
   {
-   "fieldname": "tech2applicaiton_id",
-   "fieldtype": "Data",
-   "label": "Tech2Applicaiton ID"
-  },
-  {
    "fieldname": "section_break_rknc",
    "fieldtype": "Section Break"
   },
@@ -974,12 +945,17 @@
    "fieldtype": "Select",
    "label": "Options",
    "options": "\nTitle2Scene\nInfo2Tech"
+  },
+  {
+   "fieldname": "tech2application_id",
+   "fieldtype": "Data",
+   "label": "Tech2Application ID"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-26 16:19:06.883271",
+ "modified": "2025-07-27 08:37:56.711682",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Patent Workflow",
