@@ -84,8 +84,8 @@ def _job(docname: str, user=None):
 
 		payload = {
 			"input": {
-				"base64file": compress_str_to_base64(doc.tech),
 				"patent_title": doc.patent_title,
+				"base64file": compress_str_to_base64(doc.tech),
 				"tmp_folder": tmp_folder,
 				"mid_files": compress_json_to_base64(mid_files),
 			}
