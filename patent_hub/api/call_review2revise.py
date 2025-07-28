@@ -7,7 +7,6 @@ import re
 import frappe
 import httpx
 from frappe import enqueue
-from frappe.utils import now_datetime
 
 from patent_hub.api._utils import (
 	complete_task_fields,
@@ -23,12 +22,17 @@ TIMEOUT = 1800
 
 
 @frappe.whitelist()
-def run(docname):
+def run(docname: str, force: bool = False):
 	try:
-		logger.info(f"开始处理文档：{docname}")
+		logger.info(f"[Review2Revise] 准备启动任务: {docname}, force={force}")
 		doc = frappe.get_doc("Patent Workflow", docname)
 		if not doc:
 			return {"success": False, "error": f"文档 {docname} 不存在"}
+
+		if doc.is_done_review2revise and not force:
+			logger.warning(f"[Review2Revise] 任务已完成，跳过执行: {docname}")
+			return {"success": True, "message": "任务已完成，未重复执行"}
+
 		if doc.is_running_review2revise:
 			return {"success": False, "error": "任务正在运行中，请等待完成"}
 
@@ -43,18 +47,27 @@ def run(docname):
 			docname=docname,
 			user=frappe.session.user,
 		)
-		return {"success": True, "message": "任务已成功提交"}
+
+		logger.info(f"[Review2Revise] 已入队执行: {docname}")
+		return {"success": True, "message": "任务已提交执行队列"}
+
 	except Exception as e:
-		logger.error(f"启动任务失败: {e}")
+		logger.error(f"[Review2Revise] 启动任务失败: {e}")
 		logger.error(frappe.get_traceback())
 		return {"success": False, "error": f"启动任务失败: {e}"}
 
 
-def _job(docname, user=None):
-	logger.info(f"进入 job: {docname}")
+def _job(docname: str, user=None):
+	logger.info(f"[Review2Revise] 开始执行任务: {docname}")
 	doc = None
+
 	try:
 		doc = frappe.get_doc("Patent Workflow", docname)
+
+		# 🛡 防御性：如果任务已非运行状态，则跳过执行
+		if not doc.is_running_review2revise:
+			logger.warning(f"[Review2Revise] 任务状态已取消，跳过执行: {docname}")
+			return
 
 		api_endpoint = frappe.get_single("API Endpoint")
 		if not api_endpoint:
@@ -63,7 +76,7 @@ def _job(docname, user=None):
 		base_url = api_endpoint.server_ip_port.rstrip("/")
 		app_name = api_endpoint.review2revise.strip("/")
 		url = f"{base_url}/{app_name}/invoke"
-		logger.info(f"请求 URL：{url}")
+		logger.info(f"[Review2Revise] 请求 URL: {url}")
 
 		tmp_folder = os.path.join(
 			api_endpoint.get_password("server_work_dir"),
@@ -91,7 +104,6 @@ def _job(docname, user=None):
 		doc.reply_review = _res.get("reply_review_txt")
 		doc.revised_application = _res.get("revised_application_txt")
 
-		# ✅ 标记完成
 		complete_task_fields(
 			doc,
 			"review2revise",
@@ -100,12 +112,15 @@ def _job(docname, user=None):
 				"cost_review2revise": output.get("cost", 0),
 			},
 		)
+
+		logger.info(f"[Review2Revise] 执行成功: {docname}")
 		frappe.db.commit()
 		frappe.publish_realtime("review2revise_done", {"docname": doc.name}, user=user)
 
 	except Exception as e:
-		logger.error(f"任务 review2revise 执行失败: {e}")
+		logger.error(f"[Review2Revise] 执行失败: {e}")
 		logger.error(frappe.get_traceback())
+
 		if doc:
 			fail_task_fields(doc, "review2revise", str(e))
 			frappe.db.commit()

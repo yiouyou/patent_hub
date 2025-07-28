@@ -7,7 +7,6 @@ import re
 import frappe
 import httpx
 from frappe import enqueue
-from frappe.utils import now_datetime
 
 from patent_hub.api._utils import (
 	complete_task_fields,
@@ -23,12 +22,17 @@ TIMEOUT = 1800
 
 
 @frappe.whitelist()
-def run(docname):
+def run(docname: str, force: bool = False):
 	try:
-		logger.info(f"开始处理文档：{docname}")
+		logger.info(f"[Tech2Application] 准备启动任务: {docname}, force={force}")
 		doc = frappe.get_doc("Patent Workflow", docname)
 		if not doc:
 			return {"success": False, "error": f"文档 {docname} 不存在"}
+
+		if doc.is_done_tech2application and not force:
+			logger.info(f"[Tech2Application] 任务已完成，跳过执行: {docname}")
+			return {"success": True, "message": "任务已完成，未重复执行"}
+
 		if doc.is_running_tech2application:
 			return {"success": False, "error": "任务正在运行中，请等待完成"}
 
@@ -43,18 +47,24 @@ def run(docname):
 			docname=docname,
 			user=frappe.session.user,
 		)
-		return {"success": True, "message": "任务已成功提交"}
+		logger.info(f"[Tech2Application] 任务已提交执行队列: {docname}")
+		return {"success": True, "message": "任务已提交执行队列"}
+
 	except Exception as e:
-		logger.error(f"启动任务失败: {e}")
+		logger.error(f"[Tech2Application] 启动任务失败: {e}")
 		logger.error(frappe.get_traceback())
 		return {"success": False, "error": f"启动任务失败: {e}"}
 
 
-def _job(docname, user=None):
-	logger.info(f"进入 job: {docname}")
+def _job(docname: str, user=None):
+	logger.info(f"[Tech2Application] 开始执行任务: {docname}")
 	doc = None
 	try:
 		doc = frappe.get_doc("Patent Workflow", docname)
+
+		if not doc.is_running_tech2application:
+			logger.warning(f"[Tech2Application] 任务已被取消或终止，跳过执行: {docname}")
+			return
 
 		api_endpoint = frappe.get_single("API Endpoint")
 		if not api_endpoint:
@@ -63,7 +73,7 @@ def _job(docname, user=None):
 		base_url = api_endpoint.server_ip_port.rstrip("/")
 		app_name = api_endpoint.tech2application.strip("/")
 		url = f"{base_url}/{app_name}/invoke"
-		logger.info(f"请求 URL：{url}")
+		logger.info(f"[Tech2Application] 请求 URL: {url}")
 
 		tmp_folder = os.path.join(
 			api_endpoint.get_password("server_work_dir"),
@@ -111,7 +121,7 @@ def _job(docname, user=None):
 		doc.final_application = _res.get("final_application")
 		doc.application = _res.get("final_application")
 
-		# ✅ 成功标记状态
+		# ✅ 标记完成
 		complete_task_fields(
 			doc,
 			"tech2application",
@@ -120,11 +130,13 @@ def _job(docname, user=None):
 				"cost_tech2application": output.get("cost", 0),
 			},
 		)
+
+		logger.info(f"[Tech2Application] 执行成功: {docname}")
 		frappe.db.commit()
 		frappe.publish_realtime("tech2application_done", {"docname": doc.name}, user=user)
 
 	except Exception as e:
-		logger.error(f"任务 tech2application 执行失败: {e}")
+		logger.error(f"[Tech2Application] 执行失败: {e}")
 		logger.error(frappe.get_traceback())
 		if doc:
 			fail_task_fields(doc, "tech2application", str(e))

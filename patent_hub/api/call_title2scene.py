@@ -7,7 +7,6 @@ import re
 import frappe
 import httpx
 from frappe import enqueue
-from frappe.utils import now_datetime
 
 from patent_hub.api._utils import (
 	complete_task_fields,
@@ -23,12 +22,17 @@ TIMEOUT = 1800
 
 
 @frappe.whitelist()
-def run(docname):
+def run(docname: str, force: bool = False):
 	try:
-		logger.info(f"开始处理文档：{docname}")
+		logger.info(f"[Title2Scene] 准备启动任务: {docname}, force={force}")
 		doc = frappe.get_doc("Patent Workflow", docname)
 		if not doc:
 			return {"success": False, "error": f"文档 {docname} 不存在"}
+
+		if doc.is_done_title2scene and not force:
+			logger.info(f"[Title2Scene] 任务已完成，跳过执行: {docname}")
+			return {"success": True, "message": "任务已完成，未重复执行"}
+
 		if doc.is_running_title2scene:
 			return {"success": False, "error": "任务正在运行中，请等待完成"}
 
@@ -43,20 +47,27 @@ def run(docname):
 			docname=docname,
 			user=frappe.session.user,
 		)
-		return {"success": True, "message": "任务已成功提交"}
+		logger.info(f"[Title2Scene] 任务已提交队列: {docname}")
+		return {"success": True, "message": "任务已提交执行队列"}
+
 	except Exception as e:
-		logger.error(f"启动任务失败: {e}")
+		logger.error(f"[Title2Scene] 启动任务失败: {e}")
 		logger.error(frappe.get_traceback())
 		return {"success": False, "error": f"启动任务失败: {e}"}
 
 
-def _job(docname, user=None):
-	logger.info(f"进入 job: {docname}")
+def _job(docname: str, user=None):
+	logger.info(f"[Title2Scene] 开始执行任务: {docname}")
 	doc = None
 	try:
 		doc = frappe.get_doc("Patent Workflow", docname)
 
-		# 准备请求参数
+		# ⚠️ 再次检查是否已被取消
+		if not doc.is_running_title2scene:
+			logger.warning(f"[Title2Scene] 任务已被取消或终止，跳过执行: {docname}")
+			return
+
+		# 获取 API endpoint 和拼接 URL
 		api_endpoint = frappe.get_single("API Endpoint")
 		if not api_endpoint:
 			frappe.throw("未配置 API Endpoint")
@@ -64,14 +75,16 @@ def _job(docname, user=None):
 		base_url = api_endpoint.server_ip_port.rstrip("/")
 		app_name = api_endpoint.title2scene.strip("/")
 		url = f"{base_url}/{app_name}/invoke"
-		logger.info(f"请求 URL：{url}")
+		logger.info(f"[Title2Scene] 请求 URL：{url}")
 
+		# 临时工作路径
 		tmp_folder = os.path.join(
 			api_endpoint.get_password("server_work_dir"),
 			re.sub(r"[^\w\u4e00-\u9fa5\-]", "", doc.patent_title),
 			"r2r",
 		)
 
+		# 构建 payload
 		payload = {
 			"input": {
 				"review_base64": "test",
@@ -89,9 +102,10 @@ def _job(docname, user=None):
 		output = json.loads(res.json()["output"])
 		_res = decompress_json_from_base64(output.get("res", ""))
 
+		# 写入字段
 		doc.scene = _res.get("scene")
 
-		# ✅ 成功完成：使用工具函数设置状态
+		# ✅ 成功完成：标记任务完成状态
 		complete_task_fields(
 			doc,
 			"title2scene",
@@ -100,11 +114,13 @@ def _job(docname, user=None):
 				"cost_title2scene": output.get("cost", 0),
 			},
 		)
+
+		logger.info(f"[Title2Scene] 执行成功: {docname}")
 		frappe.db.commit()
 		frappe.publish_realtime("title2scene_done", {"docname": doc.name}, user=user)
 
 	except Exception as e:
-		logger.error(f"任务 title2scene 执行失败: {e}")
+		logger.error(f"[Title2Scene] 执行失败: {e}")
 		logger.error(frappe.get_traceback())
 		if doc:
 			fail_task_fields(doc, "title2scene", str(e))

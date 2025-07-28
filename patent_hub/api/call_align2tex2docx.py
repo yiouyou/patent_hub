@@ -25,15 +25,23 @@ TIMEOUT = 1800
 
 
 @frappe.whitelist()
-def run(docname):
+def run(docname: str, force: bool = False):
 	try:
-		logger.info(f"开始处理文档：{docname}")
+		logger.info(f"[Align2Tex2Docx] 准备启动任务: {docname}, force={force}")
 		doc = frappe.get_doc("Patent Workflow", docname)
 		if not doc:
 			return {"success": False, "error": f"文档 {docname} 不存在"}
+
+		# 已完成且非强制，则跳过
+		if doc.is_done_align2tex2docx and not force:
+			logger.warning(f"[Align2Tex2Docx] 任务已完成，未强制重跑，跳过执行: {docname}")
+			return {"success": True, "message": "任务已完成，未重复执行"}
+
+		# 正在运行中，禁止重复提交
 		if doc.is_running_align2tex2docx:
 			return {"success": False, "error": "任务正在运行中，请等待完成"}
 
+		# 初始化任务状态
 		init_task_fields(doc, "align2tex2docx", "A2T2D", logger)
 		doc.save()
 		frappe.db.commit()
@@ -45,18 +53,27 @@ def run(docname):
 			docname=docname,
 			user=frappe.session.user,
 		)
-		return {"success": True, "message": "任务已成功提交"}
+
+		logger.info(f"[Align2Tex2Docx] 已入队: {docname}")
+		return {"success": True, "message": "任务已提交执行队列"}
+
 	except Exception as e:
-		logger.error(f"启动任务失败: {e}")
+		logger.error(f"[Align2Tex2Docx] 启动任务失败: {e}")
 		logger.error(frappe.get_traceback())
 		return {"success": False, "error": f"启动任务失败: {e}"}
 
 
-def _job(docname, user=None):
-	logger.info(f"进入 job: {docname}")
+def _job(docname: str, user=None):
+	logger.info(f"[Align2Tex2Docx] 开始执行任务: {docname}")
 	doc = None
+
 	try:
 		doc = frappe.get_doc("Patent Workflow", docname)
+
+		# 🛡 防御性检查：任务被用户取消或意外退出，则跳过执行
+		if not doc.is_running_align2tex2docx:
+			logger.warning(f"[Align2Tex2Docx] 任务已非运行状态，跳过执行: {docname}")
+			return
 
 		api_endpoint = frappe.get_single("API Endpoint")
 		if not api_endpoint:
@@ -65,7 +82,7 @@ def _job(docname, user=None):
 		base_url = api_endpoint.server_ip_port.rstrip("/")
 		app_name = api_endpoint.align2tex2docx.strip("/")
 		url = f"{base_url}/{app_name}/invoke"
-		logger.info(f"请求 URL：{url}")
+		logger.info(f"[Align2Tex2Docx] 请求 URL: {url}")
 
 		tmp_folder = os.path.join(
 			api_endpoint.get_password("server_work_dir"),
@@ -87,6 +104,7 @@ def _job(docname, user=None):
 
 		res = asyncio.run(call_chain())
 		res.raise_for_status()
+
 		output = json.loads(res.json()["output"])
 		_res = decompress_json_from_base64(output.get("res", ""))
 
@@ -103,12 +121,15 @@ def _job(docname, user=None):
 				"cost_align2tex2docx": output.get("cost", 0),
 			},
 		)
+
+		logger.info(f"[Align2Tex2Docx] 执行成功: {docname}")
 		frappe.db.commit()
 		frappe.publish_realtime("align2tex2docx_done", {"docname": doc.name}, user=user)
 
 	except Exception as e:
-		logger.error(f"任务 align2tex2docx 执行失败: {e}")
+		logger.error(f"[Align2Tex2Docx] 执行失败: {e}")
 		logger.error(frappe.get_traceback())
+
 		if doc:
 			fail_task_fields(doc, "align2tex2docx", str(e))
 			frappe.db.commit()

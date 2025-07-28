@@ -22,15 +22,28 @@
   "tab_title2scene",
   "section_break_draa",
   "patent_title",
+  "section_break_wwdu",
   "call_title2scene",
+  "column_break_tpwh",
+  "cancel_title2scene",
+  "column_break_jnks",
+  "rerun_title2scene",
   "status_section_title2scene",
   "is_done_title2scene",
   "column_break_utxs",
   "is_running_title2scene",
   "column_break_bzuz",
   "cost_title2scene",
-  "column_break_eoeb",
+  "column_break_hsdo",
   "time_s_title2scene",
+  "section_break_odpf",
+  "run_count_title2scene",
+  "column_break_jbcs",
+  "success_count_title2scene",
+  "column_break_fhox",
+  "total_cost_title2scene",
+  "column_break_xwbf",
+  "total_time_s_title2scene",
   "section_break_prwl",
   "title2scene_id",
   "title2scene_started_at",
@@ -38,7 +51,12 @@
   "tab_info2tech",
   "section_break_zasr",
   "table_upload_info2tech",
+  "section_break_iyqo",
   "call_info2tech",
+  "column_break_hiio",
+  "cancel_info2tech",
+  "column_break_nbnr",
+  "rerun_info2tech",
   "status_section_info2tech",
   "is_done_info2tech",
   "column_break_prbn",
@@ -46,7 +64,15 @@
   "column_break_grbg",
   "cost_info2tech",
   "column_break_seuk",
-  "time_s__info2tech",
+  "time_s_info2tech",
+  "section_break_werw",
+  "run_count_info2tech",
+  "column_break_ckre",
+  "success_count_info2tech",
+  "column_break_qqpl",
+  "total_cost_info2tech",
+  "column_break_osuy",
+  "total_time_s_info2tech",
   "section_break_stmk",
   "info2tech_id",
   "info2tech_started_at",
@@ -54,7 +80,12 @@
   "tab_scene2tech",
   "innovation_direction_0_column",
   "scene",
+  "section_break_mqwr",
   "call_scene2tech",
+  "column_break_aqyp",
+  "cancel_scene2tech",
+  "column_break_vdiv",
+  "rerun_scene2tech",
   "status_section_scene2tech",
   "is_done_scene2tech",
   "column_break_mbcf",
@@ -63,6 +94,14 @@
   "cost_scene2tech",
   "column_break_yifb",
   "time_s_scene2tech",
+  "section_break_ibax",
+  "run_count_scene2tecch",
+  "column_break_qikg",
+  "success_count_scene2tecch",
+  "column_break_qwbp",
+  "total_cost_scene2tech",
+  "column_break_dmub",
+  "total_time_s_scene2tech",
   "prior_section_scene2tech",
   "core_problem_analysis",
   "search_keywords_scene",
@@ -89,7 +128,12 @@
   "tab_tech2application",
   "column_break_wmpp",
   "tech",
+  "section_break_yean",
   "call_tech2application",
+  "column_break_isnz",
+  "cancel_tech2application",
+  "column_break_qyhc",
+  "rerun_tech2application",
   "status_section_tech2application",
   "is_done_tech2application",
   "column_break_kxbo",
@@ -98,6 +142,14 @@
   "cost_tech2application",
   "column_break_qvlq",
   "time_s_tech2application",
+  "section_break_deqp",
+  "run_count_tech2application",
+  "column_break_kcje",
+  "success_count_tech2application",
+  "column_break_hule",
+  "total_cost_tech2application",
+  "column_break_aptu",
+  "total_time_s_tech2application",
   "prior_section_tech2application",
   "tech_disclosure",
   "search_keywords_tech",
@@ -128,7 +180,12 @@
   "last_tech2application_error",
   "tab_align2tex2docx",
   "application",
+  "section_break_mnea",
   "call_align2tex2docx",
+  "column_break_gsbi",
+  "cancel_align2tex2docx",
+  "column_break_aock",
+  "rerun_align2tex2docx",
   "status_section_align2tex2docx",
   "is_done_align2tex2docx",
   "column_break_ogxf",
@@ -137,6 +194,14 @@
   "cost_align2tex2docx",
   "column_break_lobz",
   "time_s_align2tex2docx",
+  "section_break_nfyt",
+  "run_count_align2tex2docx",
+  "column_break_xrgr",
+  "success_count_align2tex2docx",
+  "column_break_xfxw",
+  "total_cost_align2tex2docx",
+  "column_break_rnbh",
+  "total_time_s_align2tex2docx",
   "align_section",
   "application_align",
   "tex_section",
@@ -157,7 +222,12 @@
   "tab_review2revise",
   "upload_section_review2revise",
   "table_upload_review2revise",
+  "section_break_zslv",
   "call_review2revise",
+  "column_break_hqct",
+  "cancel_review2revise",
+  "column_break_ybgi",
+  "rerurn_review2revise",
   "status_section_review2revise",
   "is_done_review2revise",
   "column_break_uusn",
@@ -166,6 +236,14 @@
   "cost_review2revise",
   "column_break_onxd",
   "time_s_review2revise",
+  "section_break_qdyj",
+  "run_count_review2revise",
+  "column_break_yeqx",
+  "success_count_review2revise",
+  "column_break_nowd",
+  "total_cost_review2revise",
+  "column_break_kinq",
+  "total_time_s_review2revise",
   "response_section",
   "reply_review",
   "revised_application",
@@ -458,10 +536,6 @@
   },
   {
    "fieldname": "column_break_bzuz",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "column_break_eoeb",
    "fieldtype": "Column Break"
   },
   {
@@ -1010,13 +1084,6 @@
    "read_only": 1
   },
   {
-   "default": "0",
-   "fieldname": "time_s__info2tech",
-   "fieldtype": "Data",
-   "label": "TIme(s)",
-   "read_only": 1
-  },
-  {
    "fieldname": "status_scene2tech",
    "fieldtype": "Select",
    "label": "Scene2Tech",
@@ -1069,12 +1136,397 @@
    "label": "Align2Tex2Docx",
    "options": "Pending\nRunning\nDone\nFailed",
    "read_only": 1
+  },
+  {
+   "fieldname": "column_break_hsdo",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "run_count_title2scene",
+   "fieldtype": "Int",
+   "label": "Run #",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "success_count_title2scene",
+   "fieldtype": "Int",
+   "label": "Success #",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_odpf",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_jbcs",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_fhox",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "total_cost_title2scene",
+   "fieldtype": "Data",
+   "label": "Total Cost",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_xwbf",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "total_time_s_title2scene",
+   "fieldtype": "Data",
+   "label": "Total Time(s)",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "time_s_info2tech",
+   "fieldtype": "Data",
+   "label": "Time(s)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_werw",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "run_count_info2tech",
+   "fieldtype": "Int",
+   "label": "Run #"
+  },
+  {
+   "fieldname": "column_break_ckre",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "success_count_info2tech",
+   "fieldtype": "Int",
+   "label": "Success #"
+  },
+  {
+   "fieldname": "column_break_qqpl",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "total_cost_info2tech",
+   "fieldtype": "Data",
+   "label": "Total Cost",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_osuy",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "total_time_s_info2tech",
+   "fieldtype": "Data",
+   "label": "Total Time(s)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_ibax",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "run_count_scene2tecch",
+   "fieldtype": "Int",
+   "label": "Run #"
+  },
+  {
+   "fieldname": "column_break_qikg",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "success_count_scene2tecch",
+   "fieldtype": "Int",
+   "label": "Success #"
+  },
+  {
+   "fieldname": "column_break_qwbp",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "total_cost_scene2tech",
+   "fieldtype": "Data",
+   "label": "Total Cost",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_dmub",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "total_time_s_scene2tech",
+   "fieldtype": "Data",
+   "label": "Total Times(s)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_deqp",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "run_count_tech2application",
+   "fieldtype": "Int",
+   "label": "Run #"
+  },
+  {
+   "fieldname": "column_break_kcje",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "success_count_tech2application",
+   "fieldtype": "Int",
+   "label": "Success #"
+  },
+  {
+   "fieldname": "column_break_hule",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "total_cost_tech2application",
+   "fieldtype": "Data",
+   "label": "Total Cost",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_aptu",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "total_time_s_tech2application",
+   "fieldtype": "Data",
+   "label": "Total Time(s)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_nfyt",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "run_count_align2tex2docx",
+   "fieldtype": "Int",
+   "label": "Run #"
+  },
+  {
+   "fieldname": "column_break_xrgr",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "success_count_align2tex2docx",
+   "fieldtype": "Int",
+   "label": "Success #"
+  },
+  {
+   "fieldname": "column_break_xfxw",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "total_cost_align2tex2docx",
+   "fieldtype": "Data",
+   "label": "Total Cost"
+  },
+  {
+   "fieldname": "column_break_rnbh",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "total_time_s_align2tex2docx",
+   "fieldtype": "Data",
+   "label": "Total Time(s)"
+  },
+  {
+   "fieldname": "section_break_qdyj",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "run_count_review2revise",
+   "fieldtype": "Int",
+   "label": "Run #"
+  },
+  {
+   "fieldname": "column_break_yeqx",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "success_count_review2revise",
+   "fieldtype": "Int",
+   "label": "Sucess #"
+  },
+  {
+   "fieldname": "column_break_nowd",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "total_cost_review2revise",
+   "fieldtype": "Data",
+   "label": "Total Cost",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_kinq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "total_time_s_review2revise",
+   "fieldtype": "Data",
+   "label": "Total Time(s)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "cancel_title2scene",
+   "fieldtype": "Button",
+   "label": "Cancel Call"
+  },
+  {
+   "fieldname": "cancel_info2tech",
+   "fieldtype": "Button",
+   "label": "Cancel Call"
+  },
+  {
+   "fieldname": "cancel_scene2tech",
+   "fieldtype": "Button",
+   "label": "Cancel Call"
+  },
+  {
+   "fieldname": "cancel_tech2application",
+   "fieldtype": "Button",
+   "label": "Cancel Call"
+  },
+  {
+   "fieldname": "cancel_align2tex2docx",
+   "fieldtype": "Button",
+   "label": "Cancel Call"
+  },
+  {
+   "fieldname": "cancel_review2revise",
+   "fieldtype": "Button",
+   "label": "Cancel Call"
+  },
+  {
+   "fieldname": "section_break_wwdu",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_tpwh",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_jnks",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "rerun_title2scene",
+   "fieldtype": "Button",
+   "label": "Rerun Call"
+  },
+  {
+   "fieldname": "section_break_iyqo",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_hiio",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_nbnr",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "rerun_info2tech",
+   "fieldtype": "Button",
+   "label": "Rerun Call"
+  },
+  {
+   "fieldname": "section_break_mqwr",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_aqyp",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_vdiv",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "rerun_scene2tech",
+   "fieldtype": "Button",
+   "label": "Rerun Call"
+  },
+  {
+   "fieldname": "section_break_yean",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_isnz",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_qyhc",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "rerun_tech2application",
+   "fieldtype": "Button",
+   "label": "Rerun Call"
+  },
+  {
+   "fieldname": "section_break_mnea",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_gsbi",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_aock",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "rerun_align2tex2docx",
+   "fieldtype": "Button",
+   "label": "Rerun Call"
+  },
+  {
+   "fieldname": "section_break_zslv",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_hqct",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_ybgi",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "rerurn_review2revise",
+   "fieldtype": "Button",
+   "label": "Rerun Call"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-27 14:46:27.893546",
+ "modified": "2025-07-28 01:33:32.175570",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Patent Workflow",

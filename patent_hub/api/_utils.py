@@ -156,44 +156,87 @@ def reset_all_stuck_tasks():
 
 
 # ---------------------------------------------------
-# 🔹 通用工具：任务状态字段管理（初始化、完成、失败等）
+# 🔹 task 相关工具
 # ---------------------------------------------------
 
 
 def init_task_fields(doc, task_key: str, prefix: str, logger=None):
-	"""初始化任务状态字段，并生成 ID"""
+	"""
+	初始化任务状态字段，并生成 ID。
+	- 设置为 Running 状态
+	- 若首次运行，则生成 ID
+	- 累加 run_count
+	"""
 	id_field = f"{task_key}_id"
+	started_at_field = f"{task_key}_started_at"
+	is_running_field = f"is_running_{task_key}"
+	is_done_field = f"is_done_{task_key}"
+	status_field = f"status_{task_key}"
+	run_count_field = f"run_count_{task_key}"
+
+	# 若尚未生成 ID，则生成
 	if not getattr(doc, id_field, None):
 		setattr(doc, id_field, generate_step_id(doc.patent_id, prefix))
-	setattr(doc, f"is_running_{task_key}", 1)
-	setattr(doc, f"is_done_{task_key}", 0)
-	setattr(doc, f"status_{task_key}", "Running")
-	setattr(doc, f"{task_key}_started_at", now_datetime())
+
+	# 设置运行状态
+	setattr(doc, is_running_field, 1)
+	setattr(doc, is_done_field, 0)
+	setattr(doc, status_field, "Running")
+	setattr(doc, started_at_field, now_datetime())
+
+	# 累加运行次数
+	setattr(doc, run_count_field, getattr(doc, run_count_field, 0) + 1)
 
 	if logger:
-		logger.info(f"[{task_key}] 初始化任务: id={getattr(doc, id_field)}, status=Running")
+		logger.info(
+			f"[{task_key}] 初始化任务: id={getattr(doc, id_field)}, status=Running, run_count={getattr(doc, run_count_field)}"
+		)
 
 
 def complete_task_fields(doc, task_key: str, extra_fields: dict = None):
-	"""统一完成任务状态设置：Running → Done"""
-	setattr(doc, f"is_running_{task_key}", 0)
-	setattr(doc, f"is_done_{task_key}", 1)
-	setattr(doc, f"status_{task_key}", "Done")
+	"""
+	统一完成任务状态设置，并累加运行成功次数和累计耗时/成本。
+	"""
+	is_running_field = f"is_running_{task_key}"
+	is_done_field = f"is_done_{task_key}"
+	status_field = f"status_{task_key}"
+	success_count_field = f"success_count_{task_key}"
+
+	setattr(doc, is_running_field, 0)
+	setattr(doc, is_done_field, 1)
+	setattr(doc, status_field, "Done")
+	setattr(doc, success_count_field, getattr(doc, success_count_field, 0) + 1)
 
 	if extra_fields:
 		for key, value in extra_fields.items():
 			setattr(doc, key, value)
 
+			# 累计成本
+			if key.startswith("cost_"):
+				total_field = key.replace("cost_", "total_cost_")
+				setattr(doc, total_field, getattr(doc, total_field, 0) + float(value or 0))
+
+			# 累计时间
+			if key.startswith("time_s_"):
+				total_field = key.replace("time_s_", "total_time_s_")
+				setattr(doc, total_field, getattr(doc, total_field, 0) + float(value or 0))
+
 	doc.save()
 
 
 def fail_task_fields(doc, task_key: str, error: str = None):
-	"""统一失败任务状态设置：Running → Failed"""
-	setattr(doc, f"is_running_{task_key}", 0)
-	setattr(doc, f"is_done_{task_key}", 0)
-	setattr(doc, f"status_{task_key}", "Failed")
-
+	"""
+	设置任务失败状态，并记录错误信息（不增加 success_count）
+	"""
+	is_running_field = f"is_running_{task_key}"
+	is_done_field = f"is_done_{task_key}"
+	status_field = f"status_{task_key}"
 	error_field = f"last_{task_key}_error"
+
+	setattr(doc, is_running_field, 0)
+	setattr(doc, is_done_field, 0)
+	setattr(doc, status_field, "Failed")
+
 	if hasattr(doc, error_field):
 		setattr(doc, error_field, error or "运行失败")
 
@@ -202,8 +245,31 @@ def fail_task_fields(doc, task_key: str, error: str = None):
 
 @frappe.whitelist()
 def reset_task_status(docname: str, task_key: str):
-	"""手动重置任务状态（由用户调用）"""
+	"""
+	手动重置任务状态（用于用户在界面点击重置按钮）
+	- 将任务标记为 Failed
+	- 写入错误字段说明是用户操作
+	"""
 	doc = frappe.get_doc("Patent Workflow", docname)
 	fail_task_fields(doc, task_key, error="用户手动重置任务状态")
 	frappe.db.commit()
-	return {"success": True, "message": f"任务 {task_key} 状态已重置"}
+	return {"success": True, "message": f"任务 {task_key} 状态已重置为 Failed"}
+
+
+@frappe.whitelist()
+def cancel_task(docname: str, task_key: str):
+	"""
+	用户强制终止任务（前端点击取消按钮触发）
+	"""
+	doc = frappe.get_doc("Patent Workflow", docname)
+	is_running_field = f"is_running_{task_key}"
+	if getattr(doc, is_running_field, 0) != 1:
+		return {"success": False, "message": "任务未处于运行状态，无法取消"}
+
+	fail_task_fields(doc, task_key, "任务被用户强制终止")
+	frappe.db.commit()
+
+	# 广播实时失败事件
+	frappe.publish_realtime(f"{task_key}_failed", {"docname": docname, "error": "任务被用户强制终止"})
+
+	return {"success": True, "message": f"{task_key} 已被终止"}
