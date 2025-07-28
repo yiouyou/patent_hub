@@ -24,10 +24,7 @@ fixtures = [
 			["name", "in", ["Sync Patent Writer and User - Add", "Sync Patent Writer and User - Del"]]
 		],
 	},
-	# {
-	# 	"dt": "Client Script",
-	# 	"filters": [["name", "in", ["Auto Enable Buttons in Patent Workflow"]]],
-	# },
+	{"dt": "Client Script", "filters": [["name", "in", []]]},
 	{"dt": "UOM", "filters": [["name", "in", []]]},
 	{"dt": "UOM Category", "filters": [["name", "in", []]]},
 	{"dt": "UOM Conversion Factor", "filters": [["from_uom", "in", []]]},
