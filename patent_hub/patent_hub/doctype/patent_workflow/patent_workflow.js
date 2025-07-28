@@ -1,21 +1,21 @@
 frappe.ui.form.on('Patent Workflow', {
   call_title2scene: async function(frm) {
-    await run_step_backend_only(frm, "title2scene", "patent_hub.api.call_title2scene.run", "Title2Scene");
+    await run_step_backend(frm, "patent_hub.api.call_title2scene.run", "Title2Scene");
   },
   call_info2tech: async function(frm) {
-    await run_step_backend_only(frm, "info2tech", "patent_hub.api.call_info2tech.run", "Info2Tech");
+    await run_step_backend(frm, "patent_hub.api.call_info2tech.run", "Info2Tech");
   },
   call_scene2tech: async function(frm) {
-    await run_step_backend_only(frm, "scene2tech", "patent_hub.api.call_scene2tech.run", "Scene2Tech");
+    await run_step_backend(frm, "patent_hub.api.call_scene2tech.run", "Scene2Tech");
   },
   call_tech2application: async function(frm) {
-    await run_step_backend_only(frm, "tech2application", "patent_hub.api.call_tech2application.run", "Tech2Application");
+    await run_step_backend(frm, "patent_hub.api.call_tech2application.run", "Tech2Application");
   },
   call_align2tex2docx: async function(frm) {
-    await run_step_backend_only(frm, "align2tex2docx", "patent_hub.api.call_align2tex2docx.run", "Align2Tex2Docx");
+    await run_step_backend(frm, "patent_hub.api.call_align2tex2docx.run", "Align2Tex2Docx");
   },
   call_review2revise: async function(frm) {
-    await run_step_backend_only(frm, "review2revise", "patent_hub.api.call_review2revise.run", "Review2Revise");
+    await run_step_backend(frm, "patent_hub.api.call_review2revise.run", "Review2Revise");
   },
 
   refresh(frm) {
@@ -41,11 +41,10 @@ frappe.ui.form.on('Patent Workflow', {
 /**
  * 通用任务执行器（后端独立处理状态逻辑）
  * @param {frappe.ui.form.Form} frm
- * @param {string} step_name
  * @param {string} method_path
  * @param {string} label
  */
-async function run_step_backend_only(frm, step_name, method_path, label) {
+async function run_step_backend(frm, method_path, label) {
   try {
     await frappe.call({
       method: method_path,
