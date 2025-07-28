@@ -13,6 +13,7 @@ import base64
 import gzip
 import json
 import logging
+import os
 from typing import Any
 
 import frappe
@@ -77,6 +78,43 @@ def decompress_file_from_base64(base64_str: str, save_path: str):
 	data = gzip.decompress(compressed)
 	with open(save_path, "wb") as f:
 		f.write(data)
+
+
+def get_compressed_base64_files(doc, table_field: str) -> list[dict]:
+	"""
+	从指定子表字段中读取 file 字段，转换为 base64 压缩字符串。
+	返回格式：[{ file_path: ..., base64: ..., original_filename: ..., note: ... }, ...]
+	"""
+	results = []
+	table = getattr(doc, table_field, [])
+	for row in table:
+		file_url = row.file
+		if not file_url:
+			continue
+		# 判断路径位置（private/public）
+		if file_url.startswith("/private/files/"):
+			filename = file_url.replace("/private/files/", "")
+			file_path = os.path.join(frappe.get_site_path("private", "files"), filename)
+		elif file_url.startswith("/files/"):
+			filename = file_url.replace("/files/", "")
+			file_path = os.path.join(frappe.get_site_path("public", "files"), filename)
+		else:
+			frappe.throw(f"未知文件路径格式: {file_url}")
+		if not os.path.exists(file_path):
+			frappe.throw(f"文件不存在: {file_path}")
+		# 获取原始文件名（包含扩展名）
+		original_filename = os.path.basename(filename)
+		# 压缩成 base64
+		base64_str = compress_file_to_base64(file_path)
+		results.append(
+			{
+				"file_path": file_path,
+				"base64": base64_str,
+				"original_filename": original_filename,
+				"note": row.note,
+			}
+		)
+	return results
 
 
 # ---------------------------------------------------
@@ -174,9 +212,12 @@ def init_task_fields(doc, task_key: str, prefix: str, logger=None):
 	status_field = f"status_{task_key}"
 	run_count_field = f"run_count_{task_key}"
 
-	# 若尚未生成 ID，则生成
-	if not getattr(doc, id_field, None):
-		setattr(doc, id_field, generate_step_id(doc.patent_id, prefix))
+	# # 若尚未生成 ID，则生成，生成后不变
+	# if not getattr(doc, id_field, None):
+	# 	setattr(doc, id_field, generate_step_id(doc.patent_id, prefix))
+
+	# 每次 init 都生成新的ID
+	setattr(doc, id_field, generate_step_id(doc.patent_id, prefix))
 
 	# 设置运行状态
 	setattr(doc, is_running_field, 1)

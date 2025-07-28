@@ -1,4 +1,5 @@
 import asyncio
+import base64
 import json
 import logging
 import os
@@ -10,6 +11,8 @@ from frappe import enqueue
 
 from patent_hub.api._utils import (
 	complete_task_fields,
+	compress_json_to_base64,
+	compress_str_to_base64,
 	decompress_json_from_base64,
 	fail_task_fields,
 	init_task_fields,
@@ -78,17 +81,16 @@ def _job(docname: str, user=None):
 		url = f"{base_url}/{app_name}/invoke"
 		logger.info(f"[Scene2Tech] 请求 URL: {url}")
 
-		tmp_folder = os.path.join(
-			api_endpoint.get_password("server_work_dir"),
-			re.sub(r"[^\w\u4e00-\u9fa5\-]", "", doc.patent_title),
-			"r2r",
-		)
+		mid_files = get_scene2tech_mid_files(doc)
+
+		tmp_folder = os.path.join(api_endpoint.get_password("server_work_dir"), doc.scene2tech_id)
 
 		payload = {
 			"input": {
-				"review_base64": "test",
-				"claims_base64": "test",
+				"base64file": compress_str_to_base64(doc.scene),
+				"patent_title": doc.patent_title,
 				"tmp_folder": tmp_folder,
+				"mid_files": compress_json_to_base64(mid_files),
 			}
 		}
 
@@ -105,7 +107,7 @@ def _job(docname: str, user=None):
 		doc.core_problem_analysis = _res.get("core_problem_analysis")
 		doc.search_keywords_scene = _res.get("search_keywords_scene")
 		doc.prior_art_scene = _res.get("prior_art_scene")
-		doc.piror_solution_digest = _res.get("piror_solution_digest")
+		doc.prior_solution_digest = _res.get("prior_solution_digest")
 		doc.patent_gap_analysis = _res.get("patent_gap_analysis")
 		doc.innovation_direction_0 = _res.get("innovation_direction_0")
 		doc.design_00 = _res.get("design_00")
@@ -142,3 +144,33 @@ def _job(docname: str, user=None):
 			fail_task_fields(doc, "scene2tech", str(e))
 			frappe.db.commit()
 			frappe.publish_realtime("scene2tech_failed", {"error": str(e), "docname": docname}, user=user)
+
+
+def get_scene2tech_mid_files(doc):
+	mapping = {
+		"core_problem_analysis": "1_core_problem_analysis.txt",
+		"search_keywords_scene": "2.1_search_keywords.txt",
+		"prior_art_scene": "2.2_prior_art.txt",
+		"prior_solution_digest": "2.3_prior_solution_digest.txt",
+		"patent_gap_analysis": "3_patent_gap_analysis.txt",
+		"innovation_direction_0": "4_1.1_innovation_direction.txt",
+		"design_00": "4_1.2_design_0.txt",
+		"design_01": "4_1.2_design_1.txt",
+		"innovation_direction_1": "4_2.1_innovation_direction.txt",
+		"design_10": "4_2.2_design_0.txt",
+		"design_11": "4_2.2_design_1.txt",
+		"innovation_evaluation": "5_innovation_evaluation.txt",
+		"patent_tech": "6_patent_tech.txt",
+		"validation_report": "7_validation_report.txt",
+		"final_tech": "tech.txt",
+		"patentability_analysis_scene": "patentability.txt",
+	}
+
+	results = []
+	for field, filename in mapping.items():
+		content = getattr(doc, field, "")
+		if content and content.strip():
+			base64_str = compress_str_to_base64(content)
+			results.append({"base64": base64_str, "original_filename": filename})
+
+	return results

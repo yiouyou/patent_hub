@@ -84,16 +84,12 @@ def _job(docname: str, user=None):
 		url = f"{base_url}/{app_name}/invoke"
 		logger.info(f"[Align2Tex2Docx] 请求 URL: {url}")
 
-		tmp_folder = os.path.join(
-			api_endpoint.get_password("server_work_dir"),
-			re.sub(r"[^\w\u4e00-\u9fa5\-]", "", doc.patent_title),
-			"r2r",
-		)
+		tmp_folder = os.path.join(api_endpoint.get_password("server_work_dir"), doc.align2tex2docx_id)
 
 		payload = {
 			"input": {
-				"base64file": compress_str_to_base64(doc.application),
 				"patent_title": doc.patent_title,
+				"base64file": compress_str_to_base64(doc.application),
 				"tmp_folder": tmp_folder,
 			}
 		}
@@ -134,21 +130,3 @@ def _job(docname: str, user=None):
 			fail_task_fields(doc, "align2tex2docx", str(e))
 			frappe.db.commit()
 			frappe.publish_realtime("align2tex2docx_failed", {"error": str(e), "docname": docname}, user=user)
-
-
-def get_base64_from_attachment(doc, fieldname):
-	file_url = doc.get(fieldname)
-	if not file_url:
-		raise ValueError(f"字段 {fieldname} 为空，未上传文件")
-
-	if file_url.startswith("/private/files/"):
-		file_path = os.path.join(
-			frappe.get_site_path("private", "files"), file_url.replace("/private/files/", "")
-		)
-	elif file_url.startswith("/files/"):
-		file_path = os.path.join(frappe.get_site_path("public", "files"), file_url.replace("/files/", ""))
-	else:
-		raise ValueError(f"未知文件路径格式：{file_url}")
-
-	with open(file_path, "rb") as f:
-		return base64.b64encode(f.read()).decode("utf-8")

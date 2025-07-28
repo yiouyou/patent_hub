@@ -1,4 +1,5 @@
 import asyncio
+import base64
 import json
 import logging
 import os
@@ -10,8 +11,10 @@ from frappe import enqueue
 
 from patent_hub.api._utils import (
 	complete_task_fields,
+	compress_str_to_base64,
 	decompress_json_from_base64,
 	fail_task_fields,
+	get_compressed_base64_files,
 	init_task_fields,
 )
 
@@ -78,16 +81,19 @@ def _job(docname: str, user=None):
 		url = f"{base_url}/{app_name}/invoke"
 		logger.info(f"[Review2Revise] 请求 URL: {url}")
 
-		tmp_folder = os.path.join(
-			api_endpoint.get_password("server_work_dir"),
-			re.sub(r"[^\w\u4e00-\u9fa5\-]", "", doc.patent_title),
-			"r2r",
-		)
+		base64_files = get_compressed_base64_files(doc, "table_upload_review2revise")
+		if not base64_files:
+			frappe.throw("未上传任何审查意见 PDF 文件，无法继续执行")
+		last_review_base64 = base64_files[-1].get("base64")
+		if not last_review_base64:
+			frappe.throw("最后一个审查意见文件的 base64 编码为空")
+
+		tmp_folder = os.path.join(api_endpoint.get_password("server_work_dir"), doc.review2revise_id)
 
 		payload = {
 			"input": {
-				"review_base64": "test",
-				"claims_base64": "test",
+				"review_base64": last_review_base64,
+				"claims_base64": compress_str_to_base64(doc.application_tex),
 				"tmp_folder": tmp_folder,
 			}
 		}

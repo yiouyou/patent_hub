@@ -1,4 +1,5 @@
 import asyncio
+import base64
 import json
 import logging
 import os
@@ -10,6 +11,8 @@ from frappe import enqueue
 
 from patent_hub.api._utils import (
 	complete_task_fields,
+	compress_json_to_base64,
+	compress_str_to_base64,
 	decompress_json_from_base64,
 	fail_task_fields,
 	init_task_fields,
@@ -75,17 +78,16 @@ def _job(docname: str, user=None):
 		url = f"{base_url}/{app_name}/invoke"
 		logger.info(f"[Tech2Application] 请求 URL: {url}")
 
-		tmp_folder = os.path.join(
-			api_endpoint.get_password("server_work_dir"),
-			re.sub(r"[^\w\u4e00-\u9fa5\-]", "", doc.patent_title),
-			"r2r",
-		)
+		mid_files = get_tech2application_mid_files(doc)
+
+		tmp_folder = os.path.join(api_endpoint.get_password("server_work_dir"), doc.tech2application_id)
 
 		payload = {
 			"input": {
-				"review_base64": "test",
-				"claims_base64": "test",
+				"base64file": compress_str_to_base64(doc.tech),
+				"patent_title": doc.patent_title,
 				"tmp_folder": tmp_folder,
+				"mid_files": compress_json_to_base64(mid_files),
 			}
 		}
 
@@ -117,7 +119,7 @@ def _job(docname: str, user=None):
 		doc.description_science_optimized = _res.get("description_science_optimized")
 		doc.description_abstract = _res.get("description_abstract")
 		doc.merged_application = _res.get("merged_application")
-		doc.refined_technical_solution7 = _res.get("refined_technical_solution7")
+		doc.refined_technical_solution = _res.get("refined_technical_solution")
 		doc.final_application = _res.get("final_application")
 		doc.application = _res.get("final_application")
 
@@ -144,3 +146,37 @@ def _job(docname: str, user=None):
 			frappe.publish_realtime(
 				"tech2application_failed", {"error": str(e), "docname": docname}, user=user
 			)
+
+
+def get_tech2application_mid_files(doc):
+	mapping = {
+		"tech_disclosure": "1_disclosure.txt",
+		"search_keywords_tech": "2.1_search_keywords.txt",
+		"prior_art_tech": "2.2_prior_art.txt",
+		"prior_art_analysis": "2.3_prior_art_analysis.txt",
+		"patentability_analysis_tech": "patentability.txt",
+		"diff_analysis": "3_diff_analysis.txt",
+		"claims_plan": "4.0_claims_plan.txt",
+		"claims_science_optimized": "4.4_claims_science_optimized.txt",
+		"claims_insufficiency_analysis": "4.5_claims_insufficiency_analysis.txt",
+		"claims_insufficiency_optimized": "4.6_claims_insufficiency_optimized.txt",
+		"claims_format_corrected": "4.7_claims_format_corrected.txt",
+		"description_initial": "5.1_description_initial.txt",
+		"description_innovation_analysis": "5.2_description_innovation_analysis.txt",
+		"description_innovation_optimized": "5.3_description_innovation_optimized.txt",
+		"description_science_analysis": "5.4_description_science_analysis.txt",
+		"description_science_optimized": "5.5_description_science_optimized.txt",
+		"description_abstract": "5.6_description_abstract.txt",
+		"merged_application": "6_merged_application.txt",
+		"refined_technical_solution": "7_refined_technical_solution.txt",
+		"final_application": "application.txt",
+	}
+
+	results = []
+	for field, filename in mapping.items():
+		content = getattr(doc, field, "")
+		if content and content.strip():
+			base64_str = compress_str_to_base64(content)
+			results.append({"base64": base64_str, "original_filename": filename})
+
+	return results

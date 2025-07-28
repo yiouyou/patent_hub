@@ -1,4 +1,5 @@
 import asyncio
+import base64
 import json
 import logging
 import os
@@ -78,17 +79,12 @@ def _job(docname: str, user=None):
 		logger.info(f"[Title2Scene] 请求 URL：{url}")
 
 		# 临时工作路径
-		tmp_folder = os.path.join(
-			api_endpoint.get_password("server_work_dir"),
-			re.sub(r"[^\w\u4e00-\u9fa5\-]", "", doc.patent_title),
-			"r2r",
-		)
+		tmp_folder = os.path.join(api_endpoint.get_password("server_work_dir"), doc.title2scene_id)
 
 		# 构建 payload
 		payload = {
 			"input": {
-				"review_base64": "test",
-				"claims_base64": "test",
+				"patent_title": doc.patent_title,
 				"tmp_folder": tmp_folder,
 			}
 		}
