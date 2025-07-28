@@ -95,7 +95,7 @@
   "column_break_yifb",
   "time_s_scene2tech",
   "section_break_ibax",
-  "run_count_scene2tecch",
+  "run_count_scene2tech",
   "column_break_qikg",
   "success_count_scene2tecch",
   "column_break_qwbp",
@@ -227,7 +227,7 @@
   "column_break_hqct",
   "cancel_review2revise",
   "column_break_ybgi",
-  "rerurn_review2revise",
+  "rerun_review2revise",
   "status_section_review2revise",
   "is_done_review2revise",
   "column_break_uusn",
@@ -1237,11 +1237,6 @@
    "fieldtype": "Section Break"
   },
   {
-   "fieldname": "run_count_scene2tecch",
-   "fieldtype": "Int",
-   "label": "Run #"
-  },
-  {
    "fieldname": "column_break_qikg",
    "fieldtype": "Column Break"
   },
@@ -1518,7 +1513,12 @@
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "rerurn_review2revise",
+   "fieldname": "run_count_scene2tech",
+   "fieldtype": "Int",
+   "label": "Run #"
+  },
+  {
+   "fieldname": "rerun_review2revise",
    "fieldtype": "Button",
    "label": "Rerun Call"
   }
@@ -1526,7 +1526,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-28 01:33:32.175570",
+ "modified": "2025-07-28 01:58:51.736445",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Patent Workflow",
