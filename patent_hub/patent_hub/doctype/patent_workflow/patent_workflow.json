@@ -212,32 +212,27 @@
   {
    "fieldname": "core_problem_analysis",
    "fieldtype": "Long Text",
-   "label": "core problem analysis",
-   "read_only": 1
+   "label": "core problem analysis"
   },
   {
    "fieldname": "patent_gap_analysis",
    "fieldtype": "Long Text",
-   "label": "patent gap analysis",
-   "read_only": 1
+   "label": "patent gap analysis"
   },
   {
    "fieldname": "innovation_direction_0",
    "fieldtype": "Long Text",
-   "label": "innovation direction 0",
-   "read_only": 1
+   "label": "innovation direction 0"
   },
   {
    "fieldname": "design_00",
    "fieldtype": "Long Text",
-   "label": "design 00",
-   "read_only": 1
+   "label": "design 00"
   },
   {
    "fieldname": "design_01",
    "fieldtype": "Long Text",
-   "label": "design 01",
-   "read_only": 1
+   "label": "design 01"
   },
   {
    "fieldname": "innovation_direction1",
@@ -248,26 +243,22 @@
   {
    "fieldname": "design_10",
    "fieldtype": "Long Text",
-   "label": "design 10",
-   "read_only": 1
+   "label": "design 10"
   },
   {
    "fieldname": "design_11",
    "fieldtype": "Long Text",
-   "label": "design 11",
-   "read_only": 1
+   "label": "design 11"
   },
   {
    "fieldname": "innovation_evaluation",
    "fieldtype": "Long Text",
-   "label": "innovation evaluation",
-   "read_only": 1
+   "label": "innovation evaluation"
   },
   {
    "fieldname": "final_tech",
    "fieldtype": "Long Text",
-   "label": "final tech",
-   "read_only": 1
+   "label": "final tech"
   },
   {
    "fieldname": "tech",
@@ -292,14 +283,12 @@
   {
    "fieldname": "search_keywords_scene",
    "fieldtype": "Long Text",
-   "label": "search keywords",
-   "read_only": 1
+   "label": "search keywords"
   },
   {
    "fieldname": "prior_art_scene",
    "fieldtype": "Long Text",
-   "label": "prior art",
-   "read_only": 1
+   "label": "prior art"
   },
   {
    "fieldname": "diff_analysis",
@@ -432,8 +421,7 @@
   {
    "fieldname": "application_tex",
    "fieldtype": "Long Text",
-   "label": "application tex",
-   "read_only": 1
+   "label": "application tex"
   },
   {
    "collapsible": 1,
@@ -772,14 +760,12 @@
   {
    "fieldname": "patent_tech",
    "fieldtype": "Long Text",
-   "label": "patent tech",
-   "read_only": 1
+   "label": "patent tech"
   },
   {
    "fieldname": "validation_report",
    "fieldtype": "Long Text",
-   "label": "validation report",
-   "read_only": 1
+   "label": "validation report"
   },
   {
    "fieldname": "patentability_analysis_scene",
@@ -799,8 +785,7 @@
   {
    "fieldname": "application_align",
    "fieldtype": "Long Text",
-   "label": "application align",
-   "read_only": 1
+   "label": "application align"
   },
   {
    "fieldname": "figure_codes",
@@ -1076,8 +1061,7 @@
   {
    "fieldname": "prior_solution_digest",
    "fieldtype": "Long Text",
-   "label": "prior solution digest",
-   "read_only": 1
+   "label": "prior solution digest"
   },
   {
    "fieldname": "status_align2tex2docx",
@@ -1090,7 +1074,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-27 14:11:50.437239",
+ "modified": "2025-07-27 14:46:27.893546",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Patent Workflow",

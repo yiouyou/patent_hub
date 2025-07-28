@@ -31,10 +31,8 @@ def run(docname):
 		doc = frappe.get_doc("Patent Workflow", docname)
 		if not doc:
 			return {"success": False, "error": f"文档 {docname} 不存在"}
-		# if doc.is_done_align2tex2docx:
-		# 	return {"success": False, "error": "任务已完成，不可重复运行"}
-		# if doc.is_running_align2tex2docx:
-		# 	return {"success": False, "error": "任务正在运行中，请等待完成"}
+		if doc.is_running_align2tex2docx:
+			return {"success": False, "error": "任务正在运行中，请等待完成"}
 
 		init_task_fields(doc, "align2tex2docx", "A2T2D", logger)
 		doc.save()
