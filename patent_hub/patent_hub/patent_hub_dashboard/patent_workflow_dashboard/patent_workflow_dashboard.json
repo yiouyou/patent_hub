@@ -14,7 +14,7 @@
    "width": "Half"
   },
   {
-   "chart": "Step Avg Cost Pie",
+   "chart": "Step Avg Cost",
    "width": "Half"
   }
  ],
@@ -25,7 +25,7 @@
  "idx": 0,
  "is_default": 0,
  "is_standard": 1,
- "modified": "2025-07-30 09:41:24.642071",
+ "modified": "2025-07-30 10:33:58.125979",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Patent Workflow Dashboard",

@@ -1,0 +1,66 @@
+[
+ {
+  "add_total_row": 0,
+  "add_translate_data": 0,
+  "columns": [],
+  "disabled": 0,
+  "docstatus": 0,
+  "doctype": "Report",
+  "filters": [],
+  "is_standard": "Yes",
+  "javascript": null,
+  "json": null,
+  "letter_head": null,
+  "modified": "2025-07-30 08:00:34.314069",
+  "module": "Patent Hub",
+  "name": "Writer Patent Cost Summary",
+  "prepared_report": 0,
+  "query": null,
+  "ref_doctype": "Patent Workflow",
+  "reference_report": null,
+  "report_name": "Writer Patent Cost Summary",
+  "report_script": null,
+  "report_type": "Script Report",
+  "roles": [
+   {
+    "parent": "Writer Patent Cost Summary",
+    "parentfield": "roles",
+    "parenttype": "Report",
+    "role": "System Manager"
+   }
+  ],
+  "timeout": 0
+ },
+ {
+  "add_total_row": 0,
+  "add_translate_data": 0,
+  "columns": [],
+  "disabled": 0,
+  "docstatus": 0,
+  "doctype": "Report",
+  "filters": [],
+  "is_standard": "Yes",
+  "javascript": null,
+  "json": null,
+  "letter_head": null,
+  "modified": "2025-07-30 09:26:16.916996",
+  "module": "Patent Hub",
+  "name": "Cost Distribution by Step",
+  "prepared_report": 0,
+  "query": null,
+  "ref_doctype": "Patent Workflow",
+  "reference_report": null,
+  "report_name": "Cost Distribution by Step",
+  "report_script": null,
+  "report_type": "Script Report",
+  "roles": [
+   {
+    "parent": "Cost Distribution by Step",
+    "parentfield": "roles",
+    "parenttype": "Report",
+    "role": "System Manager"
+   }
+  ],
+  "timeout": 0
+ }
+]

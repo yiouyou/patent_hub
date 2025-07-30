@@ -1,0 +1,44 @@
+[
+ {
+  "cards": [],
+  "chart_options": null,
+  "charts": [
+   {
+    "chart": "Total Task",
+    "parent": "Patent Workflow Dashboard",
+    "parentfield": "charts",
+    "parenttype": "Dashboard",
+    "width": "Half"
+   },
+   {
+    "chart": "Top 5 Writer",
+    "parent": "Patent Workflow Dashboard",
+    "parentfield": "charts",
+    "parenttype": "Dashboard",
+    "width": "Half"
+   },
+   {
+    "chart": "Total Done",
+    "parent": "Patent Workflow Dashboard",
+    "parentfield": "charts",
+    "parenttype": "Dashboard",
+    "width": "Half"
+   },
+   {
+    "chart": "Step Avg Cost",
+    "parent": "Patent Workflow Dashboard",
+    "parentfield": "charts",
+    "parenttype": "Dashboard",
+    "width": "Half"
+   }
+  ],
+  "dashboard_name": "Patent Workflow Dashboard",
+  "docstatus": 0,
+  "doctype": "Dashboard",
+  "is_default": 0,
+  "is_standard": 1,
+  "modified": "2025-07-30 10:33:58.125979",
+  "module": "Patent Hub",
+  "name": "Patent Workflow Dashboard"
+ }
+]

@@ -145,15 +145,15 @@
  {
   "charts": [
    {
-    "chart_name": "Total Task",
-    "label": "Total Task",
+    "chart_name": "Step Avg Cost",
+    "label": "Step Avg Cost",
     "parent": "Patent WF",
     "parentfield": "charts",
     "parenttype": "Workspace"
    },
    {
-    "chart_name": "Step Avg Cost",
-    "label": "Step Avg Cost",
+    "chart_name": "Total Task",
+    "label": "Total Task",
     "parent": "Patent WF",
     "parentfield": "charts",
     "parenttype": "Workspace"
@@ -184,7 +184,7 @@
   "is_hidden": 0,
   "label": "Patent WF",
   "links": [],
-  "modified": "2025-07-30 09:57:01.144182",
+  "modified": "2025-07-30 10:12:46.438016",
   "module": "Patent Hub",
   "name": "Patent WF",
   "number_cards": [],

@@ -16,8 +16,11 @@ scheduler_events = {
 
 
 fixtures = [
+	# 权限与用户配置
 	{"dt": "Role", "filters": [["name", "in", ["Patent Writer"]]]},
-	{"dt": "Workspace", "filters": [["name", "in", ["Patent Hub", "Patent WF"]]]},
+	{"dt": "Role Profile", "filters": [["name", "in", ["Patent Writer"]]]},
+	{"dt": "Module Profile", "filters": [["name", "in", ["Patent Writer"]]]},
+	# 脚本
 	{
 		"dt": "Server Script",
 		"filters": [
@@ -25,14 +28,25 @@ fixtures = [
 		],
 	},
 	{"dt": "Client Script", "filters": [["name", "in", []]]},
+	# 工作区和仪表盘
+	{"dt": "Workspace", "filters": [["name", "in", ["Patent Hub", "Patent WF"]]]},
+	{
+		"dt": "Dashboard Chart",
+		"filters": [["name", "in", ["Step Avg Cost", "Top 5 Writer", "Total Done", "Total Task"]]],
+	},
+	{"dt": "Dashboard", "filters": [["name", "in", ["Patent Workflow Dashboard"]]]},
+	# 报表
+	{
+		"dt": "Report",
+		"filters": [["name", "in", ["Cost Distribution by Step", "Writer Patent Cost Summary"]]],
+	},
+	# 物料与库存（目前为空）
 	{"dt": "UOM", "filters": [["name", "in", []]]},
 	{"dt": "UOM Category", "filters": [["name", "in", []]]},
 	{"dt": "UOM Conversion Factor", "filters": [["from_uom", "in", []]]},
 	{"dt": "Warehouse", "filters": [["name", "in", []]]},
 	{"dt": "Item Group", "filters": [["name", "in", []]]},
 	{"dt": "Item", "filters": [["item_code", "in", []]]},
-	{"dt": "Role Profile", "filters": [["name", "in", ["Patent Writer"]]]},
-	{"dt": "Module Profile", "filters": [["name", "in", ["Patent Writer"]]]},
 ]
 
 

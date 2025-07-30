@@ -1,7 +1,7 @@
 {
- "chart_name": "Step Avg Cost Pie",
+ "chart_name": "Step Avg Cost",
  "chart_type": "Report",
- "creation": "2025-07-30 09:41:10.648733",
+ "creation": "2025-07-30 10:32:09.873211",
  "currency": "",
  "docstatus": 0,
  "doctype": "Dashboard Chart",
@@ -11,10 +11,10 @@
  "idx": 0,
  "is_public": 1,
  "is_standard": 1,
- "modified": "2025-07-30 09:44:25.037076",
+ "modified": "2025-07-30 10:32:09.873211",
  "modified_by": "Administrator",
  "module": "Patent Hub",
- "name": "Step Avg Cost Pie",
+ "name": "Step Avg Cost",
  "number_of_groups": 0,
  "owner": "Administrator",
  "report_name": "Cost Distribution by Step",
@@ -27,7 +27,6 @@
  "x_field": "step",
  "y_axis": [
   {
-   "color": "",
    "y_field": "avg_cost"
   }
  ]
