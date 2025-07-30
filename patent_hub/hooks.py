@@ -17,7 +17,7 @@ scheduler_events = {
 
 fixtures = [
 	{"dt": "Role", "filters": [["name", "in", ["Patent Writer"]]]},
-	{"dt": "Workspace", "filters": [["name", "in", ["Patent Hub"]]]},
+	{"dt": "Workspace", "filters": [["name", "in", ["Patent Hub", "Patent WF"]]]},
 	{
 		"dt": "Server Script",
 		"filters": [

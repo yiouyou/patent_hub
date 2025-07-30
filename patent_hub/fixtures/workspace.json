@@ -12,7 +12,7 @@
   "is_hidden": 0,
   "label": "Patent Hub",
   "links": [],
-  "modified": "2025-07-13 15:31:13.602662",
+  "modified": "2025-07-30 06:23:29.149332",
   "module": "Patent Hub",
   "name": "Patent Hub",
   "number_cards": [],
@@ -86,7 +86,7 @@
   ],
   "restrict_to_domain": null,
   "roles": [],
-  "sequence_id": 3.0,
+  "sequence_id": 4.0,
   "shortcuts": [
    {
     "color": "Grey",
@@ -141,5 +141,144 @@
    }
   ],
   "title": "Patent Hub"
+ },
+ {
+  "charts": [
+   {
+    "chart_name": "Total Task",
+    "label": "Total Task",
+    "parent": "Patent WF",
+    "parentfield": "charts",
+    "parenttype": "Workspace"
+   },
+   {
+    "chart_name": "Step Avg Cost",
+    "label": "Step Avg Cost",
+    "parent": "Patent WF",
+    "parentfield": "charts",
+    "parenttype": "Workspace"
+   },
+   {
+    "chart_name": "Total Done",
+    "label": "Total Done",
+    "parent": "Patent WF",
+    "parentfield": "charts",
+    "parenttype": "Workspace"
+   },
+   {
+    "chart_name": "Top 5 Writer",
+    "label": "Top 5 Writer",
+    "parent": "Patent WF",
+    "parentfield": "charts",
+    "parenttype": "Workspace"
+   }
+  ],
+  "content": "[{\"id\":\"8xDJezRq7F\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Patent WF</span>\",\"col\":12}},{\"id\":\"cPJn1LAZyN\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"uhygse8RBs\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>工具</b></span>\",\"col\":12}},{\"id\":\"Z0EbKncgF9\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"选题讨论\",\"col\":4}},{\"id\":\"bBjxkNem82\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"分类查询\",\"col\":4}},{\"id\":\"11LcUJ4ai0\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"0tEwrPZu-d\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>统计</b></span>\",\"col\":12}},{\"id\":\"Q1jMDRQ58k\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Total Task\",\"col\":6}},{\"id\":\"28EcrcPjdB\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Total Done\",\"col\":6}},{\"id\":\"sBKH18VNjE\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Top 5 Writer\",\"col\":6}},{\"id\":\"Uz49CJQpuJ\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Step Avg Cost\",\"col\":6}},{\"id\":\"WMi1_WUoyI\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"45BiTMVyew\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Failed Stage</b></span>\",\"col\":12}},{\"id\":\"2xww8sVDbA\",\"type\":\"paragraph\",\"data\":{\"text\":\"<b>Title / Info</b>\",\"col\":12}},{\"id\":\"bmEvU2DMWc\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"❌Title2Scene\",\"col\":4}},{\"id\":\"W_4-opCsnS\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"❌Info2Tech\",\"col\":4}},{\"id\":\"kxl9cVTNw6\",\"type\":\"paragraph\",\"data\":{\"text\":\"<b>Scene</b>→<b>Tech</b>→<b>Applica</b>\",\"col\":12}},{\"id\":\"qifagaRoQj\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"❌Scene2Tech\",\"col\":4}},{\"id\":\"KU3LTN13gT\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"❌Tech2Application\",\"col\":4}},{\"id\":\"byzIdSo5Q_\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"❌Align2Tex2Docx\",\"col\":4}},{\"id\":\"z1SElum4NJ\",\"type\":\"paragraph\",\"data\":{\"text\":\"Review\",\"col\":12}},{\"id\":\"VcF7z1kCr-\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"❌Review2Revise\",\"col\":4}}]",
+  "custom_blocks": [],
+  "docstatus": 0,
+  "doctype": "Workspace",
+  "for_user": "",
+  "hide_custom": 0,
+  "icon": "workflow",
+  "indicator_color": "green",
+  "is_hidden": 0,
+  "label": "Patent WF",
+  "links": [],
+  "modified": "2025-07-30 09:57:01.144182",
+  "module": "Patent Hub",
+  "name": "Patent WF",
+  "number_cards": [],
+  "parent_page": "",
+  "public": 1,
+  "quick_lists": [
+   {
+    "document_type": "Patent Workflow",
+    "label": "❌Title2Scene",
+    "parent": "Patent WF",
+    "parentfield": "quick_lists",
+    "parenttype": "Workspace",
+    "quick_list_filter": "[[\"Patent Workflow\",\"status_title2scene\",\"=\",\"Failed\",false]]"
+   },
+   {
+    "document_type": "Patent Workflow",
+    "label": "❌Info2Tech",
+    "parent": "Patent WF",
+    "parentfield": "quick_lists",
+    "parenttype": "Workspace",
+    "quick_list_filter": "[[\"Patent Workflow\",\"status_info2tech\",\"=\",\"Failed\",false]]"
+   },
+   {
+    "document_type": "Patent Workflow",
+    "label": "❌Scene2Tech",
+    "parent": "Patent WF",
+    "parentfield": "quick_lists",
+    "parenttype": "Workspace",
+    "quick_list_filter": "[[\"Patent Workflow\",\"status_scene2tech\",\"=\",\"Failed\",false]]"
+   },
+   {
+    "document_type": "Patent Workflow",
+    "label": "❌Review2Revise",
+    "parent": "Patent WF",
+    "parentfield": "quick_lists",
+    "parenttype": "Workspace",
+    "quick_list_filter": "[[\"Patent Workflow\",\"status_review2revise\",\"=\",\"Failed\",false]]"
+   },
+   {
+    "document_type": "Patent Workflow",
+    "label": "❌Tech2Application",
+    "parent": "Patent WF",
+    "parentfield": "quick_lists",
+    "parenttype": "Workspace",
+    "quick_list_filter": "[[\"Patent Workflow\",\"status_tech2application\",\"=\",\"Failed\",false]]"
+   },
+   {
+    "document_type": "Patent Workflow",
+    "label": "❌Align2Tex2Docx",
+    "parent": "Patent WF",
+    "parentfield": "quick_lists",
+    "parenttype": "Workspace",
+    "quick_list_filter": "[[\"Patent Workflow\",\"status_align2tex2docx\",\"=\",\"Failed\",false]]"
+   }
+  ],
+  "restrict_to_domain": null,
+  "roles": [],
+  "sequence_id": 3.0,
+  "shortcuts": [
+   {
+    "color": "Grey",
+    "doc_view": "New",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "选题讨论",
+    "link_to": "LLM Chat Session",
+    "parent": "Patent WF",
+    "parentfield": "shortcuts",
+    "parenttype": "Workspace",
+    "report_ref_doctype": null,
+    "restrict_to_domain": null,
+    "stats_filter": "[]",
+    "type": "DocType",
+    "url": null
+   },
+   {
+    "color": "Grey",
+    "doc_view": "List",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "分类查询",
+    "link_to": null,
+    "parent": "Patent WF",
+    "parentfield": "shortcuts",
+    "parenttype": "Workspace",
+    "report_ref_doctype": null,
+    "restrict_to_domain": null,
+    "stats_filter": null,
+    "type": "URL",
+    "url": "https://ipc.incopat.com/index"
+   }
+  ],
+  "title": "Patent WF"
  }
 ]

@@ -19,6 +19,7 @@
   "status_review2revise",
   "section_break_sgac",
   "patent_id",
+  "current_stage",
   "tab_title2scene",
   "section_break_draa",
   "patent_title",
@@ -532,7 +533,8 @@
   },
   {
    "fieldname": "column_break_utxs",
-   "fieldtype": "Column Break"
+   "fieldtype": "Column Break",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_bzuz",
@@ -554,7 +556,8 @@
    "default": "0",
    "fieldname": "is_done_scene2tech",
    "fieldtype": "Check",
-   "label": "is Done"
+   "label": "is Done",
+   "read_only": 1
   },
   {
    "default": "0",
@@ -616,25 +619,29 @@
    "default": "0",
    "fieldname": "is_done_align2tex2docx",
    "fieldtype": "Check",
-   "label": "is Done"
+   "label": "is Done",
+   "read_only": 1
   },
   {
    "default": "0",
    "fieldname": "is_running_align2tex2docx",
    "fieldtype": "Check",
-   "label": "is Running"
+   "label": "is Running",
+   "read_only": 1
   },
   {
    "default": "0",
    "fieldname": "cost_align2tex2docx",
    "fieldtype": "Data",
-   "label": "Cost"
+   "label": "Cost",
+   "read_only": 1
   },
   {
    "default": "0",
    "fieldname": "time_s_align2tex2docx",
    "fieldtype": "Data",
-   "label": "Time(s)"
+   "label": "Time(s)",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_uusn",
@@ -657,7 +664,8 @@
    "default": "0",
    "fieldname": "is_done_review2revise",
    "fieldtype": "Check",
-   "label": "is Done"
+   "label": "is Done",
+   "read_only": 1
   },
   {
    "default": "0",
@@ -689,13 +697,15 @@
    "default": "0",
    "fieldname": "is_done_tech2application",
    "fieldtype": "Check",
-   "label": "is Done"
+   "label": "is Done",
+   "read_only": 1
   },
   {
    "default": "0",
    "fieldname": "is_running_tech2application",
    "fieldtype": "Check",
-   "label": "is Running"
+   "label": "is Running",
+   "read_only": 1
   },
   {
    "default": "0",
@@ -1040,7 +1050,8 @@
    "default": "0",
    "fieldname": "is_done_title2scene",
    "fieldtype": "Check",
-   "label": "is Done"
+   "label": "is Done",
+   "read_only": 1
   },
   {
    "default": "0",
@@ -1067,7 +1078,8 @@
    "default": "0",
    "fieldname": "is_done_info2tech",
    "fieldtype": "Check",
-   "label": "is Done"
+   "label": "is Done",
+   "read_only": 1
   },
   {
    "default": "0",
@@ -1521,12 +1533,19 @@
    "fieldname": "rerun_review2revise",
    "fieldtype": "Button",
    "label": "Rerun Call"
+  },
+  {
+   "fieldname": "current_stage",
+   "fieldtype": "Select",
+   "label": "Current Stage",
+   "options": "\n\u4e13\u5229\u9898\u76ee\u2192\u5e94\u7528\u5206\u6790\uff08Title2Scene\uff09\n\u5e94\u7528\u5206\u6790\u2192\u6280\u672f\u4ea4\u5e95\uff08Scene2Tech\n\u8865\u5145\u6750\u6599\u2192\u6280\u672f\u4ea4\u5e95\uff08Info2Tech\uff09\n\u6280\u672f\u4ea4\u5e95\u2192\u7533\u8bf7txt\uff08Tech2Application\uff09\n\u7533\u8bf7txt\u2192\u7533\u8bf7docx\uff08Align2Tex2Docx\uff09\n\u6821\u5bf9\u4e2d\n\u5ba1\u67e5\u4e2d\n\u5df2\u5b8c\u6210",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-28 01:58:51.736445",
+ "modified": "2025-07-30 05:43:35.057012",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Patent Workflow",
