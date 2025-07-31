@@ -787,7 +787,8 @@
   {
    "fieldname": "scene2tech_id",
    "fieldtype": "Data",
-   "label": "Scene2Tech ID"
+   "label": "Scene2Tech ID",
+   "read_only": 1
   },
   {
    "fieldname": "section_break_enjb",
@@ -800,7 +801,8 @@
   {
    "fieldname": "align2tex2docx_id",
    "fieldtype": "Data",
-   "label": "Align2Tex2Docx ID"
+   "label": "Align2Tex2Docx ID",
+   "read_only": 1
   },
   {
    "fieldname": "section_break_agoo",
@@ -809,7 +811,8 @@
   {
    "fieldname": "review2revise_id",
    "fieldtype": "Data",
-   "label": "Review2Revise ID"
+   "label": "Review2Revise ID",
+   "read_only": 1
   },
   {
    "fieldname": "call_title2scene",
@@ -900,67 +903,80 @@
   {
    "fieldname": "tech2application_id",
    "fieldtype": "Data",
-   "label": "Tech2Application ID"
+   "label": "Tech2Application ID",
+   "read_only": 1
   },
   {
    "fieldname": "title2scene_started_at",
    "fieldtype": "Datetime",
-   "label": "Title2Scene Started At"
+   "label": "Title2Scene Started At",
+   "read_only": 1
   },
   {
    "fieldname": "info2tech_started_at",
    "fieldtype": "Datetime",
-   "label": "Info2Tech Started At"
+   "label": "Info2Tech Started At",
+   "read_only": 1
   },
   {
    "fieldname": "last_title2scene_error",
    "fieldtype": "Small Text",
-   "label": "Last Title2Scene Error"
+   "label": "Last Title2Scene Error",
+   "read_only": 1
   },
   {
    "fieldname": "last_info2tech_error",
    "fieldtype": "Small Text",
-   "label": "Last Info2Tech Error"
+   "label": "Last Info2Tech Error",
+   "read_only": 1
   },
   {
    "fieldname": "scene2tech_started_at",
    "fieldtype": "Datetime",
-   "label": "Scene2Tech Started At"
+   "label": "Scene2Tech Started At",
+   "read_only": 1
   },
   {
    "fieldname": "last_scene2tech_error",
    "fieldtype": "Small Text",
-   "label": "Last Scene2Tech Error"
+   "label": "Last Scene2Tech Error",
+   "read_only": 1
   },
   {
    "fieldname": "tech2application_started_at",
    "fieldtype": "Datetime",
-   "label": "Tech2Application Started At"
+   "label": "Tech2Application Started At",
+   "read_only": 1
   },
   {
    "fieldname": "last_tech2application_error",
    "fieldtype": "Small Text",
-   "label": "Last Tech2Application Error"
+   "label": "Last Tech2Application Error",
+   "read_only": 1
   },
   {
    "fieldname": "align2tex2docx_started_at",
    "fieldtype": "Datetime",
-   "label": "Align2Tex2Docx Started At"
+   "label": "Align2Tex2Docx Started At",
+   "read_only": 1
   },
   {
    "fieldname": "last_align2tex2docx_error",
    "fieldtype": "Small Text",
-   "label": "Last Align2Tex2Docx Error"
+   "label": "Last Align2Tex2Docx Error",
+   "read_only": 1
   },
   {
    "fieldname": "review2revise_started_at",
    "fieldtype": "Datetime",
-   "label": "Review2Revise Started At"
+   "label": "Review2Revise Started At",
+   "read_only": 1
   },
   {
    "fieldname": "last_review2revise_error",
    "fieldtype": "Small Text",
-   "label": "Last Review2Revise Error"
+   "label": "Last Review2Revise Error",
+   "read_only": 1
   },
   {
    "fieldname": "tab_title2scene",
@@ -1008,7 +1024,8 @@
   {
    "fieldname": "title2scene_id",
    "fieldtype": "Data",
-   "label": "Title2Scene ID"
+   "label": "Title2Scene ID",
+   "read_only": 1
   },
   {
    "fieldname": "section_break_stmk",
@@ -1017,7 +1034,8 @@
   {
    "fieldname": "info2tech_id",
    "fieldtype": "Data",
-   "label": "Info2Tech ID"
+   "label": "Info2Tech ID",
+   "read_only": 1
   },
   {
    "fieldname": "tab_agent",
@@ -1211,7 +1229,8 @@
   {
    "fieldname": "run_count_info2tech",
    "fieldtype": "Int",
-   "label": "Run #"
+   "label": "Run #",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_ckre",
@@ -1220,7 +1239,8 @@
   {
    "fieldname": "success_count_info2tech",
    "fieldtype": "Int",
-   "label": "Success #"
+   "label": "Success #",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_qqpl",
@@ -1255,7 +1275,8 @@
   {
    "fieldname": "success_count_scene2tecch",
    "fieldtype": "Int",
-   "label": "Success #"
+   "label": "Success #",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_qwbp",
@@ -1286,7 +1307,8 @@
   {
    "fieldname": "run_count_tech2application",
    "fieldtype": "Int",
-   "label": "Run #"
+   "label": "Run #",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_kcje",
@@ -1295,7 +1317,8 @@
   {
    "fieldname": "success_count_tech2application",
    "fieldtype": "Int",
-   "label": "Success #"
+   "label": "Success #",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_hule",
@@ -1326,7 +1349,8 @@
   {
    "fieldname": "run_count_align2tex2docx",
    "fieldtype": "Int",
-   "label": "Run #"
+   "label": "Run #",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_xrgr",
@@ -1335,7 +1359,8 @@
   {
    "fieldname": "success_count_align2tex2docx",
    "fieldtype": "Int",
-   "label": "Success #"
+   "label": "Success #",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_xfxw",
@@ -1345,7 +1370,8 @@
    "default": "0",
    "fieldname": "total_cost_align2tex2docx",
    "fieldtype": "Data",
-   "label": "Total Cost"
+   "label": "Total Cost",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_rnbh",
@@ -1355,7 +1381,8 @@
    "default": "0",
    "fieldname": "total_time_s_align2tex2docx",
    "fieldtype": "Data",
-   "label": "Total Time(s)"
+   "label": "Total Time(s)",
+   "read_only": 1
   },
   {
    "fieldname": "section_break_qdyj",
@@ -1364,7 +1391,8 @@
   {
    "fieldname": "run_count_review2revise",
    "fieldtype": "Int",
-   "label": "Run #"
+   "label": "Run #",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_yeqx",
@@ -1373,7 +1401,8 @@
   {
    "fieldname": "success_count_review2revise",
    "fieldtype": "Int",
-   "label": "Sucess #"
+   "label": "Sucess #",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_nowd",
@@ -1527,7 +1556,8 @@
   {
    "fieldname": "run_count_scene2tech",
    "fieldtype": "Int",
-   "label": "Run #"
+   "label": "Run #",
+   "read_only": 1
   },
   {
    "fieldname": "rerun_review2revise",
@@ -1545,7 +1575,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-30 05:43:35.057012",
+ "modified": "2025-07-31 00:18:54.600978",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Patent Workflow",
@@ -1561,6 +1591,18 @@
    "read": 1,
    "report": 1,
    "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Patent Writer",
    "share": 1,
    "write": 1
   }

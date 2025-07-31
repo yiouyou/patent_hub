@@ -11,7 +11,7 @@
   "javascript": null,
   "json": null,
   "letter_head": null,
-  "modified": "2025-07-30 08:00:34.314069",
+  "modified": "2025-07-30 23:34:26.025879",
   "module": "Patent Hub",
   "name": "Writer Patent Cost Summary",
   "prepared_report": 0,
@@ -27,6 +27,12 @@
     "parentfield": "roles",
     "parenttype": "Report",
     "role": "System Manager"
+   },
+   {
+    "parent": "Writer Patent Cost Summary",
+    "parentfield": "roles",
+    "parenttype": "Report",
+    "role": "Patent Writer"
    }
   ],
   "timeout": 0
@@ -43,7 +49,7 @@
   "javascript": null,
   "json": null,
   "letter_head": null,
-  "modified": "2025-07-30 09:26:16.916996",
+  "modified": "2025-07-30 23:33:56.637279",
   "module": "Patent Hub",
   "name": "Cost Distribution by Step",
   "prepared_report": 0,
@@ -59,6 +65,12 @@
     "parentfield": "roles",
     "parenttype": "Report",
     "role": "System Manager"
+   },
+   {
+    "parent": "Cost Distribution by Step",
+    "parentfield": "roles",
+    "parenttype": "Report",
+    "role": "Patent Writer"
    }
   ],
   "timeout": 0
