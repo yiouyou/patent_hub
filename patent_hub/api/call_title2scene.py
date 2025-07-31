@@ -16,7 +16,7 @@ from patent_hub.api._utils import (
 	init_task_fields,
 )
 
-logger = frappe.logger("app.patent_hub.patent_workflow.call_title2scene")
+logger = frappe.logger("app.patent_hub.patent_wf.call_title2scene")
 logger.setLevel(logging.INFO)
 
 TIMEOUT = 1800

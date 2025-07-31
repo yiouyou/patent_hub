@@ -18,7 +18,7 @@ from patent_hub.api._utils import (
 	init_task_fields,
 )
 
-logger = frappe.logger("app.patent_hub.patent_workflow.call_align2tex2docx")
+logger = frappe.logger("app.patent_hub.patent_wf.call_align2tex2docx")
 logger.setLevel(logging.INFO)
 
 TIMEOUT = 1800

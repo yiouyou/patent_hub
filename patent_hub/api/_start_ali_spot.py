@@ -9,7 +9,7 @@ from aliyunsdkcore.client import AcsClient
 from aliyunsdkecs.request.v20140526.DescribeInstancesRequest import DescribeInstancesRequest
 from aliyunsdkecs.request.v20140526.RunInstancesRequest import RunInstancesRequest
 
-logger = frappe.logger("app.patent_hub.patent_workflow._start_ali_spot")
+logger = frappe.logger("app.patent_hub.patent_wf._start_ali_spot")
 logger.setLevel(logging.DEBUG)
 
 ALIYUN_CONFIG = {

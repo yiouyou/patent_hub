@@ -21,7 +21,7 @@ from frappe.model.naming import make_autoname
 from frappe.utils import now_datetime, time_diff_in_seconds
 
 # 日志设置
-logger = frappe.logger("app.patent_hub.patent_workflow._util")
+logger = frappe.logger("app.patent_hub.patent_wf._util")
 logger.setLevel(logging.INFO)
 
 
