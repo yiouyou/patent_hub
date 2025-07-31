@@ -1,1 +1,3 @@
 httpx
+aliyun-python-sdk-core
+aliyun-python-sdk-ecs

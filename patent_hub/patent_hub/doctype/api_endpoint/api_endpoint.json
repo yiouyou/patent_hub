@@ -5,8 +5,13 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "server_section",
   "server_ip_port",
   "server_work_dir",
+  "remote_spot_section",
+  "start_ali_spot",
+  "accesskey_id",
+  "accesskey_secret",
   "section_break_wwpd",
   "title2scene",
   "info2tech",
@@ -59,7 +64,8 @@
   },
   {
    "fieldname": "section_break_wwpd",
-   "fieldtype": "Section Break"
+   "fieldtype": "Section Break",
+   "label": "Patent Workflow"
   },
   {
    "fieldname": "title2scene",
@@ -93,14 +99,40 @@
   },
   {
    "fieldname": "section_break_ieft",
-   "fieldtype": "Section Break"
+   "fieldtype": "Section Break",
+   "label": "Patent"
+  },
+  {
+   "fieldname": "server_section",
+   "fieldtype": "Section Break",
+   "label": "Server"
+  },
+  {
+   "fieldname": "remote_spot_section",
+   "fieldtype": "Section Break",
+   "label": "Remote Spot"
+  },
+  {
+   "fieldname": "start_ali_spot",
+   "fieldtype": "Button",
+   "label": "Start Ali Spot"
+  },
+  {
+   "fieldname": "accesskey_id",
+   "fieldtype": "Data",
+   "label": "AccessKey ID"
+  },
+  {
+   "fieldname": "accesskey_secret",
+   "fieldtype": "Data",
+   "label": "AccessKey Secret"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2025-07-26 05:14:57.041099",
+ "modified": "2025-07-31 15:16:19.586269",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "API Endpoint",
