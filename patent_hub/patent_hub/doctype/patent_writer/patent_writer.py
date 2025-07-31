@@ -18,7 +18,7 @@ class PatentWriter(Document):
 		if not self.full_name:
 			frappe.throw(_("Full Name is required to generate Patent Writer"))
 		safe_name = re.sub(r"[^\w\s-]", "", self.full_name).replace(" ", "_")
-		self.writer_id = make_autoname(f"WTR-{safe_name}-.###")
+		self.writer_id = make_autoname(f"WTR-{safe_name}-.##")
 		self.name = self.writer_id
 
 	def on_submit(self):

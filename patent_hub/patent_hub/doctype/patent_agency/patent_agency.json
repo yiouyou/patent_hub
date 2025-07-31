@@ -1,6 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "field:agency_id",
  "creation": "2025-07-22 15:42:52.166597",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -10,7 +11,9 @@
   "weixin",
   "phone",
   "email",
-  "contract"
+  "contract",
+  "section_break_bxin",
+  "agency_id"
  ],
  "fields": [
   {
@@ -42,15 +45,28 @@
    "fieldname": "city",
    "fieldtype": "Data",
    "label": "City"
+  },
+  {
+   "fieldname": "section_break_bxin",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "agency_id",
+   "fieldtype": "Data",
+   "label": "Agency ID",
+   "print_hide": 1,
+   "read_only": 1,
+   "unique": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-30 23:31:18.763416",
+ "modified": "2025-07-31 05:22:17.021011",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Patent Agency",
+ "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
   {
