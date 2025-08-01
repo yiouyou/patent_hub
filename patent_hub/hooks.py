@@ -9,7 +9,8 @@ app_license = "mit"
 scheduler_events = {
 	"cron": {
 		"*/5 * * * *": [  # 每 5 分钟检查一次
-			"patent_hub.api._utils.reset_all_stuck_tasks"
+			"patent_hub.api._ali_spot.check_spot_status",
+			"patent_hub.api._utils.detect_and_reset_all_stuck_tasks",
 		]
 	}
 }

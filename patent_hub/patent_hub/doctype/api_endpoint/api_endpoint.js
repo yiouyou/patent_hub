@@ -15,7 +15,7 @@ frappe.ui.form.on("API Endpoint", {
         const ip = url.replace(/^https?:\/\//, "").split(":")[0];
 
         frappe.call({
-            method: "patent_hub.api._start_ali_spot.ping",
+            method: "patent_hub.api._ali_spot.ping",
             args: { host: ip },
             callback: function (r) {
                 if (r.message === true) {
@@ -32,7 +32,7 @@ frappe.ui.form.on("API Endpoint", {
 
         function call_backend_to_start(frm) {
             frappe.call({
-                method: "patent_hub.api._start_ali_spot.run",
+                method: "patent_hub.api._ali_spot.run",
                 args: { docname: frm.doc.name },
                 callback: function (res) {
                     if (!res.exc) {
@@ -59,7 +59,7 @@ frappe.ui.form.on("API Endpoint", {
         const ip = url.replace(/^https?:\/\//, "").split(":")[0];
 
         frappe.call({
-            method: "patent_hub.api._start_ali_spot.ping",
+            method: "patent_hub.api._ali_spot.ping",
             args: { host: ip },
             callback: function (r) {
                 if (r.message === true) {

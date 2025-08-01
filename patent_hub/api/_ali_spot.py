@@ -9,7 +9,7 @@ from aliyunsdkcore.client import AcsClient
 from aliyunsdkecs.request.v20140526.DescribeInstancesRequest import DescribeInstancesRequest
 from aliyunsdkecs.request.v20140526.RunInstancesRequest import RunInstancesRequest
 
-logger = frappe.logger("app.patent_hub.patent_wf._start_ali_spot")
+logger = frappe.logger("app.patent_hub.patent_wf._ali_spot")
 logger.setLevel(logging.DEBUG)
 
 ALIYUN_CONFIG = {
@@ -32,6 +32,21 @@ def ping(host):
 		return result.returncode == 0
 	except Exception:
 		return False
+
+
+@frappe.whitelist()
+def check_spot_status():
+	doc = frappe.get_single("API Endpoint")
+	ip_port = doc.server_ip_port
+
+	if not ip_port:
+		logger.info("未配置 server_ip_port，跳过状态检查。")
+		return
+
+	host = ip_port.replace("http://", "").split(":")[0]
+	doc.spot_status = "On" if ping(host) else "Off"
+	doc.save(ignore_permissions=True)
+	frappe.db.commit()
 
 
 def wait_for_public_ip(client, instance_id, retries=10, delay=5):
@@ -80,7 +95,7 @@ def run(docname):
 		instance_info = json.loads(response)
 		instance_id = instance_info["InstanceIdSets"]["InstanceIdSet"][0]
 
-		time.sleep(10)
+		time.sleep(15)
 		ip = wait_for_public_ip(client, instance_id)
 
 		if not ip:

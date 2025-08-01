@@ -135,7 +135,7 @@ def generate_step_id(patent_id: str, prefix: str) -> str:
 # ---------------------------------------------------
 
 
-def reset_stuck_task(task_key: str, label: str, timeout_seconds=1800):
+def detect_and_reset_stuck_task(task_key: str, label: str, timeout_seconds=1800):
 	"""
 	通用函数：检测任务是否卡死（超过 timeout 秒未完成），并自动重置状态
 	:param task_key: 任务字段前缀（如 align2tex2docx）
@@ -145,16 +145,24 @@ def reset_stuck_task(task_key: str, label: str, timeout_seconds=1800):
 	started_at_field = f"{task_key}_started_at"
 	is_running_field = f"is_running_{task_key}"
 	is_done_field = f"is_done_{task_key}"
+	run_count_field = f"run_count_{task_key}"
 	status_field = f"status_{task_key}"
 
 	stuck_docs = frappe.get_all(
-		"Patent Workflow", filters={is_running_field: 1, is_done_field: 0}, fields=["name", started_at_field]
+		"Patent Workflow",
+		filters={is_running_field: 1, is_done_field: 0},
+		fields=["name", started_at_field, run_count_field],
 	)
 
 	for doc in stuck_docs:
+		if doc.get(run_count_field, 0) == 0:
+			logger.debug(f"[{label}] 跳过未启动的任务: {doc.name}")
+			continue
+
 		started_at = doc.get(started_at_field)
 		if not started_at:
 			continue
+
 		delta = time_diff_in_seconds(now_datetime(), started_at)
 		if delta > timeout_seconds:
 			_doc = frappe.get_doc("Patent Workflow", doc.name)
@@ -185,12 +193,12 @@ TASKS = [
 ]
 
 
-def reset_all_stuck_tasks():
+def detect_and_reset_all_stuck_tasks():
 	"""
 	批量检测所有任务，是否存在超时未完成的状态，并自动处理
 	"""
 	for key, label in TASKS:
-		reset_stuck_task(key, label)
+		detect_and_reset_stuck_task(key, label)
 
 
 # ---------------------------------------------------
