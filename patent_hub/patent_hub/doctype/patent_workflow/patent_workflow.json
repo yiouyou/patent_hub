@@ -8,6 +8,7 @@
   "tab_agent",
   "writer_id",
   "agency_id",
+  "patent_title",
   "status_section_all",
   "status_title2scene",
   "status_info2tech",
@@ -20,8 +21,6 @@
   "patent_id",
   "current_stage",
   "tab_title2scene",
-  "section_break_draa",
-  "patent_title",
   "section_break_wwdu",
   "call_title2scene",
   "column_break_tpwh",
@@ -1013,10 +1012,6 @@
    "label": "Review2Revise"
   },
   {
-   "fieldname": "section_break_draa",
-   "fieldtype": "Section Break"
-  },
-  {
    "fieldname": "section_break_zasr",
    "fieldtype": "Section Break"
   },
@@ -1174,14 +1169,14 @@
    "default": "0",
    "fieldname": "run_count_title2scene",
    "fieldtype": "Int",
-   "label": "Run #",
+   "label": "Run # t2s",
    "read_only": 1
   },
   {
    "default": "0",
    "fieldname": "success_count_title2scene",
    "fieldtype": "Int",
-   "label": "Success #",
+   "label": "Success # t2s",
    "read_only": 1
   },
   {
@@ -1228,7 +1223,7 @@
   {
    "fieldname": "run_count_info2tech",
    "fieldtype": "Int",
-   "label": "Run #",
+   "label": "Run # i2t",
    "read_only": 1
   },
   {
@@ -1238,7 +1233,7 @@
   {
    "fieldname": "success_count_info2tech",
    "fieldtype": "Int",
-   "label": "Success #",
+   "label": "Success # i2t",
    "read_only": 1
   },
   {
@@ -1274,7 +1269,7 @@
   {
    "fieldname": "success_count_scene2tecch",
    "fieldtype": "Int",
-   "label": "Success #",
+   "label": "Success # s2t",
    "read_only": 1
   },
   {
@@ -1306,7 +1301,7 @@
   {
    "fieldname": "run_count_tech2application",
    "fieldtype": "Int",
-   "label": "Run #",
+   "label": "Run # t2a",
    "read_only": 1
   },
   {
@@ -1316,7 +1311,7 @@
   {
    "fieldname": "success_count_tech2application",
    "fieldtype": "Int",
-   "label": "Success #",
+   "label": "Success # t2a",
    "read_only": 1
   },
   {
@@ -1348,7 +1343,7 @@
   {
    "fieldname": "run_count_align2tex2docx",
    "fieldtype": "Int",
-   "label": "Run #",
+   "label": "Run # a2d",
    "read_only": 1
   },
   {
@@ -1358,7 +1353,7 @@
   {
    "fieldname": "success_count_align2tex2docx",
    "fieldtype": "Int",
-   "label": "Success #",
+   "label": "Success # a2d",
    "read_only": 1
   },
   {
@@ -1390,7 +1385,7 @@
   {
    "fieldname": "run_count_review2revise",
    "fieldtype": "Int",
-   "label": "Run #",
+   "label": "Run # r2r",
    "read_only": 1
   },
   {
@@ -1400,7 +1395,7 @@
   {
    "fieldname": "success_count_review2revise",
    "fieldtype": "Int",
-   "label": "Sucess #",
+   "label": "Sucess # r2r",
    "read_only": 1
   },
   {
@@ -1555,7 +1550,7 @@
   {
    "fieldname": "run_count_scene2tech",
    "fieldtype": "Int",
-   "label": "Run #",
+   "label": "Run # s2t",
    "read_only": 1
   },
   {
@@ -1574,7 +1569,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-08-01 03:33:20.631279",
+ "modified": "2025-08-01 04:21:18.922722",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Patent Workflow",
