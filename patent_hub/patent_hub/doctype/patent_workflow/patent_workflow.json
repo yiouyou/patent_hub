@@ -1,6 +1,5 @@
 {
  "actions": [],
- "allow_rename": 1,
  "autoname": "field:patent_id",
  "creation": "2025-07-22 11:14:52.728654",
  "doctype": "DocType",
@@ -1575,7 +1574,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-08-01 03:12:38.969670",
+ "modified": "2025-08-01 03:33:20.631279",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Patent Workflow",
