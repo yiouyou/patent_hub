@@ -82,7 +82,7 @@ function update_start_button_style(frm) {
     if (status === "On") {
         toggle_button_state(frm, "start_ali_spot", false); // 禁用
     } else {
-        toggle_button_state(frm, "start_ali_spot", true, true); // 启用
+        toggle_button_state(frm, "start_ali_spot", true, false); // 启用
     }
 }
 
