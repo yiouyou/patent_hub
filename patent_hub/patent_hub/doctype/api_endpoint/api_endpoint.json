@@ -9,7 +9,11 @@
   "server_ip_port",
   "server_work_dir",
   "remote_spot_section",
+  "check_status",
+  "spot_status",
+  "column_break_utjj",
   "start_ali_spot",
+  "column_break_qath",
   "accesskey_id",
   "accesskey_secret",
   "section_break_wwpd",
@@ -126,13 +130,31 @@
    "fieldname": "accesskey_secret",
    "fieldtype": "Data",
    "label": "AccessKey Secret"
+  },
+  {
+   "fieldname": "spot_status",
+   "fieldtype": "Data",
+   "label": "Spot Status"
+  },
+  {
+   "fieldname": "check_status",
+   "fieldtype": "Button",
+   "label": "Check Status"
+  },
+  {
+   "fieldname": "column_break_utjj",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_qath",
+   "fieldtype": "Column Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2025-07-31 15:16:19.586269",
+ "modified": "2025-08-01 01:51:49.833446",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "API Endpoint",
