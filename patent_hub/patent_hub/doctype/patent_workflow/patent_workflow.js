@@ -122,9 +122,18 @@ function bind_table_events_once(frm, table_fieldname) {
  * ▶️ 通用运行任务：执行前自动保存表单，避免丢失字段
  */
 async function run_step_backend(frm, method_path, label, extraArgs = {}) {
+  console.log(`[DEBUG] 开始执行 ${label}`);
   try {
-    await frm.save(); // 自动保存
-    await frappe.call({
+    // 只在表单有未保存更改时才保存
+    if (frm.is_dirty()) {
+      console.log(`[DEBUG] 检测到未保存更改，正在保存...`);
+      await frm.save();
+      console.log(`[DEBUG] 表单保存完成`);
+    } else {
+      console.log(`[DEBUG] 表单无更改，跳过保存`);
+    }
+    console.log(`[DEBUG] 调用后端方法...`);
+    const response = await frappe.call({
       method: method_path,
       args: {
         docname: frm.doc.name,
@@ -133,8 +142,10 @@ async function run_step_backend(frm, method_path, label, extraArgs = {}) {
       freeze: true,
       freeze_message: `运行 ${label} 中，请稍候...`
     });
+    console.log(`[DEBUG] 后端响应:`, response);
     await frm.reload_doc();
   } catch (e) {
+    console.error(`[DEBUG] 执行失败:`, e);
     frappe.show_alert({
       message: e.message || `运行 ${label} 失败，请查看日志`,
       indicator: 'red'
