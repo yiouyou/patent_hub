@@ -293,10 +293,8 @@ def save_docx_file(doc, docx_bytes):
 		logger.info(f"all_files: {all_files}")
 
 		# 🔧 使用正则表达式精确匹配
-		pattern = re.compile(rf"^{re.escape(base_filename)}.*\.docx$")
+		pattern = re.compile(rf"^{re.escape(doc.align2tex2docx_id)}.*\.docx$")
 		files_to_delete = [f for f in all_files if f.file_name and pattern.match(f.file_name)]
-		logger.info(f"files_to_delete: {files_to_delete}")
-
 		logger.info(f"找到需要删除的文件: {[f.file_name for f in files_to_delete]}")
 
 		# 删除匹配的文件
