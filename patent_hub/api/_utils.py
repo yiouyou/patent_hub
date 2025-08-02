@@ -14,6 +14,7 @@ import gzip
 import json
 import logging
 import os
+import pickle
 from typing import Any
 
 import frappe
@@ -30,57 +31,114 @@ logger.setLevel(logging.INFO)
 # ---------------------------------------------------
 
 
-def check_data_type(data: Any) -> str:
-	"""检查数据类型"""
-	if isinstance(data, str):
-		return "string"
-	elif isinstance(data, bytes):
-		return "bytes"
-	elif isinstance(data, (dict, list)):
-		return "json"
+def make_json_serializable(obj: Any) -> Any:
+	"""
+	将任意对象转换为JSON可序列化的格式
+	"""
+	if obj is None or isinstance(obj, (str, int, float, bool)):
+		return obj
+	elif isinstance(obj, bytes):
+		# bytes 转为特殊标记的字典
+		return {"__type__": "bytes", "__data__": base64.b64encode(obj).decode("ascii")}
+	elif isinstance(obj, dict):
+		return {str(k): make_json_serializable(v) for k, v in obj.items()}
+	elif isinstance(obj, (list, tuple)):
+		result = [make_json_serializable(item) for item in obj]
+		if isinstance(obj, tuple):
+			# 保留 tuple 类型信息
+			return {"__type__": "tuple", "__data__": result}
+		return result
+	elif hasattr(obj, "__dict__"):
+		# 处理自定义对象
+		return {
+			"__type__": "object",
+			"__class__": obj.__class__.__name__,
+			"__data__": make_json_serializable(obj.__dict__),
+		}
 	else:
-		return "other"
+		# 其他类型转为字符串
+		return {"__type__": "str_repr", "__data__": str(obj)}
+
+
+def restore_from_json_serializable(obj: Any) -> Any:
+	"""
+	还原 JSON 序列化时转换的特殊类型
+	"""
+	if isinstance(obj, dict):
+		if "__type__" in obj:
+			if obj["__type__"] == "bytes":
+				return base64.b64decode(obj["__data__"].encode("ascii"))
+			elif obj["__type__"] == "tuple":
+				return tuple(restore_from_json_serializable(item) for item in obj["__data__"])
+			elif obj["__type__"] == "str_repr":
+				return obj["__data__"]  # 保持为字符串
+			elif obj["__type__"] == "object":
+				# 简单返回数据部分，不重建对象
+				return restore_from_json_serializable(obj["__data__"])
+		else:
+			return {k: restore_from_json_serializable(v) for k, v in obj.items()}
+	elif isinstance(obj, list):
+		return [restore_from_json_serializable(item) for item in obj]
+	else:
+		return obj
 
 
 def universal_compress(data: Any) -> str:
 	"""
 	通用压缩函数
 	数据流: 任意数据 → 字节 → gzip压缩 → base64编码 → 字符串
+	支持混合类型的字典和列表
 	"""
 	# 步骤1: 转为字节
 	if isinstance(data, bytes):
 		raw_bytes = data
 	elif isinstance(data, str):
 		raw_bytes = data.encode("utf-8")
-	elif isinstance(data, (dict, list)):
-		json_str = json.dumps(data, ensure_ascii=False, separators=(",", ":"))
-		raw_bytes = json_str.encode("utf-8")
+	elif isinstance(data, (dict, list, tuple, int, float, bool)) or data is None:
+		try:
+			converted_data = make_json_serializable(data)
+			json_str = json.dumps(converted_data, ensure_ascii=False, separators=(",", ":"))
+			raw_bytes = json_str.encode("utf-8")
+		except (TypeError, ValueError):
+			# 如果 JSON 序列化仍然失败，使用 pickle 作为后备方案
+			raw_bytes = pickle.dumps(data)
 	else:
-		raise TypeError(f"不支持的数据类型: {type(data)}")
+		# 对于其他复杂类型，直接使用 pickle
+		raw_bytes = pickle.dumps(data)
 	# 步骤2: gzip压缩
 	compressed = gzip.compress(raw_bytes)
 	# 步骤3: base64编码
 	return base64.b64encode(compressed).decode("ascii")
 
 
-def universal_decompress(base64_str: str, as_json: bool = False, as_bytes: bool = False) -> str | bytes | Any:
+def universal_decompress(compressed_str: str, as_json: bool = False) -> Any:
 	"""
-	通用解压函数
-	数据流: base64字符串 → gzip字节 → 原始字节 → [字符串] → [JSON对象]
+	通用解压缩函数
 	"""
-	# 步骤1: base64解码
-	compressed = base64.b64decode(base64_str)
-	# 步骤2: gzip解压
-	raw_bytes = gzip.decompress(compressed)
-	# 步骤3: 根据需要返回不同格式
-	if as_bytes:
-		return raw_bytes
-	# 步骤4: UTF-8解码为字符串
-	raw_str = raw_bytes.decode("utf-8")
-	# 步骤5: JSON解析(可选)
-	if as_json:
-		return json.loads(raw_str)
-	return raw_str
+	try:
+		# 步骤1: base64解码
+		compressed_bytes = base64.b64decode(compressed_str.encode("ascii"))
+		# 步骤2: gzip解压缩
+		raw_bytes = gzip.decompress(compressed_bytes)
+		if as_json:
+			# 尝试 JSON 解析
+			try:
+				json_str = raw_bytes.decode("utf-8")
+				data = json.loads(json_str)
+				# 还原特殊类型
+				return restore_from_json_serializable(data)
+			except (json.JSONDecodeError, UnicodeDecodeError):
+				# JSON 解析失败，使用 pickle
+				return pickle.loads(raw_bytes)
+		else:
+			# 尝试字符串解码
+			try:
+				return raw_bytes.decode("utf-8")
+			except UnicodeDecodeError:
+				# 不是文本，使用 pickle
+				return pickle.loads(raw_bytes)
+	except Exception as e:
+		raise ValueError(f"解压缩失败: {e}")
 
 
 def text_to_base64(text: str) -> str:

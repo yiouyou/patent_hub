@@ -205,15 +205,14 @@
   "application_align",
   "tex_section",
   "application_tex",
-  "download_section_align2tex2docx",
-  "download_application_docx",
   "figures_section",
   "figure_codes",
+  "link_section_align2tex2docx",
+  "application_docx_link",
   "section_break_rknc",
   "align2tex2docx_id",
   "align2tex2docx_started_at",
   "last_align2tex2docx_error",
-  "application_docx_link",
   "tab_proofreading",
   "proofreading_section",
   "before_tex",
@@ -247,15 +246,13 @@
   "response_section",
   "reply_review",
   "revised_application",
-  "download_section_review2revise",
-  "download_reply_review",
-  "download_revised_application",
+  "link_section_review2revise",
+  "reply_review_docx_link",
+  "revised_application_docx_link",
   "section_break_agoo",
   "review2revise_id",
   "review2revise_started_at",
-  "last_review2revise_error",
-  "reply_review_docx_link",
-  "revised_application_docx_link"
+  "last_review2revise_error"
  ],
  "fields": [
   {
@@ -463,16 +460,6 @@
    "fieldname": "revised_application",
    "fieldtype": "Long Text",
    "label": "Revised Application"
-  },
-  {
-   "fieldname": "download_reply_review",
-   "fieldtype": "Button",
-   "label": "Reply Review Docx"
-  },
-  {
-   "fieldname": "download_revised_application",
-   "fieldtype": "Button",
-   "label": "Revised Application Docx"
   },
   {
    "fieldname": "application",
@@ -874,25 +861,10 @@
    "label": "figure codes"
   },
   {
-   "fieldname": "download_section_review2revise",
-   "fieldtype": "Section Break",
-   "label": "Download"
-  },
-  {
-   "fieldname": "download_section_align2tex2docx",
-   "fieldtype": "Section Break",
-   "label": "Download"
-  },
-  {
    "collapsible": 1,
    "fieldname": "figures_section",
    "fieldtype": "Section Break",
    "label": "Figures"
-  },
-  {
-   "fieldname": "download_application_docx",
-   "fieldtype": "Button",
-   "label": "Application Docx"
   },
   {
    "fieldname": "tech2application_id",
@@ -1558,22 +1530,21 @@
   {
    "fieldname": "application_docx_link",
    "fieldtype": "Link",
-   "hidden": 1,
-   "label": "Application Docx Link",
+   "label": "Application Docx",
    "options": "File"
   },
   {
    "fieldname": "reply_review_docx_link",
    "fieldtype": "Link",
    "hidden": 1,
-   "label": "Reply Review Docx Link",
+   "label": "Reply Review Docx",
    "options": "File"
   },
   {
    "fieldname": "revised_application_docx_link",
    "fieldtype": "Link",
    "hidden": 1,
-   "label": "Revised Application Docx Link",
+   "label": "Revised Application Docx",
    "options": "File"
   },
   {
@@ -1586,12 +1557,22 @@
    "fieldtype": "Int",
    "label": "Success # s2t",
    "read_only": 1
+  },
+  {
+   "fieldname": "link_section_align2tex2docx",
+   "fieldtype": "Section Break",
+   "label": "Link"
+  },
+  {
+   "fieldname": "link_section_review2revise",
+   "fieldtype": "Section Break",
+   "label": "Link"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-08-02 06:33:07.598606",
+ "modified": "2025-08-02 14:40:30.642589",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Patent Workflow",
