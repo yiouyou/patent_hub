@@ -49,7 +49,32 @@ frappe.ui.form.on('Patent Workflow', {
   cancel_scene2tech: async frm => await cancel_step_backend(frm, "scene2tech", "Scene2Tech"),
   cancel_tech2application: async frm => await cancel_step_backend(frm, "tech2application", "Tech2Application"),
   cancel_align2tex2docx: async frm => await cancel_step_backend(frm, "align2tex2docx", "Align2Tex2Docx"),
-  cancel_review2revise: async frm => await cancel_step_backend(frm, "review2revise", "Review2Revise")
+  cancel_review2revise: async frm => await cancel_step_backend(frm, "review2revise", "Review2Revise"),
+
+  download_application_docx: function(frm) {
+		if (!frm.doc.application_docx_link) {
+			frappe.msgprint('申请书 DOCX 文件不存在，请先运行 Align2Tex2Docx 任务');
+			return;
+		}
+		let file_url = `/api/method/frappe.utils.file_manager.download_file?file_url=${encodeURIComponent('/files/' + frm.doc.application_docx_link)}`;
+		window.open(file_url, '_blank');
+	},
+  download_reply_review: function(frm) {
+		if (!frm.doc.reply_review_docx_link) {
+			frappe.msgprint('回复审查意见 DOCX 文件不存在，请先运行 Review2Revise 任务');
+			return;
+		}
+		let download_url = `/api/method/frappe.utils.file_manager.download_file?file_url=${frm.doc.reply_review_docx_link}`;
+		window.open(download_url, '_blank');
+	},
+	download_revised_application: function(frm) {
+		if (!frm.doc.revised_application_docx_link) {
+			frappe.msgprint('修改后申请书 DOCX 文件不存在，请先运行 Review2Revise 任务');
+			return;
+		}
+		let download_url = `/api/method/frappe.utils.file_manager.download_file?file_url=${frm.doc.revised_application_docx_link}`;
+		window.open(download_url, '_blank');
+	}
 });
 
 /**

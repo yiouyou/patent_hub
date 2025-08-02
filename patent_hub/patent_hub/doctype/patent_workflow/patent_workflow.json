@@ -96,7 +96,7 @@
   "section_break_ibax",
   "run_count_scene2tech",
   "column_break_qikg",
-  "success_count_scene2tecch",
+  "success_count_scene2tech",
   "column_break_qwbp",
   "total_cost_scene2tech",
   "column_break_dmub",
@@ -111,7 +111,7 @@
   "innovation_direction_0",
   "design_00",
   "design_01",
-  "innovation_direction1",
+  "innovation_direction_1",
   "design_10",
   "design_11",
   "innovation_evaluation",
@@ -213,6 +213,7 @@
   "align2tex2docx_id",
   "align2tex2docx_started_at",
   "last_align2tex2docx_error",
+  "application_docx_link",
   "tab_proofreading",
   "proofreading_section",
   "before_tex",
@@ -252,7 +253,9 @@
   "section_break_agoo",
   "review2revise_id",
   "review2revise_started_at",
-  "last_review2revise_error"
+  "last_review2revise_error",
+  "reply_review_docx_link",
+  "revised_application_docx_link"
  ],
  "fields": [
   {
@@ -310,12 +313,6 @@
    "fieldname": "design_01",
    "fieldtype": "Long Text",
    "label": "design 01"
-  },
-  {
-   "fieldname": "innovation_direction1",
-   "fieldtype": "Long Text",
-   "label": "innovation direction1",
-   "read_only": 1
   },
   {
    "fieldname": "design_10",
@@ -435,8 +432,7 @@
   {
    "fieldname": "refined_technical_solution",
    "fieldtype": "Long Text",
-   "label": "refined technical solution",
-   "read_only": 1
+   "label": "refined technical solution"
   },
   {
    "fieldname": "final_application",
@@ -1267,12 +1263,6 @@
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "success_count_scene2tecch",
-   "fieldtype": "Int",
-   "label": "Success # s2t",
-   "read_only": 1
-  },
-  {
    "fieldname": "column_break_qwbp",
    "fieldtype": "Column Break"
   },
@@ -1564,12 +1554,44 @@
    "label": "Current Stage",
    "options": "\n\u4e13\u5229\u9898\u76ee\u2192\u5e94\u7528\u5206\u6790\uff08Title2Scene\uff09\n\u5e94\u7528\u5206\u6790\u2192\u6280\u672f\u4ea4\u5e95\uff08Scene2Tech\n\u8865\u5145\u6750\u6599\u2192\u6280\u672f\u4ea4\u5e95\uff08Info2Tech\uff09\n\u6280\u672f\u4ea4\u5e95\u2192\u7533\u8bf7txt\uff08Tech2Application\uff09\n\u7533\u8bf7txt\u2192\u7533\u8bf7docx\uff08Align2Tex2Docx\uff09\n\u6821\u5bf9\u4e2d\n\u5ba1\u67e5\u4e2d\n\u5df2\u5b8c\u6210",
    "read_only": 1
+  },
+  {
+   "fieldname": "application_docx_link",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Application Docx Link",
+   "options": "File"
+  },
+  {
+   "fieldname": "reply_review_docx_link",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Reply Review Docx Link",
+   "options": "File"
+  },
+  {
+   "fieldname": "revised_application_docx_link",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Revised Application Docx Link",
+   "options": "File"
+  },
+  {
+   "fieldname": "innovation_direction_1",
+   "fieldtype": "Long Text",
+   "label": "innovation direction 1"
+  },
+  {
+   "fieldname": "success_count_scene2tech",
+   "fieldtype": "Int",
+   "label": "Success # s2t",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-08-01 04:21:18.922722",
+ "modified": "2025-08-02 06:33:07.598606",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Patent Workflow",

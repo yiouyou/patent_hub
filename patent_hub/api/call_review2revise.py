@@ -105,10 +105,19 @@ def _job(docname: str, user=None):
 		res = asyncio.run(call_chain())
 		res.raise_for_status()
 		output = json.loads(res.json()["output"])
-		_res = universal_decompress(output.get("res", ""))
+		_res = universal_decompress(output.get("res", ""), as_json=True)
 
 		doc.reply_review = _res.get("reply_review_txt")
 		doc.revised_application = _res.get("revised_application_txt")
+
+		reply_review_docx_bytes = _res.get("reply_review_docx_bytes")
+		revised_application_docx_bytes = _res.get("revised_application_docx_bytes")
+		if reply_review_docx_bytes:
+			reply_file_doc = save_docx_file(doc, reply_review_docx_bytes, "reply_review")
+			doc.reply_review_docx_link = reply_file_doc.name
+		if revised_application_docx_bytes:
+			revised_file_doc = save_docx_file(doc, revised_application_docx_bytes, "revised_application")
+			doc.revised_application_docx_link = revised_file_doc.name
 
 		complete_task_fields(
 			doc,
@@ -131,3 +140,79 @@ def _job(docname: str, user=None):
 			fail_task_fields(doc, "review2revise", str(e))
 			frappe.db.commit()
 			frappe.publish_realtime("review2revise_failed", {"error": str(e), "docname": docname}, user=user)
+
+
+def save_docx_file(doc, docx_bytes, file_type):
+	"""保存 docx bytes 为 File 文档
+
+	Args:
+		doc: Patent Workflow 文档
+		docx_bytes: docx 文件的字节数据
+		file_type: 文件类型，"reply_review" 或 "revised_application"
+	"""
+	from frappe.utils.file_manager import save_file
+
+	# 生成文件名
+	filename = f"{doc.name}_{file_type}.docx"
+
+	# 如果已存在同名文件，先删除
+	existing_files = frappe.get_all(
+		"File",
+		filters={"attached_to_doctype": doc.doctype, "attached_to_name": doc.name, "file_name": filename},
+	)
+	for existing_file in existing_files:
+		frappe.delete_doc("File", existing_file.name)
+
+	# 保存新文件
+	file_doc = save_file(
+		fname=filename,
+		content=docx_bytes,
+		dt=doc.doctype,
+		dn=doc.name,
+		is_private=1,  # 设为私有文件
+	)
+
+	logger.info(f"[Review2Revise] 已保存文件: {filename}, File ID: {file_doc.name}")
+	return file_doc
+
+
+@frappe.whitelist()
+def download_reply_review(docname: str):
+	"""下载 reply_review.docx 文件"""
+	try:
+		doc = frappe.get_doc("Patent Workflow", docname)
+
+		if not doc.reply_review_docx_link:
+			frappe.throw("回复审查意见 DOCX 文件不存在，请先运行 Review2Revise 任务")
+
+		file_doc = frappe.get_doc("File", doc.reply_review_docx_link)
+
+		if not file_doc:
+			frappe.throw("文件记录不存在")
+
+		return {"success": True, "file_url": file_doc.file_url, "file_name": file_doc.file_name}
+
+	except Exception as e:
+		logger.error(f"[Review2Revise] 下载回复审查意见文件失败: {e}")
+		return {"success": False, "error": str(e)}
+
+
+@frappe.whitelist()
+def download_revised_application(docname: str):
+	"""下载 revised_application.docx 文件"""
+	try:
+		doc = frappe.get_doc("Patent Workflow", docname)
+
+		if not doc.revised_application_docx_link:
+			frappe.throw("修改后申请书 DOCX 文件不存在，请先运行 Review2Revise 任务")
+
+		file_doc = frappe.get_doc("File", doc.revised_application_docx_link)
+
+		if not file_doc:
+			frappe.throw("文件记录不存在")
+
+		return {"success": True, "file_url": file_doc.file_url, "file_name": file_doc.file_name}
+
+	except Exception as e:
+		logger.error(f"[Review2Revise] 下载修改后申请书文件失败: {e}")
+		return {"success": False, "error": str(e)}

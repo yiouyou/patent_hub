@@ -164,7 +164,7 @@ def detect_and_reset_stuck_task(task_key: str, label: str, timeout_seconds=1800)
 
 	for doc in stuck_docs:
 		if doc.get(run_count_field, 0) == 0:
-			logger.debug(f"[{label}] 跳过未启动的任务: {doc.name}")
+			logger.info(f"[{label}] 跳过未启动的任务: {doc.name}")
 			continue
 
 		started_at = doc.get(started_at_field)
@@ -244,10 +244,9 @@ def init_task_fields(doc, task_key: str, prefix: str, logger=None):
 	# 累加运行次数
 	setattr(doc, run_count_field, getattr(doc, run_count_field, 0) + 1)
 
-	if logger:
-		logger.info(
-			f"[{task_key}] 初始化任务: id={getattr(doc, id_field)}, status=Running, run_count={getattr(doc, run_count_field)}"
-		)
+	logger.info(
+		f"[{task_key}] 初始化任务: id={getattr(doc, id_field)}, status=Running, run_count={getattr(doc, run_count_field)}"
+	)
 
 
 def complete_task_fields(doc, task_key: str, extra_fields: dict = None):
@@ -257,27 +256,42 @@ def complete_task_fields(doc, task_key: str, extra_fields: dict = None):
 	is_running_field = f"is_running_{task_key}"
 	is_done_field = f"is_done_{task_key}"
 	status_field = f"status_{task_key}"
-	success_count_field = f"success_count_{task_key}"
-
+	error_field = f"last_{task_key}_error"
 	setattr(doc, is_running_field, 0)
 	setattr(doc, is_done_field, 1)
 	setattr(doc, status_field, "Done")
-	setattr(doc, success_count_field, getattr(doc, success_count_field, 0) + 1)
+	setattr(doc, error_field, "成功！")
+
+	success_count_field = f"success_count_{task_key}"
+	_success_count = int(getattr(doc, success_count_field, 0) or 0)
+	setattr(doc, success_count_field, _success_count + 1)
+	# logger.info(f"_success_count: {_success_count}")
+	# logger.info(f"success_count: {getattr(doc, success_count_field, 0)}")
+	doc.save()
 
 	if extra_fields:
 		for key, value in extra_fields.items():
 			setattr(doc, key, value)
-
 			# 累计成本
 			if key.startswith("cost_"):
 				total_field = key.replace("cost_", "total_cost_")
-				setattr(doc, total_field, getattr(doc, total_field, 0) + float(value or 0))
-
+				try:
+					current_total = float(getattr(doc, total_field, 0) or 0)
+					new_value = float(value or 0)
+					setattr(doc, total_field, current_total + new_value)
+				except (ValueError, TypeError) as e:
+					logger.info(f"Error converting cost values: {e}")
+					setattr(doc, total_field, float(value or 0))
 			# 累计时间
 			if key.startswith("time_s_"):
 				total_field = key.replace("time_s_", "total_time_s_")
-				setattr(doc, total_field, getattr(doc, total_field, 0) + float(value or 0))
-
+				try:
+					current_total = float(getattr(doc, total_field, 0) or 0)
+					new_value = float(value or 0)
+					setattr(doc, total_field, current_total + new_value)
+				except (ValueError, TypeError) as e:
+					logger.info(f"Error converting time values: {e}")
+					setattr(doc, total_field, float(value or 0))
 	doc.save()
 
 

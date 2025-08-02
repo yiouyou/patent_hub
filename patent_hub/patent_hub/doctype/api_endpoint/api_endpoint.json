@@ -20,7 +20,7 @@
   "title2scene",
   "info2tech",
   "scene2tech",
-  "tech2appliation",
+  "tech2application",
   "align2tex2docx",
   "review2revise",
   "section_break_ieft",
@@ -87,11 +87,6 @@
    "label": "Scene2Tech"
   },
   {
-   "fieldname": "tech2appliation",
-   "fieldtype": "Data",
-   "label": "Tech2Appliation"
-  },
-  {
    "fieldname": "align2tex2docx",
    "fieldtype": "Data",
    "label": "Align2Tex2Docx"
@@ -148,13 +143,18 @@
   {
    "fieldname": "column_break_qath",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "tech2application",
+   "fieldtype": "Data",
+   "label": "Tech2Application"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2025-08-01 01:51:49.833446",
+ "modified": "2025-08-02 04:41:48.294410",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "API Endpoint",

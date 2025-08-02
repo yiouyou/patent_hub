@@ -102,12 +102,18 @@ def _job(docname: str, user=None):
 		res.raise_for_status()
 
 		output = json.loads(res.json()["output"])
-		_res = universal_decompress(output.get("res", ""))
+		_res = universal_decompress(output.get("res", ""), as_json=True)
 
 		doc.application_align = _res.get("application_align")
 		doc.application_tex = _res.get("application_tex")
 		doc.before_tex = _res.get("application_align")  # 原始对齐文本
 		doc.figure_codes = "\n==========\n".join([str(code) for code in _res.get("figure_codes", [])])
+
+		application_docx_bytes = _res.get("application_docx_bytes")
+		if application_docx_bytes:
+			# 保存为 File 文档
+			file_doc = save_docx_file(doc, application_docx_bytes)
+			doc.application_docx_link = file_doc.name
 
 		complete_task_fields(
 			doc,
@@ -130,3 +136,52 @@ def _job(docname: str, user=None):
 			fail_task_fields(doc, "align2tex2docx", str(e))
 			frappe.db.commit()
 			frappe.publish_realtime("align2tex2docx_failed", {"error": str(e), "docname": docname}, user=user)
+
+
+def save_docx_file(doc, docx_bytes):
+	"""保存 docx bytes 为 File 文档"""
+	from frappe.utils.file_manager import save_file
+
+	# 生成文件名
+	filename = f"{doc.name}_application.docx"
+
+	# 如果已存在同名文件，先删除
+	existing_files = frappe.get_all(
+		"File",
+		filters={"attached_to_doctype": doc.doctype, "attached_to_name": doc.name, "file_name": filename},
+	)
+	for existing_file in existing_files:
+		frappe.delete_doc("File", existing_file.name)
+
+	# 保存新文件
+	file_doc = save_file(
+		fname=filename,
+		content=docx_bytes,
+		dt=doc.doctype,
+		dn=doc.name,
+		is_private=1,  # 设为私有文件
+	)
+
+	return file_doc
+
+
+@frappe.whitelist()
+def download_application_docx(docname: str):
+	"""下载 application.docx 文件"""
+	try:
+		doc = frappe.get_doc("Patent Workflow", docname)
+
+		if not doc.application_docx_link:
+			frappe.throw("DOCX 文件不存在，请先运行 Align2Tex2Docx 任务")
+
+		file_doc = frappe.get_doc("File", doc.application_docx_link)
+
+		if not file_doc:
+			frappe.throw("文件记录不存在")
+
+		# 返回文件 URL 用于下载
+		return {"success": True, "file_url": file_doc.file_url, "file_name": file_doc.file_name}
+
+	except Exception as e:
+		logger.error(f"[Align2Tex2Docx] 下载文件失败: {e}")
+		return {"success": False, "error": str(e)}

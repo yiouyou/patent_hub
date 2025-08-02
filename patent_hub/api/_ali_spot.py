@@ -10,7 +10,7 @@ from aliyunsdkecs.request.v20140526.DescribeInstancesRequest import DescribeInst
 from aliyunsdkecs.request.v20140526.RunInstancesRequest import RunInstancesRequest
 
 logger = frappe.logger("app.patent_hub.patent_wf._ali_spot")
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
 
 ALIYUN_CONFIG = {
 	"region": "us-west-1",

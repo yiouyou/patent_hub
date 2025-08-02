@@ -101,7 +101,7 @@ def _job(docname: str, user=None):
 		res = asyncio.run(call_chain())
 		res.raise_for_status()
 		output = json.loads(res.json()["output"])
-		_res = universal_decompress(output.get("res", ""))
+		_res = universal_decompress(output.get("res", ""), as_json=True)
 
 		# 填充结果字段
 		doc.core_problem_analysis = _res.get("core_problem_analysis")
