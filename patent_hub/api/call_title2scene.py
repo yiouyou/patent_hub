@@ -11,9 +11,9 @@ from frappe import enqueue
 
 from patent_hub.api._utils import (
 	complete_task_fields,
-	decompress_json_from_base64,
 	fail_task_fields,
 	init_task_fields,
+	universal_decompress,
 )
 
 logger = frappe.logger("app.patent_hub.patent_wf.call_title2scene")
@@ -96,7 +96,7 @@ def _job(docname: str, user=None):
 		res = asyncio.run(call_chain())
 		res.raise_for_status()
 		output = json.loads(res.json()["output"])
-		_res = decompress_json_from_base64(output.get("res", ""))
+		_res = universal_decompress(output.get("res", ""))
 
 		# 写入字段
 		doc.scene = _res.get("scene")

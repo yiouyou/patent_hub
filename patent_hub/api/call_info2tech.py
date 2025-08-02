@@ -11,11 +11,11 @@ from frappe import enqueue
 
 from patent_hub.api._utils import (
 	complete_task_fields,
-	compress_json_to_base64,
-	decompress_json_from_base64,
 	fail_task_fields,
-	get_compressed_base64_files,
+	get_attached_files,
 	init_task_fields,
+	universal_compress,
+	universal_decompress,
 )
 
 logger = frappe.logger("app.patent_hub.patent_wf.call_info2tech")
@@ -83,20 +83,13 @@ def _job(docname: str, user=None):
 		url = f"{base_url}/{app_name}/invoke"
 		logger.info(f"[Info2Tech] 请求 URL: {url}")
 
-		base64_files = get_compressed_base64_files(doc, "table_upload_info2tech")
-		if not base64_files:
-			frappe.throw("未上传任何文件，无法继续执行")
-		info_files = [
-			{"base64": item["base64"], "original_filename": item["original_filename"]}
-			for item in base64_files
-		]
-
+		info_files = get_attached_files(doc, "table_upload_info2tech")
 		tmp_folder = os.path.join(api_endpoint.get_password("server_work_dir"), doc.info2tech_id)
 
 		payload = {
 			"input": {
 				"patent_title": doc.patent_title,
-				"info_files": compress_json_to_base64(info_files),
+				"info_files": universal_compress(info_files),
 				"tmp_folder": tmp_folder,
 			}
 		}
@@ -108,7 +101,7 @@ def _job(docname: str, user=None):
 		res = asyncio.run(call_chain())
 		res.raise_for_status()
 		output = json.loads(res.json()["output"])
-		_res = decompress_json_from_base64(output.get("res", ""))
+		_res = universal_decompress(output.get("res", ""))
 
 		doc.tech = _res.get("tech")
 

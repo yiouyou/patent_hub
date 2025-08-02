@@ -12,10 +12,10 @@ from frappe.utils import now_datetime
 
 from patent_hub.api._utils import (
 	complete_task_fields,
-	compress_str_to_base64,
-	decompress_json_from_base64,
 	fail_task_fields,
 	init_task_fields,
+	text_to_base64,
+	universal_decompress,
 )
 
 logger = frappe.logger("app.patent_hub.patent_wf.call_align2tex2docx")
@@ -89,7 +89,7 @@ def _job(docname: str, user=None):
 		payload = {
 			"input": {
 				"patent_title": doc.patent_title,
-				"base64file": compress_str_to_base64(doc.application),
+				"base64file": text_to_base64(doc.application),
 				"tmp_folder": tmp_folder,
 			}
 		}
@@ -102,7 +102,7 @@ def _job(docname: str, user=None):
 		res.raise_for_status()
 
 		output = json.loads(res.json()["output"])
-		_res = decompress_json_from_base64(output.get("res", ""))
+		_res = universal_decompress(output.get("res", ""))
 
 		doc.application_align = _res.get("application_align")
 		doc.application_tex = _res.get("application_tex")

@@ -30,57 +30,60 @@ logger.setLevel(logging.INFO)
 # ---------------------------------------------------
 
 
-def compress_str_to_base64(text: str) -> str:
-	"""压缩字符串并转为 base64 编码"""
-	compressed = gzip.compress(text.encode("utf-8"))
-	return base64.b64encode(compressed).decode("utf-8")
+def check_data_type(data: Any) -> str:
+	"""检查数据类型"""
+	if isinstance(data, str):
+		return "string"
+	elif isinstance(data, bytes):
+		return "bytes"
+	elif isinstance(data, (dict, list)):
+		return "json"
+	else:
+		return "other"
 
 
-def decompress_str_from_base64(base64_str: str) -> str:
-	"""解压 base64 编码的压缩字符串"""
-	compressed = base64.b64decode(base64_str.encode("utf-8"))
-	return gzip.decompress(compressed).decode("utf-8")
+def universal_compress(data: Any) -> str:
+	"""
+	通用压缩函数
+	数据流: 任意数据 → 字节 → gzip压缩 → base64编码 → 字符串
+	"""
+	# 步骤1: 转为字节
+	if isinstance(data, bytes):
+		raw_bytes = data
+	elif isinstance(data, str):
+		raw_bytes = data.encode("utf-8")
+	elif isinstance(data, (dict, list)):
+		json_str = json.dumps(data, ensure_ascii=False, separators=(",", ":"))
+		raw_bytes = json_str.encode("utf-8")
+	else:
+		raise TypeError(f"不支持的数据类型: {type(data)}")
+	# 步骤2: gzip压缩
+	compressed = gzip.compress(raw_bytes)
+	# 步骤3: base64编码
+	return base64.b64encode(compressed).decode("ascii")
 
 
-# ---------------------------------------------------
-# 🔹 JSON 对象压缩与解压（对象 ⇄ base64）
-# ---------------------------------------------------
+def universal_decompress(base64_str: str, as_json: bool = False, as_bytes: bool = False) -> str | bytes | Any:
+	"""
+	通用解压函数
+	数据流: base64字符串 → gzip字节 → 原始字节 → [字符串] → [JSON对象]
+	"""
+	# 步骤1: base64解码
+	compressed = base64.b64decode(base64_str)
+	# 步骤2: gzip解压
+	raw_bytes = gzip.decompress(compressed)
+	# 步骤3: 根据需要返回不同格式
+	if as_bytes:
+		return raw_bytes
+	# 步骤4: UTF-8解码为字符串
+	raw_str = raw_bytes.decode("utf-8")
+	# 步骤5: JSON解析(可选)
+	if as_json:
+		return json.loads(raw_str)
+	return raw_str
 
 
-def compress_json_to_base64(obj: Any) -> str:
-	"""将 Python 对象压缩并 base64 编码"""
-	json_str = json.dumps(obj)
-	return compress_str_to_base64(json_str)
-
-
-def decompress_json_from_base64(base64_str: str) -> Any:
-	"""解压 base64 字符串为 Python 对象"""
-	json_str = decompress_str_from_base64(base64_str)
-	return json.loads(json_str)
-
-
-# ---------------------------------------------------
-# 🔹 文件压缩与解压（文件 ⇄ base64）
-# ---------------------------------------------------
-
-
-def compress_file_to_base64(path: str) -> str:
-	"""读取文件，压缩并转为 base64 字符串"""
-	with open(path, "rb") as f:
-		data = f.read()
-	compressed = gzip.compress(data)
-	return base64.b64encode(compressed).decode("utf-8")
-
-
-def decompress_file_from_base64(base64_str: str, save_path: str):
-	"""将 base64 压缩数据解压并保存为文件"""
-	compressed = base64.b64decode(base64_str.encode("utf-8"))
-	data = gzip.decompress(compressed)
-	with open(save_path, "wb") as f:
-		f.write(data)
-
-
-def get_compressed_base64_files(doc, table_field: str) -> list[dict]:
+def get_attached_files(doc, table_field: str) -> list[dict]:
 	"""
 	从指定子表字段中读取 file 字段，转换为 base64 压缩字符串。
 	返回格式：[{ file_path: ..., base64: ..., original_filename: ..., note: ... }, ...]
@@ -104,17 +107,22 @@ def get_compressed_base64_files(doc, table_field: str) -> list[dict]:
 			frappe.throw(f"文件不存在: {file_path}")
 		# 获取原始文件名（包含扩展名）
 		original_filename = os.path.basename(filename)
-		# 压缩成 base64
-		base64_str = compress_file_to_base64(file_path)
+		with open(file_path, "rb") as f:
+			file_data = f.read()
 		results.append(
 			{
-				"file_path": file_path,
-				"base64": base64_str,
+				"content_bytes": file_data,
 				"original_filename": original_filename,
-				"note": row.note,
+				# "file_path": file_path,
+				# "note": row.note,
 			}
 		)
 	return results
+
+
+def text_to_base64(text: str) -> str:
+	"""文本字符串转base64"""
+	return base64.b64encode(text.encode("utf-8")).decode("ascii")
 
 
 # ---------------------------------------------------

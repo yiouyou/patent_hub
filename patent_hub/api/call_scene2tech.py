@@ -11,11 +11,11 @@ from frappe import enqueue
 
 from patent_hub.api._utils import (
 	complete_task_fields,
-	compress_json_to_base64,
-	compress_str_to_base64,
-	decompress_json_from_base64,
 	fail_task_fields,
 	init_task_fields,
+	text_to_base64,
+	universal_compress,
+	universal_decompress,
 )
 
 logger = frappe.logger("app.patent_hub.patent_wf.call_scene2tech")
@@ -88,9 +88,9 @@ def _job(docname: str, user=None):
 		payload = {
 			"input": {
 				"patent_title": doc.patent_title,
-				"base64file": compress_str_to_base64(doc.scene),
+				"base64file": text_to_base64(doc.scene),
 				"tmp_folder": tmp_folder,
-				"mid_files": compress_json_to_base64(mid_files),
+				"mid_files": universal_compress(mid_files),
 			}
 		}
 
@@ -101,7 +101,7 @@ def _job(docname: str, user=None):
 		res = asyncio.run(call_chain())
 		res.raise_for_status()
 		output = json.loads(res.json()["output"])
-		_res = decompress_json_from_base64(output.get("res", ""))
+		_res = universal_decompress(output.get("res", ""))
 
 		# 填充结果字段
 		doc.core_problem_analysis = _res.get("core_problem_analysis")
@@ -170,7 +170,11 @@ def get_scene2tech_mid_files(doc):
 	for field, filename in mapping.items():
 		content = getattr(doc, field, "")
 		if content and content.strip():
-			base64_str = compress_str_to_base64(content)
-			results.append({"base64": base64_str, "original_filename": filename})
+			results.append(
+				{
+					"content": content,  # 保存原始内容
+					"original_filename": filename,
+				}
+			)
 
 	return results
