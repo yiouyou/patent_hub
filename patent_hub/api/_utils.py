@@ -83,6 +83,11 @@ def universal_decompress(base64_str: str, as_json: bool = False, as_bytes: bool 
 	return raw_str
 
 
+def text_to_base64(text: str) -> str:
+	"""文本字符串转base64"""
+	return base64.b64encode(text.encode("utf-8")).decode("ascii")
+
+
 def get_attached_files(doc, table_field: str) -> list[dict]:
 	"""
 	从指定子表字段中读取 file 字段，转换为 base64 压缩字符串。
@@ -118,11 +123,6 @@ def get_attached_files(doc, table_field: str) -> list[dict]:
 			}
 		)
 	return results
-
-
-def text_to_base64(text: str) -> str:
-	"""文本字符串转base64"""
-	return base64.b64encode(text.encode("utf-8")).decode("ascii")
 
 
 # ---------------------------------------------------
