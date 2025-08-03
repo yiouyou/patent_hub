@@ -2,13 +2,15 @@ import asyncio
 import json
 import logging
 import os
-import tempfile
+import re
+import time
+from contextlib import contextmanager
 from typing import Any
 
 import frappe
 import httpx
 from frappe import enqueue
-from frappe.utils import now_datetime
+from frappe.utils.file_manager import save_file
 
 from patent_hub.api._utils import (
 	complete_task_fields,
@@ -19,130 +21,158 @@ from patent_hub.api._utils import (
 	universal_decompress,
 )
 
+# 配置
 logger = frappe.logger("app.patent_hub.patent_wf.call_align2tex2docx")
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.DEBUG)
 
 TIMEOUT = 1800
+HTTP_CONFIG = {
+	"timeout": httpx.Timeout(connect=10.0, read=300.0, write=30.0, pool=30.0),
+	"limits": httpx.Limits(max_keepalive_connections=5, max_connections=10, keepalive_expiry=30.0),
+	"headers": {
+		"User-Agent": "PatentHub/1.0",
+		"Accept": "application/json",
+		"Content-Type": "application/json",
+	},
+}
+
+
+@contextmanager
+def atomic_transaction():
+	"""原子事务上下文管理器"""
+	try:
+		frappe.db.begin()
+		yield
+		frappe.db.commit()
+	except Exception:
+		frappe.db.rollback()
+		raise
 
 
 @frappe.whitelist()
 def run(docname: str, force: bool = False):
+	"""启动align2tex2docx任务"""
 	try:
-		logger.info(f"[Align2Tex2Docx] 准备启动任务: {docname}, force={force}")
+		logger.info(f"启动任务: {docname}, force={force}")
 
-		# 🔧 添加权限检查
+		# 获取文档并检查权限
 		doc = frappe.get_doc("Patent Workflow", docname)
+		if not doc:
+			return {"success": False, "error": f"文档 {docname} 不存在"}
 		doc.check_permission("write")
 
-		if doc.is_done_align2tex2docx and not force:
-			logger.warning(f"[Align2Tex2Docx] 任务已完成，未强制重跑: {docname}")
-			return {"success": True, "message": "任务已完成，未重复执行"}
-
-		if doc.is_running_align2tex2docx:
-			return {"success": False, "error": "任务正在运行中，请等待完成"}
-
-		# 🔧 使用数据库事务确保状态一致性
-		frappe.db.begin()
+		# 原子性检查和更新状态
 		try:
-			init_task_fields(doc, "align2tex2docx", "A2T2D", logger)
-			doc.save(ignore_permissions=True, ignore_version=True)
-			frappe.db.commit()
-		except Exception:
-			frappe.db.rollback()
-			raise
+			_update_task_status(doc, force)
+		except ValueError as e:
+			logger.warning(f"任务状态检查失败 [{docname}]: {e}")
+			return {"success": False, "error": str(e)}
 
-		# 🔧 使用更具体的队列名称和jobname
-		job = enqueue(
-			"patent_hub.api.call_align2tex2docx._job",
-			queue="long",
-			timeout=TIMEOUT,
-			job_name=f"align2tex2docx_{docname}",  # 唯一的job名称
-			docname=docname,
-			user=frappe.session.user,
-		)
+		# 入队任务
+		job = _enqueue_task(docname, doc)
 
-		logger.info(f"[Align2Tex2Docx] 已入队: {docname}, job_id: {job.id}")
+		logger.info(f"任务已入队: {docname}, job_id: {job.id}")
 		return {"success": True, "message": "任务已提交执行队列", "job_id": job.id}
 
 	except frappe.PermissionError:
+		logger.warning(f"权限不足: {docname}, user: {frappe.session.user}")
 		return {"success": False, "error": "权限不足"}
 	except Exception as e:
-		logger.error(f"[Align2Tex2Docx] 启动任务失败: {e}")
-		logger.error(frappe.get_traceback())
+		logger.error(f"启动任务失败 [{docname}]: {e}")
 		return {"success": False, "error": f"启动任务失败: {e!s}"}
 
 
+def _update_task_status(doc, force: bool):
+	"""原子性更新任务状态"""
+	with atomic_transaction():
+		# 使用 SELECT FOR UPDATE 锁定记录，防止并发修改
+		locked_doc = frappe.db.sql(
+			"""
+			SELECT name, is_done_align2tex2docx, is_running_align2tex2docx 
+			FROM `tabPatent Workflow` 
+			WHERE name = %s 
+			FOR UPDATE
+			""",
+			doc.name,
+			as_dict=True,
+		)
+
+		if not locked_doc:
+			raise ValueError(f"文档 {doc.name} 不存在")
+
+		locked_doc = locked_doc[0]
+
+		# 检查任务状态
+		if locked_doc.is_done_align2tex2docx and not force:
+			raise ValueError("任务已完成，未重复执行")
+		if locked_doc.is_running_align2tex2docx:
+			raise ValueError("任务正在运行中，请等待完成")
+
+		# 重新加载并更新状态
+		doc.reload()
+		init_task_fields(doc, "align2tex2docx", "A2T2D", logger)
+		doc.save(ignore_permissions=True, ignore_version=True)
+
+
+def _enqueue_task(docname: str, doc):
+	"""入队任务并处理失败回滚"""
+	try:
+		return enqueue(
+			"patent_hub.api.call_align2tex2docx._job",
+			queue="long",
+			timeout=TIMEOUT,
+			job_name=f"align2tex2docx_{docname}",
+			docname=docname,
+			user=frappe.session.user,
+		)
+	except Exception as e:
+		# 入队失败，回滚状态
+		logger.error(f"入队失败，回滚状态: {e}")
+		try:
+			with atomic_transaction():
+				doc.reload()
+				doc.is_running_align2tex2docx = False
+				doc.last_align2tex2docx_error = f"入队失败: {e}"
+				doc.save(ignore_permissions=True, ignore_version=True)
+		except Exception as rollback_error:
+			logger.error(f"状态回滚失败: {rollback_error}")
+		raise Exception(f"任务入队失败: {e}")
+
+
 async def call_chain_with_retry(url: str, payload: dict, max_retries: int = 5) -> dict[str, Any]:
-	"""优化的带重试机制的API调用"""
-
-	# 🔧 优化超时配置
-	timeout = httpx.Timeout(
-		connect=10.0,
-		read=300.0,  # 5分钟读取超时
-		write=30.0,
-		pool=30.0,
-	)
-
-	limits = httpx.Limits(max_keepalive_connections=5, max_connections=10, keepalive_expiry=30.0)
-
-	# 🔧 指数退避策略
-	backoff_factor = 2
-
+	"""API调用重试机制"""
 	for attempt in range(max_retries):
 		try:
-			async with httpx.AsyncClient(
-				timeout=timeout,
-				limits=limits,
-				http2=False,
-				# 🔧 添加重试相关的headers
-				headers={
-					"User-Agent": "PatentHub/1.0",
-					"Accept": "application/json",
-					"Content-Type": "application/json",
-				},
-			) as client:
+			async with httpx.AsyncClient(**HTTP_CONFIG) as client:
 				logger.info(f"API调用尝试 {attempt + 1}/{max_retries}")
 				response = await client.post(url, json=payload)
 
 				if response.status_code == 200:
-					result = response.json()
 					logger.info(f"API调用成功，响应大小: {len(response.content)} 字节")
-					return result
+					return response.json()
 
-				# 🔧 区分不同的HTTP错误
-				elif response.status_code >= 500:
-					# 服务器错误，可以重试
-					logger.warning(f"服务器错误 {response.status_code}，将重试")
-					if attempt == max_retries - 1:
-						raise httpx.HTTPStatusError(
-							message=f"HTTP {response.status_code}: {response.text}",
-							request=response.request,
-							response=response,
-						)
-				else:
-					# 客户端错误，不重试
-					raise httpx.HTTPStatusError(
-						message=f"HTTP {response.status_code}: {response.text}",
-						request=response.request,
-						response=response,
-					)
+				# 5xx错误重试，4xx错误直接抛出
+				if response.status_code < 500:
+					response.raise_for_status()
+
+				logger.warning(f"服务器错误 {response.status_code}，将重试")
+				if attempt == max_retries - 1:
+					response.raise_for_status()
 
 		except (httpx.RemoteProtocolError, httpx.ReadTimeout, httpx.ConnectTimeout) as e:
 			logger.warning(f"网络错误 (尝试 {attempt + 1}): {e}")
 			if attempt == max_retries - 1:
 				raise
-
 		except httpx.HTTPStatusError as e:
 			if e.response.status_code < 500:
-				# 客户端错误不重试
-				raise
+				raise  # 客户端错误不重试
 			logger.warning(f"服务器错误 (尝试 {attempt + 1}): {e}")
 			if attempt == max_retries - 1:
 				raise
 
-		# 🔧 指数退避
+		# 指数退避
 		if attempt < max_retries - 1:
-			wait_time = backoff_factor**attempt
+			wait_time = 2**attempt
 			logger.info(f"等待 {wait_time} 秒后重试...")
 			await asyncio.sleep(wait_time)
 
@@ -150,26 +180,40 @@ async def call_chain_with_retry(url: str, payload: dict, max_retries: int = 5) -
 
 
 def _job(docname: str, user=None):
-	"""优化的任务执行函数"""
-	logger.info(f"[Align2Tex2Docx] 开始执行任务: {docname}")
+	"""执行align2tex2docx任务"""
+	logger.info(f"开始执行任务: {docname}")
 	doc = None
 
 	try:
-		# 🔧 使用 frappe.get_doc 的 for_update 参数避免并发问题
-		doc = frappe.get_doc("Patent Workflow", docname, for_update=True)
+		# 验证任务状态
+		with atomic_transaction():
+			doc = frappe.get_doc("Patent Workflow", docname)
 
-		# 防御性检查
-		if not doc.is_running_align2tex2docx:
-			logger.warning(f"[Align2Tex2Docx] 任务已非运行状态，跳过执行: {docname}")
-			return
+			# 使用数据库锁验证状态
+			locked_status = frappe.db.sql(
+				"""
+				SELECT is_running_align2tex2docx 
+				FROM `tabPatent Workflow` 
+				WHERE name = %s 
+				FOR UPDATE
+				""",
+				docname,
+				as_dict=True,
+			)
 
-		# 🔧 使用 frappe.get_cached_doc 获取单例文档
-		api_endpoint = frappe.get_cached_doc("API Endpoint", "API Endpoint")
+			if not locked_status or not locked_status[0].is_running_align2tex2docx:
+				logger.warning(f"任务已非运行状态，跳过执行: {docname}")
+				return
 
-		base_url = api_endpoint.server_ip_port.rstrip("/")
-		app_name = api_endpoint.align2tex2docx.strip("/")
-		url = f"{base_url}/{app_name}/invoke"
+		# 构建API请求（在事务外执行）
+		api_endpoint = frappe.get_single("API Endpoint")
+		if not api_endpoint:
+			raise ValueError("未配置 API Endpoint")
 
+		url = f"{api_endpoint.server_ip_port.rstrip('/')}/{api_endpoint.align2tex2docx.strip('/')}/invoke"
+		logger.info(f"请求 URL: {url}")
+
+		# 准备请求数据
 		tmp_folder = os.path.join(api_endpoint.get_password("server_work_dir"), doc.align2tex2docx_id)
 
 		payload = {
@@ -180,18 +224,41 @@ def _job(docname: str, user=None):
 			}
 		}
 
-		# 调用API
+		# 调用API（长时间操作，在事务外执行）
 		result = asyncio.run(call_chain_with_retry(url, payload))
 
-		# 🔧 重新获取文档确保数据最新
-		doc.reload()
+		# 处理结果（在新事务中）
+		_process_api_result(doc, result, user)
+		logger.info(f"执行成功: {docname}")
 
-		# 再次检查任务状态
-		if not doc.is_running_align2tex2docx:
-			logger.warning(f"[Align2Tex2Docx] 任务在执行过程中被取消: {docname}")
+	except Exception as e:
+		logger.error(f"执行失败 [{docname}]: {e}")
+		_handle_task_failure(doc, docname, str(e), user)
+
+
+def _process_api_result(doc, result: dict, user):
+	"""处理API结果并更新文档"""
+	with atomic_transaction():
+		# 锁定文档并验证状态
+		locked_status = frappe.db.sql(
+			"""
+			SELECT is_running_align2tex2docx 
+			FROM `tabPatent Workflow` 
+			WHERE name = %s 
+			FOR UPDATE
+			""",
+			doc.name,
+			as_dict=True,
+		)
+
+		if not locked_status or not locked_status[0].is_running_align2tex2docx:
+			logger.warning(f"任务在执行过程中被取消: {doc.name}")
 			return
 
-		# 解析响应
+		# 重新加载文档获取最新状态
+		doc.reload()
+
+		# 解析API响应
 		output = result.get("output")
 		if not output:
 			raise ValueError("API响应格式错误：缺少output字段")
@@ -199,30 +266,36 @@ def _job(docname: str, user=None):
 		if isinstance(output, str):
 			output = json.loads(output)
 
-		_res = universal_decompress(output.get("res", ""), as_json=True)
+		res_data = universal_decompress(output.get("res", ""), as_json=True)
 
-		# 🔧 批量更新字段，减少数据库操作
+		# 准备更新字段
 		update_fields = {
-			"application_align": _res.get("application_align"),
-			"application_tex": _res.get("application_tex"),
-			"before_tex": _res.get("application_align"),
-			"figure_codes": "\n==========\n".join([str(code) for code in _res.get("figure_codes", [])]),
+			"application_align": res_data.get("application_align"),
+			"application_tex": res_data.get("application_tex"),
+			"before_tex": res_data.get("application_align"),
+			"figure_codes": "\n==========\n".join(str(code) for code in res_data.get("figure_codes", [])),
 		}
 
+		# 清理旧文件
+		_cleanup_old_docx_files(doc)
+
 		# 处理DOCX文件
-		application_docx_bytes = _res.get("application_docx_bytes")
-		if application_docx_bytes:
-			if isinstance(application_docx_bytes, dict):
-				application_docx_bytes = restore_from_json_serializable(application_docx_bytes)
+		docx_files = {
+			"application_docx_link": ("application_docx_bytes", "application"),
+		}
 
-			if not isinstance(application_docx_bytes, bytes):
-				raise ValueError(f"DOCX数据类型错误，期望bytes，实际: {type(application_docx_bytes)}")
+		for link_field, (bytes_field, file_type) in docx_files.items():
+			if docx_bytes := res_data.get(bytes_field):
+				# 处理DOCX字节数据
+				if isinstance(docx_bytes, dict):
+					docx_bytes = restore_from_json_serializable(docx_bytes)
+				if not isinstance(docx_bytes, bytes):
+					raise ValueError(f"DOCX数据类型错误，期望bytes，实际: {type(docx_bytes)}")
 
-			# 保存文件
-			file_doc = save_docx_file(doc, application_docx_bytes)
-			update_fields["application_docx_link"] = file_doc.name
+				file_doc = _save_docx_file(doc, docx_bytes, file_type)
+				update_fields[link_field] = file_doc.name
 
-		# 🔧 使用 frappe.db.set_value 批量更新
+		# 批量设置字段
 		for field, value in update_fields.items():
 			if value is not None:
 				doc.set(field, value)
@@ -231,103 +304,107 @@ def _job(docname: str, user=None):
 		complete_task_fields(
 			doc,
 			"align2tex2docx",
-			extra_fields={
+			{
 				"time_s_align2tex2docx": output.get("TIME(s)", 0.0),
 				"cost_align2tex2docx": output.get("cost", 0),
 			},
+			logger,
 		)
 
-		# 🔧 使用 ignore_permissions 和 ignore_version 优化保存
 		doc.save(ignore_permissions=True, ignore_version=True)
-		frappe.db.commit()
 
-		logger.info(f"[Align2Tex2Docx] 执行成功: {docname}")
+	# 在事务外发布成功事件
+	_publish_success_event(doc, user)
 
-		# 🔧 使用更具体的事件名称
+
+def _publish_success_event(doc, user):
+	"""发布成功事件"""
+	try:
 		frappe.publish_realtime(
 			"patent_workflow_update",
 			{"docname": doc.name, "event": "align2tex2docx_done", "message": "Align2Tex2Docx 任务完成"},
 			user=user,
 		)
-
 	except Exception as e:
-		logger.error(f"[Align2Tex2Docx] 执行失败: {e}")
-		logger.error(frappe.get_traceback())
-
-		if doc:
-			try:
-				doc.reload()  # 重新加载以获取最新状态
-				fail_task_fields(doc, "align2tex2docx", str(e))
-				doc.save(ignore_permissions=True, ignore_version=True)
-				frappe.db.commit()
-			except Exception as save_error:
-				logger.error(f"保存失败状态时出错: {save_error}")
-
-			frappe.publish_realtime(
-				"patent_workflow_update",
-				{"docname": docname, "event": "align2tex2docx_failed", "error": str(e)},
-				user=user,
-			)
+		logger.warning(f"发布成功事件失败: {e}")
 
 
-def save_docx_file(doc, docx_bytes):
-	import re
+def _handle_task_failure(doc, docname: str, error_msg: str, user):
+	"""处理任务失败"""
+	try:
+		with atomic_transaction():
+			if doc:
+				doc.reload()
+			else:
+				doc = frappe.get_doc("Patent Workflow", docname)
 
-	from frappe.utils.file_manager import save_file
+			fail_task_fields(doc, "align2tex2docx", error_msg, logger)
+			doc.save(ignore_permissions=True, ignore_version=True)
+	except Exception as save_error:
+		logger.error(f"保存失败状态时出错: {save_error}")
 
+	# 在事务外发布失败事件
+	try:
+		frappe.publish_realtime(
+			"patent_workflow_update",
+			{"docname": docname, "event": "align2tex2docx_failed", "error": error_msg},
+			user=user,
+		)
+	except Exception as e:
+		logger.warning(f"发布失败事件失败: {e}")
+
+
+def _save_docx_file(doc, docx_bytes: bytes, file_type: str):
+	"""保存DOCX文件"""
 	if not isinstance(docx_bytes, bytes):
 		raise ValueError(f"参数必须是bytes类型，实际类型: {type(docx_bytes)}")
 
-	base_filename = f"{doc.align2tex2docx_id}_application_"
-
+	filename = f"{doc.align2tex2docx_id}_{file_type}_.docx"
 	try:
-		# 🔧 获取所有相关的文件
+		logger.info(f"保存文件 {filename}，大小: {len(docx_bytes)} 字节")
+		file_doc = save_file(
+			fname=filename, content=docx_bytes, dt=doc.doctype, dn=doc.name, is_private=1, decode=False
+		)
+		logger.info(f"文件保存成功: {file_doc.name}")
+		return file_doc
+	except Exception as e:
+		logger.error(f"保存DOCX文件失败: {e}")
+		raise
+
+
+def _cleanup_old_docx_files(doc):
+	"""清理旧的DOCX文件"""
+	try:
+		# 获取所有相关文件
 		all_files = frappe.get_all(
 			"File",
 			filters={
 				"attached_to_doctype": doc.doctype,
 				"attached_to_name": doc.name,
 			},
-			fields=["name", "file_name", "file_url"],
+			fields=["name", "file_name"],
 		)
-		logger.info(f"all_files: {all_files}")
 
-		# 🔧 使用正则表达式精确匹配
-		pattern = re.compile(rf"^{re.escape(doc.align2tex2docx_id)}.*\.docx$")
-		files_to_delete = [f for f in all_files if f.file_name and pattern.match(f.file_name)]
-		logger.info(f"找到需要删除的文件: {[f.file_name for f in files_to_delete]}")
+		# 匹配需要删除的文件
+		id_prefix = doc.align2tex2docx_id.rsplit("-", 1)[0]
+		pattern = re.compile(rf"^{re.escape(id_prefix)}.*\.docx$")
+		files_to_delete = [f for f in all_files if f.get("file_name") and pattern.match(f["file_name"])]
 
-		# 删除匹配的文件
-		for file_to_delete in files_to_delete:
+		if not files_to_delete:
+			return
+
+		logger.info(f"找到需要删除的文件: {[f['file_name'] for f in files_to_delete]}")
+
+		# 删除文件
+		for file_info in files_to_delete:
 			try:
-				frappe.delete_doc("File", file_to_delete.name, force=True, ignore_permissions=True)
-				logger.info(f"删除旧文件: {file_to_delete.file_name}")
+				frappe.delete_doc("File", file_info.name, force=True, ignore_permissions=True)
+				logger.info(f"删除旧文件: {file_info.file_name}")
 			except Exception as e:
-				logger.warning(f"删除旧文件失败 {file_to_delete.name}: {e}")
+				logger.warning(f"删除旧文件失败 {file_info.name}: {e}")
 
-		if files_to_delete:
-			frappe.db.commit()
-			# 等待一小段时间确保删除操作完成
-			import time
-
-			time.sleep(0.1)
+		# 确保删除操作完成
+		time.sleep(0.1)
 
 	except Exception as e:
-		logger.info(f"清理旧文件时出错: {e}")
-
-	# 生成最终文件名
-	final_filename = f"{base_filename}.docx"
-
-	try:
-		logger.info(f"保存文件 {final_filename}，大小: {len(docx_bytes)} 字节")
-
-		file_doc = save_file(
-			fname=final_filename, content=docx_bytes, dt=doc.doctype, dn=doc.name, is_private=1, decode=False
-		)
-
-		logger.info(f"文件保存成功: {file_doc.name}")
-		return file_doc
-
-	except Exception as e:
-		logger.error(f"保存DOCX文件失败: {e}")
-		raise
+		logger.warning(f"清理旧文件时出错: {e}")

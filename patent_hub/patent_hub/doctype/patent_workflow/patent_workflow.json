@@ -1536,14 +1536,12 @@
   {
    "fieldname": "reply_review_docx_link",
    "fieldtype": "Link",
-   "hidden": 1,
    "label": "Reply Review Docx",
    "options": "File"
   },
   {
    "fieldname": "revised_application_docx_link",
    "fieldtype": "Link",
-   "hidden": 1,
    "label": "Revised Application Docx",
    "options": "File"
   },
@@ -1572,7 +1570,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-08-02 14:40:30.642589",
+ "modified": "2025-08-03 04:50:33.263754",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Patent Workflow",

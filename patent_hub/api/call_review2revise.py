@@ -4,90 +4,230 @@ import json
 import logging
 import os
 import re
+import time
+from contextlib import contextmanager
+from typing import Any
 
 import frappe
 import httpx
 from frappe import enqueue
+from frappe.utils.file_manager import save_file
 
 from patent_hub.api._utils import (
 	complete_task_fields,
 	fail_task_fields,
 	get_attached_files,
 	init_task_fields,
+	restore_from_json_serializable,
 	text_to_base64,
 	universal_decompress,
 )
 
+# 配置
 logger = frappe.logger("app.patent_hub.patent_wf.call_review2revise")
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.DEBUG)
 
 TIMEOUT = 1800
+HTTP_CONFIG = {
+	"timeout": httpx.Timeout(connect=10.0, read=300.0, write=30.0, pool=30.0),
+	"limits": httpx.Limits(max_keepalive_connections=5, max_connections=10, keepalive_expiry=30.0),
+	"headers": {
+		"User-Agent": "PatentHub/1.0",
+		"Accept": "application/json",
+		"Content-Type": "application/json",
+	},
+}
+
+
+@contextmanager
+def atomic_transaction():
+	"""原子事务上下文管理器"""
+	try:
+		frappe.db.begin()
+		yield
+		frappe.db.commit()
+	except Exception:
+		frappe.db.rollback()
+		raise
 
 
 @frappe.whitelist()
 def run(docname: str, force: bool = False):
+	"""启动review2revise任务"""
 	try:
-		logger.info(f"[Review2Revise] 准备启动任务: {docname}, force={force}")
+		logger.info(f"启动任务: {docname}, force={force}")
+
+		# 获取文档并检查权限
 		doc = frappe.get_doc("Patent Workflow", docname)
 		if not doc:
 			return {"success": False, "error": f"文档 {docname} 不存在"}
+		doc.check_permission("write")
 
-		if doc.is_done_review2revise and not force:
-			logger.warning(f"[Review2Revise] 任务已完成，跳过执行: {docname}")
-			return {"success": True, "message": "任务已完成，未重复执行"}
+		# 原子性检查和更新状态
+		try:
+			_update_task_status(doc, force)
+		except ValueError as e:
+			logger.warning(f"任务状态检查失败 [{docname}]: {e}")
+			return {"success": False, "error": str(e)}
 
-		if doc.is_running_review2revise:
-			return {"success": False, "error": "任务正在运行中，请等待完成"}
+		# 入队任务
+		job = _enqueue_task(docname, doc)
 
+		logger.info(f"任务已入队: {docname}, job_id: {job.id}")
+		return {"success": True, "message": "任务已提交执行队列", "job_id": job.id}
+
+	except frappe.PermissionError:
+		logger.warning(f"权限不足: {docname}, user: {frappe.session.user}")
+		return {"success": False, "error": "权限不足"}
+	except Exception as e:
+		logger.error(f"启动任务失败 [{docname}]: {e}")
+		return {"success": False, "error": f"启动任务失败: {e!s}"}
+
+
+def _update_task_status(doc, force: bool):
+	"""原子性更新任务状态"""
+	with atomic_transaction():
+		# 使用 SELECT FOR UPDATE 锁定记录，防止并发修改
+		locked_doc = frappe.db.sql(
+			"""
+			SELECT name, is_done_review2revise, is_running_review2revise 
+			FROM `tabPatent Workflow` 
+			WHERE name = %s 
+			FOR UPDATE
+			""",
+			doc.name,
+			as_dict=True,
+		)
+
+		if not locked_doc:
+			raise ValueError(f"文档 {doc.name} 不存在")
+
+		locked_doc = locked_doc[0]
+
+		# 检查任务状态
+		if locked_doc.is_done_review2revise and not force:
+			raise ValueError("任务已完成，未重复执行")
+		if locked_doc.is_running_review2revise:
+			raise ValueError("任务正在运行中，请等待完成")
+
+		# 重新加载并更新状态
+		doc.reload()
 		init_task_fields(doc, "review2revise", "R2R", logger)
-		doc.save()
-		frappe.db.commit()
+		doc.save(ignore_permissions=True, ignore_version=True)
 
-		enqueue(
+
+def _enqueue_task(docname: str, doc):
+	"""入队任务并处理失败回滚"""
+	try:
+		return enqueue(
 			"patent_hub.api.call_review2revise._job",
 			queue="long",
 			timeout=TIMEOUT,
+			job_name=f"review2revise_{docname}",
 			docname=docname,
 			user=frappe.session.user,
 		)
-
-		logger.info(f"[Review2Revise] 已入队执行: {docname}")
-		return {"success": True, "message": "任务已提交执行队列"}
-
 	except Exception as e:
-		logger.error(f"[Review2Revise] 启动任务失败: {e}")
-		logger.error(frappe.get_traceback())
-		return {"success": False, "error": f"启动任务失败: {e}"}
+		# 入队失败，回滚状态
+		logger.error(f"入队失败，回滚状态: {e}")
+		try:
+			with atomic_transaction():
+				doc.reload()
+				doc.is_running_review2revise = False
+				doc.last_review2revise_error = f"入队失败: {e}"
+				doc.save(ignore_permissions=True, ignore_version=True)
+		except Exception as rollback_error:
+			logger.error(f"状态回滚失败: {rollback_error}")
+		raise Exception(f"任务入队失败: {e}")
+
+
+async def call_chain_with_retry(url: str, payload: dict, max_retries: int = 5) -> dict[str, Any]:
+	"""API调用重试机制"""
+	for attempt in range(max_retries):
+		try:
+			async with httpx.AsyncClient(**HTTP_CONFIG) as client:
+				logger.info(f"API调用尝试 {attempt + 1}/{max_retries}")
+				response = await client.post(url, json=payload)
+
+				if response.status_code == 200:
+					logger.info(f"API调用成功，响应大小: {len(response.content)} 字节")
+					return response.json()
+
+				# 5xx错误重试，4xx错误直接抛出
+				if response.status_code < 500:
+					response.raise_for_status()
+
+				logger.warning(f"服务器错误 {response.status_code}，将重试")
+				if attempt == max_retries - 1:
+					response.raise_for_status()
+
+		except (httpx.RemoteProtocolError, httpx.ReadTimeout, httpx.ConnectTimeout) as e:
+			logger.warning(f"网络错误 (尝试 {attempt + 1}): {e}")
+			if attempt == max_retries - 1:
+				raise
+		except httpx.HTTPStatusError as e:
+			if e.response.status_code < 500:
+				raise  # 客户端错误不重试
+			logger.warning(f"服务器错误 (尝试 {attempt + 1}): {e}")
+			if attempt == max_retries - 1:
+				raise
+
+		# 指数退避
+		if attempt < max_retries - 1:
+			wait_time = 2**attempt
+			logger.info(f"等待 {wait_time} 秒后重试...")
+			await asyncio.sleep(wait_time)
+
+	raise Exception("所有重试都失败了")
 
 
 def _job(docname: str, user=None):
-	logger.info(f"[Review2Revise] 开始执行任务: {docname}")
+	"""执行review2revise任务"""
+	logger.info(f"开始执行任务: {docname}")
 	doc = None
 
 	try:
-		doc = frappe.get_doc("Patent Workflow", docname)
+		# 验证任务状态
+		with atomic_transaction():
+			doc = frappe.get_doc("Patent Workflow", docname)
 
-		# 🛡 防御性：如果任务已非运行状态，则跳过执行
-		if not doc.is_running_review2revise:
-			logger.warning(f"[Review2Revise] 任务状态已取消，跳过执行: {docname}")
-			return
+			# 使用数据库锁验证状态
+			locked_status = frappe.db.sql(
+				"""
+				SELECT is_running_review2revise 
+				FROM `tabPatent Workflow` 
+				WHERE name = %s 
+				FOR UPDATE
+				""",
+				docname,
+				as_dict=True,
+			)
 
-		api_endpoint = frappe.get_single("API Endpoint")
-		if not api_endpoint:
-			frappe.throw("未配置 API Endpoint")
+			if not locked_status or not locked_status[0].is_running_review2revise:
+				logger.warning(f"任务已非运行状态，跳过执行: {docname}")
+				return
 
-		base_url = api_endpoint.server_ip_port.rstrip("/")
-		app_name = api_endpoint.review2revise.strip("/")
-		url = f"{base_url}/{app_name}/invoke"
-		logger.info(f"[Review2Revise] 请求 URL: {url}")
-
+		# 验证前置条件（在事务外执行）
 		review_files = get_attached_files(doc, "table_upload_review2revise")
 		if not review_files:
-			frappe.throw("未上传任何审查意见 PDF 文件，无法继续执行")
+			raise ValueError("未上传任何审查意见 PDF 文件，无法继续执行")
+
 		last_review_base64 = review_files[-1].get("content_bytes")
 		if not last_review_base64:
-			frappe.throw("最后一个审查意见文件的 base64 编码为空")
+			raise ValueError("最后一个审查意见文件的 base64 编码为空")
 
+		if not doc.application_tex:
+			raise ValueError("缺少 application_tex 内容")
+
+		# 构建API请求（在事务外执行）
+		api_endpoint = frappe.get_single("API Endpoint")
+		if not api_endpoint:
+			raise ValueError("未配置 API Endpoint")
+
+		url = f"{api_endpoint.server_ip_port.rstrip('/')}/{api_endpoint.review2revise.strip('/')}/invoke"
+		logger.info(f"请求 URL: {url}")
+
+		# 准备请求数据
 		tmp_folder = os.path.join(api_endpoint.get_password("server_work_dir"), doc.review2revise_id)
 
 		payload = {
@@ -98,121 +238,186 @@ def _job(docname: str, user=None):
 			}
 		}
 
-		async def call_chain():
-			async with httpx.AsyncClient(timeout=TIMEOUT) as client:
-				return await client.post(url, json=payload)
+		# 调用API（长时间操作，在事务外执行）
+		result = asyncio.run(call_chain_with_retry(url, payload))
 
-		res = asyncio.run(call_chain())
-		res.raise_for_status()
-		output = json.loads(res.json()["output"])
-		_res = universal_decompress(output.get("res", ""), as_json=True)
+		# 处理结果（在新事务中）
+		_process_api_result(doc, result, user)
+		logger.info(f"执行成功: {docname}")
 
-		doc.reply_review = _res.get("reply_review_txt")
-		doc.revised_application = _res.get("revised_application_txt")
+	except Exception as e:
+		logger.error(f"执行失败 [{docname}]: {e}")
+		_handle_task_failure(doc, docname, str(e), user)
 
-		reply_review_docx_bytes = _res.get("reply_review_docx_bytes")
-		revised_application_docx_bytes = _res.get("revised_application_docx_bytes")
-		if reply_review_docx_bytes:
-			reply_file_doc = save_docx_file(doc, reply_review_docx_bytes, "reply_review")
-			doc.reply_review_docx_link = reply_file_doc.name
-		if revised_application_docx_bytes:
-			revised_file_doc = save_docx_file(doc, revised_application_docx_bytes, "revised_application")
-			doc.revised_application_docx_link = revised_file_doc.name
 
+def _process_api_result(doc, result: dict, user):
+	"""处理API结果并更新文档"""
+	with atomic_transaction():
+		# 锁定文档并验证状态
+		locked_status = frappe.db.sql(
+			"""
+			SELECT is_running_review2revise 
+			FROM `tabPatent Workflow` 
+			WHERE name = %s 
+			FOR UPDATE
+			""",
+			doc.name,
+			as_dict=True,
+		)
+
+		if not locked_status or not locked_status[0].is_running_review2revise:
+			logger.warning(f"任务在执行过程中被取消: {doc.name}")
+			return
+
+		# 重新加载文档获取最新状态
+		doc.reload()
+
+		# 解析API响应
+		output = result.get("output")
+		if not output:
+			raise ValueError("API响应格式错误：缺少output字段")
+
+		if isinstance(output, str):
+			output = json.loads(output)
+
+		res_data = universal_decompress(output.get("res", ""), as_json=True)
+
+		# 准备更新字段
+		update_fields = {
+			"reply_review": res_data.get("reply_review_txt"),
+			"revised_application": res_data.get("revised_application_txt"),
+		}
+
+		# 清理旧文件
+		_cleanup_old_docx_files(doc)
+
+		# 处理DOCX文件
+		docx_files = {
+			"reply_review_docx_link": ("reply_review_docx_bytes", "reply"),
+			"revised_application_docx_link": ("revised_application_docx_bytes", "revised"),
+		}
+
+		for link_field, (bytes_field, file_type) in docx_files.items():
+			if docx_bytes := res_data.get(bytes_field):
+				# 处理DOCX字节数据
+				if isinstance(docx_bytes, dict):
+					docx_bytes = restore_from_json_serializable(docx_bytes)
+				if not isinstance(docx_bytes, bytes):
+					raise ValueError(f"DOCX数据类型错误，期望bytes，实际: {type(docx_bytes)}")
+
+				file_doc = _save_docx_file(doc, docx_bytes, file_type)
+				update_fields[link_field] = file_doc.name
+
+		# 批量设置字段
+		for field, value in update_fields.items():
+			if value is not None:
+				doc.set(field, value)
+
+		# 完成任务
 		complete_task_fields(
 			doc,
 			"review2revise",
-			extra_fields={
+			{
 				"time_s_review2revise": output.get("TIME(s)", 0.0),
 				"cost_review2revise": output.get("cost", 0),
 			},
+			logger,
 		)
 
-		logger.info(f"[Review2Revise] 执行成功: {docname}")
-		frappe.db.commit()
-		frappe.publish_realtime("review2revise_done", {"docname": doc.name}, user=user)
+		doc.save(ignore_permissions=True, ignore_version=True)
 
-	except Exception as e:
-		logger.error(f"[Review2Revise] 执行失败: {e}")
-		logger.error(frappe.get_traceback())
-
-		if doc:
-			fail_task_fields(doc, "review2revise", str(e))
-			frappe.db.commit()
-			frappe.publish_realtime("review2revise_failed", {"error": str(e), "docname": docname}, user=user)
+	# 在事务外发布成功事件
+	_publish_success_event(doc, user)
 
 
-def save_docx_file(doc, docx_bytes, file_type):
-	"""保存 docx bytes 为 File 文档
-
-	Args:
-		doc: Patent Workflow 文档
-		docx_bytes: docx 文件的字节数据
-		file_type: 文件类型，"reply_review" 或 "revised_application"
-	"""
-	from frappe.utils.file_manager import save_file
-
-	# 生成文件名
-	filename = f"{doc.name}_{file_type}.docx"
-
-	# 如果已存在同名文件，先删除
-	existing_files = frappe.get_all(
-		"File",
-		filters={"attached_to_doctype": doc.doctype, "attached_to_name": doc.name, "file_name": filename},
-	)
-	for existing_file in existing_files:
-		frappe.delete_doc("File", existing_file.name)
-
-	# 保存新文件
-	file_doc = save_file(
-		fname=filename,
-		content=docx_bytes,
-		dt=doc.doctype,
-		dn=doc.name,
-		is_private=1,  # 设为私有文件
-	)
-
-	logger.info(f"[Review2Revise] 已保存文件: {filename}, File ID: {file_doc.name}")
-	return file_doc
-
-
-@frappe.whitelist()
-def download_reply_review(docname: str):
-	"""下载 reply_review.docx 文件"""
+def _publish_success_event(doc, user):
+	"""发布成功事件"""
 	try:
-		doc = frappe.get_doc("Patent Workflow", docname)
-
-		if not doc.reply_review_docx_link:
-			frappe.throw("回复审查意见 DOCX 文件不存在，请先运行 Review2Revise 任务")
-
-		file_doc = frappe.get_doc("File", doc.reply_review_docx_link)
-
-		if not file_doc:
-			frappe.throw("文件记录不存在")
-
-		return {"success": True, "file_url": file_doc.file_url, "file_name": file_doc.file_name}
-
+		frappe.publish_realtime(
+			"patent_workflow_update",
+			{"docname": doc.name, "event": "review2revise_done", "message": "Review2Revise 任务完成"},
+			user=user,
+		)
 	except Exception as e:
-		logger.error(f"[Review2Revise] 下载回复审查意见文件失败: {e}")
-		return {"success": False, "error": str(e)}
+		logger.warning(f"发布成功事件失败: {e}")
 
 
-@frappe.whitelist()
-def download_revised_application(docname: str):
-	"""下载 revised_application.docx 文件"""
+def _handle_task_failure(doc, docname: str, error_msg: str, user):
+	"""处理任务失败"""
 	try:
-		doc = frappe.get_doc("Patent Workflow", docname)
+		with atomic_transaction():
+			if doc:
+				doc.reload()
+			else:
+				doc = frappe.get_doc("Patent Workflow", docname)
 
-		if not doc.revised_application_docx_link:
-			frappe.throw("修改后申请书 DOCX 文件不存在，请先运行 Review2Revise 任务")
+			fail_task_fields(doc, "review2revise", error_msg, logger)
+			doc.save(ignore_permissions=True, ignore_version=True)
+	except Exception as save_error:
+		logger.error(f"保存失败状态时出错: {save_error}")
 
-		file_doc = frappe.get_doc("File", doc.revised_application_docx_link)
+	# 在事务外发布失败事件
+	try:
+		frappe.publish_realtime(
+			"patent_workflow_update",
+			{"docname": docname, "event": "review2revise_failed", "error": error_msg},
+			user=user,
+		)
+	except Exception as e:
+		logger.warning(f"发布失败事件失败: {e}")
 
-		if not file_doc:
-			frappe.throw("文件记录不存在")
 
-		return {"success": True, "file_url": file_doc.file_url, "file_name": file_doc.file_name}
+def _save_docx_file(doc, docx_bytes: bytes, file_type: str):
+	"""保存DOCX文件"""
+	if not isinstance(docx_bytes, bytes):
+		raise ValueError(f"参数必须是bytes类型，实际类型: {type(docx_bytes)}")
+
+	filename = f"{doc.review2revise_id}_{file_type}_.docx"
+	try:
+		logger.info(f"保存文件 {filename}，大小: {len(docx_bytes)} 字节")
+		file_doc = save_file(
+			fname=filename, content=docx_bytes, dt=doc.doctype, dn=doc.name, is_private=1, decode=False
+		)
+		logger.info(f"文件保存成功: {file_doc.name}")
+		return file_doc
+	except Exception as e:
+		logger.error(f"保存DOCX文件失败: {e}")
+		raise
+
+
+def _cleanup_old_docx_files(doc):
+	"""清理旧的DOCX文件"""
+	try:
+		# 获取所有相关文件
+		all_files = frappe.get_all(
+			"File",
+			filters={
+				"attached_to_doctype": doc.doctype,
+				"attached_to_name": doc.name,
+			},
+			fields=["name", "file_name"],
+		)
+
+		# 匹配需要删除的文件
+		id_prefix = doc.review2revise_id.rsplit("-", 1)[0]
+		pattern = re.compile(rf"^{re.escape(id_prefix)}.*\.docx$")
+		files_to_delete = [f for f in all_files if f.get("file_name") and pattern.match(f["file_name"])]
+
+		if not files_to_delete:
+			return
+
+		logger.info(f"找到需要删除的文件: {[f['file_name'] for f in files_to_delete]}")
+
+		# 删除文件
+		for file_info in files_to_delete:
+			try:
+				frappe.delete_doc("File", file_info.name, force=True, ignore_permissions=True)
+				logger.info(f"删除旧文件: {file_info.file_name}")
+			except Exception as e:
+				logger.warning(f"删除旧文件失败 {file_info.name}: {e}")
+
+		# 确保删除操作完成
+		time.sleep(0.1)
 
 	except Exception as e:
-		logger.error(f"[Review2Revise] 下载修改后申请书文件失败: {e}")
-		return {"success": False, "error": str(e)}
+		logger.warning(f"清理旧文件时出错: {e}")

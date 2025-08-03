@@ -23,7 +23,7 @@ from frappe.utils import now_datetime, time_diff_in_seconds
 
 # 日志设置
 logger = frappe.logger("app.patent_hub.patent_wf._util")
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.DEBUG)
 
 
 # ---------------------------------------------------
@@ -285,29 +285,22 @@ def init_task_fields(doc, task_key: str, prefix: str, logger=None):
 	is_done_field = f"is_done_{task_key}"
 	status_field = f"status_{task_key}"
 	run_count_field = f"run_count_{task_key}"
-
-	# # 若尚未生成 ID，则生成，生成后不变
-	# if not getattr(doc, id_field, None):
-	# 	setattr(doc, id_field, generate_step_id(doc.patent_id, prefix))
-
 	# 每次 init 都生成新的ID
 	setattr(doc, id_field, generate_step_id(doc.patent_id, prefix))
-
 	# 设置运行状态
 	setattr(doc, is_running_field, 1)
 	setattr(doc, is_done_field, 0)
 	setattr(doc, status_field, "Running")
 	setattr(doc, started_at_field, now_datetime())
-
 	# 累加运行次数
 	setattr(doc, run_count_field, getattr(doc, run_count_field, 0) + 1)
+	if logger:
+		logger.info(
+			f"[{task_key}] 初始化任务: id={getattr(doc, id_field)}, status=Running, run_count={getattr(doc, run_count_field)}"
+		)
 
-	logger.info(
-		f"[{task_key}] 初始化任务: id={getattr(doc, id_field)}, status=Running, run_count={getattr(doc, run_count_field)}"
-	)
 
-
-def complete_task_fields(doc, task_key: str, extra_fields: dict = None):
+def complete_task_fields(doc, task_key: str, extra_fields: dict = None, logger=None):
 	"""
 	统一完成任务状态设置，并累加运行成功次数和累计耗时/成本。
 	"""
@@ -319,14 +312,9 @@ def complete_task_fields(doc, task_key: str, extra_fields: dict = None):
 	setattr(doc, is_done_field, 1)
 	setattr(doc, status_field, "Done")
 	setattr(doc, error_field, "成功！")
-
 	success_count_field = f"success_count_{task_key}"
 	_success_count = int(getattr(doc, success_count_field, 0) or 0)
 	setattr(doc, success_count_field, _success_count + 1)
-	# logger.info(f"_success_count: {_success_count}")
-	# logger.info(f"success_count: {getattr(doc, success_count_field, 0)}")
-	doc.save()
-
 	if extra_fields:
 		for key, value in extra_fields.items():
 			setattr(doc, key, value)
@@ -348,12 +336,15 @@ def complete_task_fields(doc, task_key: str, extra_fields: dict = None):
 					new_value = float(value or 0)
 					setattr(doc, total_field, current_total + new_value)
 				except (ValueError, TypeError) as e:
-					logger.info(f"Error converting time values: {e}")
+					if logger:
+						logger.info(f"Error converting time values: {e}")
 					setattr(doc, total_field, float(value or 0))
 	doc.save()
+	if logger:
+		logger.info(f"[{task_key}] 任务完成: status=Done, success_count={getattr(doc, success_count_field)}")
 
 
-def fail_task_fields(doc, task_key: str, error: str = None):
+def fail_task_fields(doc, task_key: str, error: str = None, logger=None):
 	"""
 	设置任务失败状态，并记录错误信息（不增加 success_count）
 	"""
@@ -361,15 +352,15 @@ def fail_task_fields(doc, task_key: str, error: str = None):
 	is_done_field = f"is_done_{task_key}"
 	status_field = f"status_{task_key}"
 	error_field = f"last_{task_key}_error"
-
 	setattr(doc, is_running_field, 0)
 	setattr(doc, is_done_field, 0)
 	setattr(doc, status_field, "Failed")
-
+	error_msg = error or "运行失败"
 	if hasattr(doc, error_field):
-		setattr(doc, error_field, error or "运行失败")
-
+		setattr(doc, error_field, error_msg)
 	doc.save()
+	if logger:
+		logger.error(f"[{task_key}] 任务失败: error={error_msg}")
 
 
 @frappe.whitelist()
