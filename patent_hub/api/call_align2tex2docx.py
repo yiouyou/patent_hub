@@ -273,7 +273,10 @@ def _process_api_result(doc, result: dict, user):
 			"application_align": res_data.get("application_align"),
 			"application_tex": res_data.get("application_tex"),
 			"before_tex": res_data.get("application_align"),
-			"figure_codes": "\n==========\n".join(str(code) for code in res_data.get("figure_codes", [])),
+			"figure_codes": "\n".join(
+				f"========== {i} ==========\n{code}"
+				for i, code in enumerate(res_data.get("figure_codes", []), 1)
+			),
 		}
 
 		# 清理旧文件
