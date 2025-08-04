@@ -5,10 +5,14 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "llm_section",
   "anthropic_api_key",
   "openai_api_key",
   "gemini_api_key",
   "deepseek_api_key",
+  "ali_section",
+  "ali_accesskey_id",
+  "ali_accesskey_secret",
   "section_break_mlfz",
   "s3_bucket_name",
   "aws_region",
@@ -48,7 +52,8 @@
   },
   {
    "fieldname": "section_break_mlfz",
-   "fieldtype": "Section Break"
+   "fieldtype": "Section Break",
+   "label": "AWS"
   },
   {
    "fieldname": "s3_bucket_name",
@@ -59,13 +64,33 @@
    "fieldname": "aws_region",
    "fieldtype": "Data",
    "label": "AWS Region"
+  },
+  {
+   "fieldname": "llm_section",
+   "fieldtype": "Section Break",
+   "label": "LLM"
+  },
+  {
+   "fieldname": "ali_section",
+   "fieldtype": "Section Break",
+   "label": "Ali"
+  },
+  {
+   "fieldname": "ali_accesskey_id",
+   "fieldtype": "Password",
+   "label": "Ali AccessKey ID"
+  },
+  {
+   "fieldname": "ali_accesskey_secret",
+   "fieldtype": "Password",
+   "label": "Ali AccessKey Secret"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2025-07-11 03:16:47.474734",
+ "modified": "2025-08-04 00:30:14.290261",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "API KEY",
