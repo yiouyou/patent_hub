@@ -118,12 +118,12 @@
   },
   {
    "fieldname": "accesskey_id",
-   "fieldtype": "Data",
+   "fieldtype": "Password",
    "label": "AccessKey ID"
   },
   {
    "fieldname": "accesskey_secret",
-   "fieldtype": "Data",
+   "fieldtype": "Password",
    "label": "AccessKey Secret"
   },
   {
@@ -154,7 +154,7 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2025-08-02 04:41:48.294410",
+ "modified": "2025-08-04 00:00:46.677255",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "API Endpoint",

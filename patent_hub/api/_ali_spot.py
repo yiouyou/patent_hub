@@ -67,8 +67,9 @@ def wait_for_public_ip(client, instance_id, retries=10, delay=5):
 def run(docname):
 	doc = frappe.get_doc("API Endpoint", docname)
 
-	ACCESS_KEY = doc.accesskey_id
-	ACCESS_SECRET = doc.accesskey_secret
+	api_endpoint = frappe.get_single("API Endpoint")
+	ACCESS_KEY = api_endpoint.get_password("accesskey_id")
+	ACCESS_SECRET = api_endpoint.get_password("accesskey_secret")
 
 	try:
 		client = AcsClient(ACCESS_KEY, ACCESS_SECRET, ALIYUN_CONFIG["region"])
