@@ -8,7 +8,10 @@ requires-python = ">=3.10"
 readme = "README.md"
 dynamic = ["version"]
 dependencies = [
-    # "frappe~=15.0.0" # Installed and managed by bench.
+    "frappe>=15.0.0" # Installed and managed by bench.
+    "httpx==0.28.1",
+    "aliyun-python-sdk-core==2.16.0",
+    "aliyun-python-sdk-ecs==4.24.82"
 ]
 
 [build-system]
@@ -56,6 +59,3 @@ indent-style = "tab"
 docstring-code-format = true
 
 [tool.bench.frappe-dependencies]
-httpx = "*"
-aliyun-python-sdk-core = "*"
-aliyun-python-sdk-ecs = "*"
