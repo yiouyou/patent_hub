@@ -36,8 +36,8 @@
   "docstatus": 0,
   "doctype": "Dashboard",
   "is_default": 0,
-  "is_standard": 0,
-  "modified": "2025-08-04 00:45:04.076762",
+  "is_standard": 1,
+  "modified": "2025-08-04 01:01:58.984193",
   "module": "Patent Hub",
   "name": "Patent Workflow Dashboard"
  }
