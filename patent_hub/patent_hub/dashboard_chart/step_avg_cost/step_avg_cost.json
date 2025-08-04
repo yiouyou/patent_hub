@@ -10,7 +10,7 @@
  "group_by_type": "Count",
  "idx": 25,
  "is_public": 1,
- "is_standard": 1,
+ "is_standard": 0,
  "modified": "2025-08-04 01:01:46.274254",
  "modified_by": "Administrator",
  "module": "Patent Hub",
