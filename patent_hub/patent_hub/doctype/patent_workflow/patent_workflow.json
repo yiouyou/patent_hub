@@ -9,6 +9,7 @@
   "writer_id",
   "agency_id",
   "patent_title",
+  "ipc_number",
   "status_section_all",
   "status_title2scene",
   "status_info2tech",
@@ -1565,12 +1566,17 @@
    "fieldname": "link_section_review2revise",
    "fieldtype": "Section Break",
    "label": "Link"
+  },
+  {
+   "fieldname": "ipc_number",
+   "fieldtype": "Data",
+   "label": "IPC Number"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-08-03 04:50:33.263754",
+ "modified": "2025-08-06 00:02:45.783927",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Patent Workflow",
