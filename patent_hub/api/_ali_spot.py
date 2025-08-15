@@ -5,6 +5,7 @@ import time
 from datetime import datetime, timezone
 
 import frappe
+import requests
 from aliyunsdkcore.client import AcsClient
 from aliyunsdkecs.request.v20140526.DescribeInstancesRequest import DescribeInstancesRequest
 from aliyunsdkecs.request.v20140526.RunInstancesRequest import RunInstancesRequest
@@ -15,8 +16,8 @@ logger.setLevel(logging.INFO)
 ALIYUN_CONFIG = {
 	"region": "us-west-1",
 	"zone_id": "us-west-1b",
-	"image_id": "m-rj9fn9ate2oewlhzfzut",
-	"instance_type": "ecs.sn1.medium",  # ecs.sn1.medium
+	"image_id": "m-rj9cg23kqe7sgu3yaxll",  # m-rj9fpuckfm7a00352iom, m-rj9fn9ate2oewlhzfzut
+	"instance_type": "ecs.sn1.medium",  # ecs.sn1.medium / ecs.e-c1m2.large / ecs.u1-c1m2.large
 	"security_group": "sg-rj983e9wauefg6dpluvu",
 	"vswitch_id": "vsw-rj98hw33pyjzp3x8midvi",
 	"key_pair": "ali-us",
@@ -24,12 +25,13 @@ ALIYUN_CONFIG = {
 
 
 @frappe.whitelist()
-def ping(host):
+def ping(server_ip_port):
 	try:
-		result = subprocess.run(
-			["ping", "-c", "1", "-W", "2", host], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
-		)
-		return result.returncode == 0
+		url = f"{server_ip_port}/docs"
+		resp = requests.get(url, timeout=2)
+		logger.info(url)
+		logger.info(resp)
+		return resp.status_code == 200 and bool(resp.text.strip())
 	except Exception:
 		return False
 
@@ -37,14 +39,13 @@ def ping(host):
 @frappe.whitelist()
 def check_spot_status():
 	doc = frappe.get_single("API Endpoint")
-	ip_port = doc.server_ip_port
+	server_ip_port = doc.server_ip_port
 
-	if not ip_port:
+	if not server_ip_port:
 		logger.info("未配置 server_ip_port，跳过状态检查。")
 		return
 
-	host = ip_port.replace("http://", "").split(":")[0]
-	doc.spot_status = "On" if ping(host) else "Off"
+	doc.spot_status = "On" if ping(server_ip_port) else "Off"
 	doc.save(ignore_permissions=True)
 	frappe.db.commit()
 

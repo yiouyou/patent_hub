@@ -12,11 +12,9 @@ frappe.ui.form.on("API Endpoint", {
             return;
         }
 
-        const ip = url.replace(/^https?:\/\//, "").split(":")[0];
-
         frappe.call({
             method: "patent_hub.api._ali_spot.ping",
-            args: { host: ip },
+            args: { server_ip_port: url },
             callback: function (r) {
                 if (r.message === true) {
                     frappe.show_alert({ message: "实例已在线，无需重启！", indicator: "green" }, 3);
@@ -56,11 +54,9 @@ frappe.ui.form.on("API Endpoint", {
             return;
         }
 
-        const ip = url.replace(/^https?:\/\//, "").split(":")[0];
-
         frappe.call({
             method: "patent_hub.api._ali_spot.ping",
-            args: { host: ip },
+            args: { server_ip_port: url },
             callback: function (r) {
                 if (r.message === true) {
                     frappe.show_alert({ message: "实例在线", indicator: "green" }, 3);

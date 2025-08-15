@@ -1,0 +1,214 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-08-12 23:36:45.116165",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "code",
+  "section_break_khuk",
+  "call_code2png",
+  "column_break_lbdx",
+  "cancel_code2png",
+  "column_break_amzn",
+  "rerun_code2png",
+  "status_section",
+  "is_done_code2png",
+  "column_break_axgd",
+  "is_running_code2png",
+  "column_break_hdqo",
+  "cost_code2png",
+  "column_break_jhus",
+  "time_s_code2png",
+  "section_break_grav",
+  "run_count_code2png",
+  "column_break_pyrv",
+  "success_count_code2png",
+  "column_break_lprk",
+  "total_cost_code2png",
+  "column_break_avje",
+  "total_time_s_code2png",
+  "link_section",
+  "png",
+  "section_break_yxus",
+  "code2png_id",
+  "code2png_started_at",
+  "last_code2png_error"
+ ],
+ "fields": [
+  {
+   "fieldname": "code",
+   "fieldtype": "Small Text",
+   "label": "code"
+  },
+  {
+   "fieldname": "link_section",
+   "fieldtype": "Section Break",
+   "label": "link"
+  },
+  {
+   "fieldname": "png",
+   "fieldtype": "Link",
+   "label": "png",
+   "options": "File"
+  },
+  {
+   "fieldname": "section_break_yxus",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "code2png_id",
+   "fieldtype": "Data",
+   "label": "code2png ID",
+   "read_only": 1
+  },
+  {
+   "fieldname": "code2png_started_at",
+   "fieldtype": "Datetime",
+   "label": "code2png Started At",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_code2png_error",
+   "fieldtype": "Small Text",
+   "label": "Last code2png Error",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_khuk",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "call_code2png",
+   "fieldtype": "Button",
+   "label": "Call code2png"
+  },
+  {
+   "fieldname": "column_break_lbdx",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "cancel_code2png",
+   "fieldtype": "Button",
+   "label": "Cancel Call"
+  },
+  {
+   "fieldname": "column_break_amzn",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "rerun_code2png",
+   "fieldtype": "Button",
+   "label": "Rerun Call"
+  },
+  {
+   "fieldname": "status_section",
+   "fieldtype": "Section Break",
+   "label": "Status"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_done_code2png",
+   "fieldtype": "Check",
+   "label": "is Done",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_axgd",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_running_code2png",
+   "fieldtype": "Check",
+   "label": "is Running",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_hdqo",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "cost_code2png",
+   "fieldtype": "Data",
+   "label": "Cost",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_jhus",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "time_s_code2png",
+   "fieldtype": "Data",
+   "label": "Time(s)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_grav",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "run_count_code2png",
+   "fieldtype": "Data",
+   "label": "Run # c2p",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_pyrv",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "success_count_code2png",
+   "fieldtype": "Data",
+   "label": "Success # c2p",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_lprk",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "total_cost_code2png",
+   "fieldtype": "Data",
+   "label": "Total Cost",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_avje",
+   "fieldtype": "Column Break",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_time_s_code2png",
+   "fieldtype": "Data",
+   "label": "Total Time(s)"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-08-12 23:51:44.273799",
+ "modified_by": "Administrator",
+ "module": "Patent Hub",
+ "name": "code2png",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
