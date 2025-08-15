@@ -1190,6 +1190,7 @@
    "fieldtype": "Section Break"
   },
   {
+   "default": "0",
    "fieldname": "run_count_info2tech",
    "fieldtype": "Int",
    "label": "Run # i2t",
@@ -1200,6 +1201,7 @@
    "fieldtype": "Column Break"
   },
   {
+   "default": "0",
    "fieldname": "success_count_info2tech",
    "fieldtype": "Int",
    "label": "Success # i2t",
@@ -1262,6 +1264,7 @@
    "fieldtype": "Section Break"
   },
   {
+   "default": "0",
    "fieldname": "run_count_tech2application",
    "fieldtype": "Int",
    "label": "Run # t2a",
@@ -1272,6 +1275,7 @@
    "fieldtype": "Column Break"
   },
   {
+   "default": "0",
    "fieldname": "success_count_tech2application",
    "fieldtype": "Int",
    "label": "Success # t2a",
@@ -1304,6 +1308,7 @@
    "fieldtype": "Section Break"
   },
   {
+   "default": "0",
    "fieldname": "run_count_align2tex2docx",
    "fieldtype": "Int",
    "label": "Run # a2d",
@@ -1314,6 +1319,7 @@
    "fieldtype": "Column Break"
   },
   {
+   "default": "0",
    "fieldname": "success_count_align2tex2docx",
    "fieldtype": "Int",
    "label": "Success # a2d",
@@ -1346,6 +1352,7 @@
    "fieldtype": "Section Break"
   },
   {
+   "default": "0",
    "fieldname": "run_count_review2revise",
    "fieldtype": "Int",
    "label": "Run # r2r",
@@ -1356,6 +1363,7 @@
    "fieldtype": "Column Break"
   },
   {
+   "default": "0",
    "fieldname": "success_count_review2revise",
    "fieldtype": "Int",
    "label": "Sucess # r2r",
@@ -1511,6 +1519,7 @@
    "fieldtype": "Column Break"
   },
   {
+   "default": "0",
    "fieldname": "run_count_scene2tech",
    "fieldtype": "Int",
    "label": "Run # s2t",
@@ -1552,6 +1561,7 @@
    "label": "innovation direction 1"
   },
   {
+   "default": "0",
    "fieldname": "success_count_scene2tech",
    "fieldtype": "Int",
    "label": "Success # s2t",
@@ -1576,7 +1586,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-08-12 12:23:31.827978",
+ "modified": "2025-08-15 03:03:52.518534",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Patent Workflow",

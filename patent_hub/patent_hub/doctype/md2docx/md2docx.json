@@ -1,11 +1,13 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "field:md2docx_id",
  "creation": "2025-08-12 14:05:37.950741",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
   "md",
+  "is_patent_md2docx",
   "section_break_zwtu",
   "call_md2docx",
   "column_break_lsku",
@@ -96,6 +98,7 @@
    "fieldtype": "Column Break"
   },
   {
+   "default": "0",
    "fieldname": "cost_md2docx",
    "fieldtype": "Data",
    "label": "Cost",
@@ -106,6 +109,7 @@
    "fieldtype": "Column Break"
   },
   {
+   "default": "0",
    "fieldname": "time_s_md2docx",
    "fieldtype": "Data",
    "label": "Time(s)",
@@ -116,6 +120,7 @@
    "fieldtype": "Section Break"
   },
   {
+   "default": "0",
    "fieldname": "run_count_md2docx",
    "fieldtype": "Int",
    "label": "Run # m2d",
@@ -126,6 +131,7 @@
    "fieldtype": "Column Break"
   },
   {
+   "default": "0",
    "fieldname": "success_count_md2docx",
    "fieldtype": "Int",
    "label": "Success # m2d",
@@ -136,6 +142,7 @@
    "fieldtype": "Column Break"
   },
   {
+   "default": "0",
    "fieldname": "total_cost_md2docx",
    "fieldtype": "Data",
    "label": "Total Cost",
@@ -146,6 +153,7 @@
    "fieldtype": "Column Break"
   },
   {
+   "default": "0",
    "fieldname": "total_time_s_md2docx",
    "fieldtype": "Data",
    "label": "Total Time(s)",
@@ -170,7 +178,8 @@
    "fieldname": "md2docx_id",
    "fieldtype": "Data",
    "label": "md2docx ID",
-   "read_only": 1
+   "read_only": 1,
+   "unique": 1
   },
   {
    "fieldname": "md2docx_started_at",
@@ -183,15 +192,22 @@
    "fieldtype": "Small Text",
    "label": "Last md2docx Error",
    "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "is_patent_md2docx",
+   "fieldtype": "Check",
+   "label": "is Patent Application"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-08-12 23:51:47.983876",
+ "modified": "2025-08-15 03:10:18.157254",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "md2docx",
+ "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
   {
@@ -203,6 +219,18 @@
    "read": 1,
    "report": 1,
    "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Patent Writer",
    "share": 1,
    "write": 1
   }

@@ -11,14 +11,21 @@
     "width": "Half"
    },
    {
-    "chart": "Top 5 Writer",
+    "chart": "Total Done",
     "parent": "Patent Workflow Dashboard",
     "parentfield": "charts",
     "parenttype": "Dashboard",
     "width": "Half"
    },
    {
-    "chart": "Total Done",
+    "chart": "Top Agency",
+    "parent": "Patent Workflow Dashboard",
+    "parentfield": "charts",
+    "parenttype": "Dashboard",
+    "width": "Half"
+   },
+   {
+    "chart": "Top Writer",
     "parent": "Patent Workflow Dashboard",
     "parentfield": "charts",
     "parenttype": "Dashboard",
@@ -37,7 +44,7 @@
   "doctype": "Dashboard",
   "is_default": 0,
   "is_standard": 0,
-  "modified": "2025-08-04 01:25:32.403729",
+  "modified": "2025-08-15 03:21:31.907688",
   "module": "Patent Hub",
   "name": "Patent Workflow Dashboard"
  }

@@ -1,11 +1,13 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "field:code2png_id",
  "creation": "2025-08-12 23:36:45.116165",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
   "code",
+  "code_type",
   "section_break_khuk",
   "call_code2png",
   "column_break_lbdx",
@@ -39,12 +41,12 @@
   {
    "fieldname": "code",
    "fieldtype": "Small Text",
-   "label": "code"
+   "label": "Code"
   },
   {
    "fieldname": "link_section",
    "fieldtype": "Section Break",
-   "label": "link"
+   "label": "Link"
   },
   {
    "fieldname": "png",
@@ -60,7 +62,8 @@
    "fieldname": "code2png_id",
    "fieldtype": "Data",
    "label": "code2png ID",
-   "read_only": 1
+   "read_only": 1,
+   "unique": 1
   },
   {
    "fieldname": "code2png_started_at",
@@ -129,6 +132,7 @@
    "fieldtype": "Column Break"
   },
   {
+   "default": "0",
    "fieldname": "cost_code2png",
    "fieldtype": "Data",
    "label": "Cost",
@@ -139,6 +143,7 @@
    "fieldtype": "Column Break"
   },
   {
+   "default": "0",
    "fieldname": "time_s_code2png",
    "fieldtype": "Data",
    "label": "Time(s)",
@@ -149,8 +154,9 @@
    "fieldtype": "Section Break"
   },
   {
+   "default": "0",
    "fieldname": "run_count_code2png",
-   "fieldtype": "Data",
+   "fieldtype": "Int",
    "label": "Run # c2p",
    "read_only": 1
   },
@@ -159,8 +165,9 @@
    "fieldtype": "Column Break"
   },
   {
+   "default": "0",
    "fieldname": "success_count_code2png",
-   "fieldtype": "Data",
+   "fieldtype": "Int",
    "label": "Success # c2p",
    "read_only": 1
   },
@@ -169,6 +176,7 @@
    "fieldtype": "Column Break"
   },
   {
+   "default": "0",
    "fieldname": "total_cost_code2png",
    "fieldtype": "Data",
    "label": "Total Cost",
@@ -180,18 +188,26 @@
    "read_only": 1
   },
   {
+   "default": "0",
    "fieldname": "total_time_s_code2png",
    "fieldtype": "Data",
    "label": "Total Time(s)"
+  },
+  {
+   "fieldname": "code_type",
+   "fieldtype": "Select",
+   "label": "Code Type",
+   "options": "\npy\nmmd"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-08-12 23:51:44.273799",
+ "modified": "2025-08-15 03:10:01.652507",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "code2png",
+ "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
   {
@@ -203,6 +219,18 @@
    "read": 1,
    "report": 1,
    "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Patent Writer",
    "share": 1,
    "write": 1
   }
