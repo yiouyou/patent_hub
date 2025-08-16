@@ -11,12 +11,14 @@ from typing import Any
 import frappe
 import httpx
 from frappe import enqueue
+from frappe.model.naming import make_autoname
+from frappe.utils import now_datetime
 from frappe.utils.file_manager import save_file
 
 from patent_hub.api._utils import (
 	complete_task_fields,
 	fail_task_fields,
-	init_task_fields,
+	# init_task_fields,
 	restore_from_json_serializable,
 	universal_decompress,
 )
@@ -35,6 +37,34 @@ HTTP_CONFIG = {
 		"Content-Type": "application/json",
 	},
 }
+
+
+def init_code2png_fields(doc, task_key: str, prefix: str, logger=None):
+	"""
+	初始化任务状态字段，并生成 ID。
+	- 设置为 Running 状态
+	- 若首次运行，则生成 ID
+	- 累加 run_count
+	"""
+	id_field = f"{task_key}_id"
+	started_at_field = f"{task_key}_started_at"
+	is_running_field = f"is_running_{task_key}"
+	is_done_field = f"is_done_{task_key}"
+	status_field = f"status_{task_key}"
+	run_count_field = f"run_count_{task_key}"
+	# 每次 init 都生成新的ID
+	# setattr(doc, id_field, make_autoname(f"{doc.code2png_id}-{prefix}-.#"))
+	# 设置运行状态
+	setattr(doc, is_running_field, 1)
+	setattr(doc, is_done_field, 0)
+	setattr(doc, status_field, "Running")
+	setattr(doc, started_at_field, now_datetime())
+	# 累加运行次数
+	setattr(doc, run_count_field, getattr(doc, run_count_field, 0) + 1)
+	if logger:
+		logger.info(
+			f"[{task_key}] 初始化任务: id={getattr(doc, id_field)}, status=Running, run_count={getattr(doc, run_count_field)}"
+		)
 
 
 @contextmanager
@@ -129,7 +159,7 @@ def _update_task_status(doc, force: bool):
 
 		# 重新加载并更新状态
 		doc.reload()
-		init_task_fields(doc, "code2png", "C2P", logger)
+		init_code2png_fields(doc, "code2png", "C2P", logger)
 		doc.save(ignore_permissions=True, ignore_version=True)
 
 

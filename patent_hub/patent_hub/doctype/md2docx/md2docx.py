@@ -9,6 +9,6 @@ from frappe.model.naming import make_autoname
 
 class Md2docx(Document):
 	def autoname(self):
-		# 自动生成主键和 patent_id：PAT-YYYYMMDD-##
+		# 自动生成主键和 md2docx_id：M2D-YYYYMMDD-##
 		self.name = make_autoname("M2D-.YYYY.MM.DD.-.##")
-		self.patent_id = self.name
+		self.md2docx_id = self.name
