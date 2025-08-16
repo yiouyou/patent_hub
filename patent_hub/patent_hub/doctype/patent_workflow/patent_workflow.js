@@ -77,16 +77,28 @@ function update_step_buttons(frm) {
   steps.forEach(step => {
     const is_running = frm.doc[`is_running_${step}`] === 1;
     const is_done = frm.doc[`is_done_${step}`] === 1;
+    const success_count = frm.doc[`success_count_${step}`] || 0;
     const field = field_map[step];
     const is_table = field.startsWith("table_");
     const has_value = is_table
       ? Array.isArray(frm.doc[field]) && frm.doc[field].length > 0
       : !!frm.doc[field]?.trim?.();
 
+    // 判断是否曾经成功执行过
+    const has_ever_succeeded = success_count > 0;
+
     // 控制按钮状态
-    toggle_button_state(frm, `call_${step}`, has_value && !is_running && !is_done); // 首次执行
-    toggle_button_state(frm, `rerun_${step}`, has_value && !is_running && is_done); // 重跑
-    toggle_button_state(frm, `cancel_${step}`, is_running, true); // 正在运行可取消
+    if (has_ever_succeeded) {
+      // 曾经成功过：只显示 rerun 和 cancel 按钮
+      toggle_button_state(frm, `call_${step}`, false); // 隐藏首次执行按钮
+      toggle_button_state(frm, `rerun_${step}`, has_value && !is_running); // 重跑按钮
+      toggle_button_state(frm, `cancel_${step}`, is_running, true); // 取消按钮
+    } else {
+      // 从未成功过：只显示 call 和 cancel 按钮
+      toggle_button_state(frm, `call_${step}`, has_value && !is_running && !is_done); // 首次执行
+      toggle_button_state(frm, `rerun_${step}`, false); // 隐藏重跑按钮
+      toggle_button_state(frm, `cancel_${step}`, is_running, true); // 取消按钮
+    }
   });
 }
 

@@ -206,7 +206,7 @@
  "modified": "2025-08-15 03:10:18.157254",
  "modified_by": "Administrator",
  "module": "Patent Hub",
- "name": "md2docx",
+ "name": "Md2docx",
  "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [

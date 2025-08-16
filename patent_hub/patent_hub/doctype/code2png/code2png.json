@@ -31,7 +31,7 @@
   "column_break_avje",
   "total_time_s_code2png",
   "link_section",
-  "png",
+  "png_link",
   "section_break_yxus",
   "code2png_id",
   "code2png_started_at",
@@ -47,12 +47,6 @@
    "fieldname": "link_section",
    "fieldtype": "Section Break",
    "label": "Link"
-  },
-  {
-   "fieldname": "png",
-   "fieldtype": "Link",
-   "label": "png",
-   "options": "File"
   },
   {
    "fieldname": "section_break_yxus",
@@ -198,15 +192,21 @@
    "fieldtype": "Select",
    "label": "Code Type",
    "options": "\npy\nmmd"
+  },
+  {
+   "fieldname": "png_link",
+   "fieldtype": "Link",
+   "label": "png",
+   "options": "File"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-08-15 03:10:01.652507",
+ "modified": "2025-08-16 07:34:18.436950",
  "modified_by": "Administrator",
  "module": "Patent Hub",
- "name": "code2png",
+ "name": "Code2png",
  "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
