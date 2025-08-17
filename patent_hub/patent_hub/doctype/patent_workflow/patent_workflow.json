@@ -10,6 +10,7 @@
   "agency_id",
   "patent_title",
   "ipc_number",
+  "note",
   "status_section_all",
   "status_title2scene",
   "status_info2tech",
@@ -1581,12 +1582,17 @@
    "fieldname": "ipc_number",
    "fieldtype": "Data",
    "label": "IPC Number"
+  },
+  {
+   "fieldname": "note",
+   "fieldtype": "Small Text",
+   "label": "Note"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-08-15 03:03:52.518534",
+ "modified": "2025-08-17 01:23:14.185652",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Patent Workflow",
