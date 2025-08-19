@@ -16,6 +16,7 @@ from patent_hub.api._utils import (
 	text_to_base64,
 	universal_compress,
 	universal_decompress,
+	with_heartbeat,
 )
 
 # 配置
@@ -176,8 +177,9 @@ async def call_chain_with_retry(url: str, payload: dict, max_retries: int = 5) -
 	raise Exception("所有重试都失败了")
 
 
+@with_heartbeat("align2tex2docx", "Patent Workflow")
 def _job(docname: str, user=None):
-	"""执行scene2tech任务"""
+	"""执行scene2tech任务 - 自动心跳更新"""
 	logger.info(f"开始执行任务: {docname}")
 	doc = None
 

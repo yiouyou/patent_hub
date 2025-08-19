@@ -174,7 +174,8 @@ async function cancel_step_backend(frm, task_key, label) {
       method: "patent_hub.api._utils.cancel_task",
       args: {
         docname: frm.doc.name,
-        task_key: task_key
+        task_key: task_key,
+        doctype: "Patent Workflow"
       },
       freeze: true,
       freeze_message: `正在终止 ${label} ...`

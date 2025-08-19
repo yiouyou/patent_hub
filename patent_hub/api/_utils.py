@@ -1,5 +1,5 @@
 # ===============================================
-# 📦 工具模块：patent_hub.patent_workflow._util
+# 📦 工具模块：patent_hub.api._utils
 # 描述：提供通用任务工具函数，包括：
 #  - 字符串压缩/解压
 #  - JSON 压缩/解压
@@ -7,6 +7,7 @@
 #  - ID 生成
 #  - 卡死任务检测与重置（心跳机制）
 #  - 通用任务状态重置
+#  - 心跳装饰器（自动心跳更新）
 # ===============================================
 
 import base64
@@ -15,6 +16,8 @@ import json
 import logging
 import os
 import pickle
+import threading
+from functools import wraps
 from typing import Any
 
 import frappe
@@ -200,43 +203,44 @@ def generate_step_id(patent_id: str, prefix: str) -> str:
 # 🔹 心跳机制配置和超时检测（优化版）
 # ---------------------------------------------------
 
-# 心跳超时时间配置（秒）- 大幅缩短，因为有心跳机制保障
+# 超时时间：5分钟 - 快速故障检测
 TASK_TIMEOUTS = {
-	"title2scene": 300,  # 5分钟心跳超时
-	"info2tech": 300,  # 5分钟心跳超时
-	"scene2tech": 300,  # 5分钟心跳超时
-	"tech2application": 300,  # 5分钟心跳超时
-	"review2revise": 300,  # 5分钟心跳超时
-	"align2tex2docx": 300,  # 5分钟心跳超时
+	"title2scene": 300,  # 5分钟
+	"info2tech": 300,  # 5分钟
+	"scene2tech": 300,  # 5分钟
+	"tech2application": 300,  # 5分钟
+	"review2revise": 300,  # 5分钟
+	"align2tex2docx": 300,  # 5分钟
 }
 
-# 建议的心跳更新间隔（秒）
-HEARTBEAT_INTERVAL = 60  # 1分钟更新一次心跳
+# 心跳间隔：1分40秒 - 频繁但不过度
+HEARTBEAT_INTERVAL = 100
 
 
 def update_task_heartbeat(doc, task_key: str):
 	"""
 	更新任务心跳时间，防止被误判为超时
-	:param doc: Patent Workflow 文档对象
+	:param doc: 文档对象
 	:param task_key: 任务字段前缀
 	"""
 	heartbeat_field = f"{task_key}_last_heartbeat"
 	current_time = now_datetime()
 	setattr(doc, heartbeat_field, current_time)
 	doc.save()
-	logger.debug(f"[{task_key}] 心跳更新: {doc.name} at {current_time}")
+	logger.debug(f"[{task_key}] 心跳更新: {doc.doctype}.{doc.name} at {current_time}")
 
 
-def detect_and_reset_stuck_task(task_key: str, label: str, timeout_seconds=None):
+def detect_and_reset_stuck_task(task_key: str, label: str, doctype: str, timeout_seconds=None):
 	"""
 	基于心跳机制的任务超时检测，能快速发现真正卡死的任务
 	:param task_key: 任务字段前缀（如 align2tex2docx）
 	:param label: 中文任务名称（用于日志和评论）
+	:param doctype: 文档类型名称（如 "Patent Workflow"）
 	:param timeout_seconds: 心跳超时时间（秒），如果为None则使用TASK_TIMEOUTS中的配置
 	"""
 	# 使用优化后的短超时时间
 	if timeout_seconds is None:
-		timeout_seconds = TASK_TIMEOUTS.get(task_key, 600)  # 默认10分钟
+		timeout_seconds = TASK_TIMEOUTS.get(task_key, 300)  # 默认5分钟
 
 	started_at_field = f"{task_key}_started_at"
 	heartbeat_field = f"{task_key}_last_heartbeat"
@@ -246,25 +250,25 @@ def detect_and_reset_stuck_task(task_key: str, label: str, timeout_seconds=None)
 	status_field = f"status_{task_key}"
 
 	stuck_docs = frappe.get_all(
-		"Patent Workflow",
+		doctype,  # 🔥 使用参数化的doctype
 		filters={is_running_field: 1, is_done_field: 0},
 		fields=["name", started_at_field, heartbeat_field, run_count_field],
 	)
 
 	for doc in stuck_docs:
 		if doc.get(run_count_field, 0) == 0:
-			logger.info(f"[{label}] 跳过未启动的任务: {doc.name}")
+			logger.info(f"[{label}] 跳过未启动的任务: {doctype}.{doc.name}")
 			continue
 
 		# 优先检查心跳时间，如果没有心跳则使用开始时间
 		check_time = doc.get(heartbeat_field) or doc.get(started_at_field)
 		if not check_time:
-			logger.warning(f"[{label}] 任务缺少时间戳: {doc.name}")
+			logger.warning(f"[{label}] 任务缺少时间戳: {doctype}.{doc.name}")
 			continue
 
 		delta = time_diff_in_seconds(now_datetime(), check_time)
 		if delta > timeout_seconds:
-			_doc = frappe.get_doc("Patent Workflow", doc.name)
+			_doc = frappe.get_doc(doctype, doc.name)
 			setattr(_doc, is_running_field, 0)
 			setattr(_doc, status_field, "Failed")
 
@@ -280,8 +284,88 @@ def detect_and_reset_stuck_task(task_key: str, label: str, timeout_seconds=None)
 			)
 			_doc.save()
 			logger.warning(
-				f"[{label}] 任务{timeout_type}超时自动重置: {_doc.name}, 超时: {delta}s > {timeout_seconds}s"
+				f"[{label}] 任务{timeout_type}超时自动重置: {doctype}.{_doc.name}, 超时: {delta}s > {timeout_seconds}s"
 			)
+
+
+# ---------------------------------------------------
+# 🔹 心跳装饰器（自动心跳更新）
+# ---------------------------------------------------
+
+
+def with_heartbeat(task_key: str, doctype: str, heartbeat_interval: int = None):
+	"""
+	装饰器：为长时间运行的函数自动添加心跳更新
+	:param task_key: 任务键名（如 "title2scene"）
+	:param doctype: 文档类型名称（如 "Patent Workflow"）
+	:param heartbeat_interval: 心跳间隔（秒），默认使用 HEARTBEAT_INTERVAL
+
+	使用示例：
+	@frappe.whitelist()
+	@with_heartbeat("title2scene", "Patent Workflow")
+	def run(docname, force=False):
+	    pass
+	"""
+	if heartbeat_interval is None:
+		heartbeat_interval = HEARTBEAT_INTERVAL
+
+	def decorator(func):
+		@wraps(func)
+		def wrapper(docname, *args, **kwargs):
+			doc = frappe.get_doc(doctype, docname)
+			heartbeat_stop_event = threading.Event()
+			heartbeat_thread = None
+
+			def heartbeat_worker():
+				"""心跳更新工作线程"""
+				logger.info(f"[{task_key}] 心跳线程启动: {doctype}.{docname}, 间隔: {heartbeat_interval}s")
+
+				while not heartbeat_stop_event.wait(heartbeat_interval):
+					try:
+						# 重新获取文档，检查任务是否还在运行
+						current_doc = frappe.get_doc(doctype, docname)
+						is_running_field = f"is_running_{task_key}"
+
+						if not getattr(current_doc, is_running_field, 0):
+							logger.info(f"[{task_key}] 任务已停止，心跳线程退出: {doctype}.{docname}")
+							break
+
+						# 更新心跳
+						update_task_heartbeat(current_doc, task_key)
+						frappe.db.commit()
+						logger.debug(f"[{task_key}] 心跳更新成功: {doctype}.{docname}")
+
+					except Exception as e:
+						logger.error(f"[{task_key}] 心跳更新失败: {doctype}.{docname}, 错误: {e}")
+						# 心跳失败不应该中断主任务，继续尝试
+
+			try:
+				# 启动心跳线程
+				heartbeat_thread = threading.Thread(target=heartbeat_worker, daemon=True)
+				heartbeat_thread.start()
+				logger.info(f"[{task_key}] 开始执行任务（带心跳）: {doctype}.{docname}")
+
+				# 执行原函数
+				result = func(docname, *args, **kwargs)
+
+				logger.info(f"[{task_key}] 任务执行完成: {doctype}.{docname}")
+				return result
+
+			except Exception as e:
+				logger.error(f"[{task_key}] 任务执行失败: {doctype}.{docname}, 错误: {e}")
+				raise
+			finally:
+				# 停止心跳线程
+				if heartbeat_thread and heartbeat_thread.is_alive():
+					logger.info(f"[{task_key}] 停止心跳线程: {doctype}.{docname}")
+					heartbeat_stop_event.set()
+					heartbeat_thread.join(timeout=2)  # 等待最多2秒
+					if heartbeat_thread.is_alive():
+						logger.warning(f"[{task_key}] 心跳线程未能正常退出: {doctype}.{docname}")
+
+		return wrapper
+
+	return decorator
 
 
 # ---------------------------------------------------
@@ -298,15 +382,33 @@ TASKS = [
 ]
 
 
-def detect_and_reset_all_stuck_tasks():
+def detect_and_reset_all_stuck_tasks(doctype: str):
 	"""
 	批量检测所有任务，基于心跳机制快速发现卡死任务
-	使用优化后的短超时时间配置
+	:param doctype: 文档类型名称（如 "Patent Workflow"）
 	"""
-	logger.info("开始检测卡死任务（基于心跳机制）...")
+	logger.info(f"开始检测卡死任务（基于心跳机制）: {doctype}...")
 	for key, label in TASKS:
-		detect_and_reset_stuck_task(key, label)
-	logger.info("卡死任务检测完成")
+		detect_and_reset_stuck_task(key, label, doctype)
+	logger.info(f"卡死任务检测完成: {doctype}")
+
+
+def detect_and_reset_all_stuck_tasks_multi():
+	"""
+	多 DocType 的定时任务包装函数
+	可以同时检测多个 DocType 的卡死任务
+	"""
+	doctypes_to_check = [
+		"Patent Workflow",
+		"Code2png",
+		"Md2docx",
+	]
+
+	for doctype in doctypes_to_check:
+		try:
+			detect_and_reset_all_stuck_tasks(doctype)
+		except Exception as e:
+			logger.error(f"检测 {doctype} 卡死任务失败: {e}")
 
 
 # ---------------------------------------------------
@@ -321,6 +423,11 @@ def init_task_fields(doc, task_key: str, prefix: str, logger=None):
 	- 若首次运行，则生成 ID
 	- 累加 run_count
 	- 初始化心跳时间
+
+	:param doc: 文档对象（任意DocType）
+	:param task_key: 任务键名
+	:param prefix: ID前缀
+	:param logger: 日志对象
 	"""
 	id_field = f"{task_key}_id"
 	started_at_field = f"{task_key}_started_at"
@@ -331,7 +438,13 @@ def init_task_fields(doc, task_key: str, prefix: str, logger=None):
 	run_count_field = f"run_count_{task_key}"
 
 	# 每次 init 都生成新的ID
-	setattr(doc, id_field, generate_step_id(doc.patent_id, prefix))
+	# 🔥 修改：支持不同DocType的ID生成
+	if hasattr(doc, "patent_id"):
+		# Patent Workflow 使用 patent_id
+		setattr(doc, id_field, generate_step_id(doc.patent_id, prefix))
+	else:
+		# 其他DocType使用 name 或自定义逻辑
+		setattr(doc, id_field, generate_step_id(doc.name, prefix))
 
 	# 设置运行状态
 	current_time = now_datetime()
@@ -345,10 +458,10 @@ def init_task_fields(doc, task_key: str, prefix: str, logger=None):
 	setattr(doc, run_count_field, getattr(doc, run_count_field, 0) + 1)
 
 	# 获取该任务的心跳超时配置
-	heartbeat_timeout = TASK_TIMEOUTS.get(task_key, 600)
+	heartbeat_timeout = TASK_TIMEOUTS.get(task_key, 300)
 
 	logger.info(
-		f"[{task_key}] 初始化任务: id={getattr(doc, id_field)}, status=Running, "
+		f"[{task_key}] 初始化任务: {doc.doctype}.{doc.name}, id={getattr(doc, id_field)}, status=Running, "
 		f"run_count={getattr(doc, run_count_field)}, 心跳超时={heartbeat_timeout}s, "
 		f"建议心跳间隔={HEARTBEAT_INTERVAL}s"
 	)
@@ -357,6 +470,11 @@ def init_task_fields(doc, task_key: str, prefix: str, logger=None):
 def complete_task_fields(doc, task_key: str, extra_fields: dict = None, logger=None):
 	"""
 	统一完成任务状态设置，并累加运行成功次数和累计耗时/成本。
+
+	:param doc: 文档对象（任意DocType）
+	:param task_key: 任务键名
+	:param extra_fields: 额外字段
+	:param logger: 日志对象
 	"""
 	is_running_field = f"is_running_{task_key}"
 	is_done_field = f"is_done_{task_key}"
@@ -399,12 +517,19 @@ def complete_task_fields(doc, task_key: str, extra_fields: dict = None, logger=N
 					setattr(doc, total_field, float(value or 0))
 
 	doc.save()
-	logger.info(f"[{task_key}] 任务完成: status=Done, success_count={getattr(doc, success_count_field)}")
+	logger.info(
+		f"[{task_key}] 任务完成: {doc.doctype}.{doc.name}, status=Done, success_count={getattr(doc, success_count_field)}"
+	)
 
 
 def fail_task_fields(doc, task_key: str, error: str = None, logger=None):
 	"""
 	设置任务失败状态，并记录错误信息（不增加 success_count）
+
+	:param doc: 文档对象（任意DocType）
+	:param task_key: 任务键名
+	:param error: 错误信息
+	:param logger: 日志对象
 	"""
 	is_running_field = f"is_running_{task_key}"
 	is_done_field = f"is_done_{task_key}"
@@ -422,28 +547,18 @@ def fail_task_fields(doc, task_key: str, error: str = None, logger=None):
 		setattr(doc, error_field, error_msg)
 
 	doc.save()
-	logger.error(f"[{task_key}] 任务失败: error={error_msg}")
+	logger.error(f"[{task_key}] 任务失败: {doc.doctype}.{doc.name}, error={error_msg}")
 
 
 @frappe.whitelist()
-def reset_task_status(docname: str, task_key: str):
-	"""
-	手动重置任务状态（用于用户在界面点击重置按钮）
-	- 将任务标记为 Failed
-	- 写入错误字段说明是用户操作
-	"""
-	doc = frappe.get_doc("Patent Workflow", docname)
-	fail_task_fields(doc, task_key, error="用户手动重置任务状态")
-	frappe.db.commit()
-	return {"success": True, "message": f"任务 {task_key} 状态已重置为 Failed"}
-
-
-@frappe.whitelist()
-def cancel_task(docname: str, task_key: str):
+def cancel_task(docname: str, task_key: str, doctype: str):
 	"""
 	用户强制终止任务（前端点击取消按钮触发）
+	:param docname: 文档名称
+	:param task_key: 任务键名
+	:param doctype: 文档类型名称（如 "Patent Workflow"）
 	"""
-	doc = frappe.get_doc("Patent Workflow", docname)
+	doc = frappe.get_doc(doctype, docname)
 	is_running_field = f"is_running_{task_key}"
 	if getattr(doc, is_running_field, 0) != 1:
 		return {"success": False, "message": "任务未处于运行状态，无法取消"}
@@ -452,55 +567,73 @@ def cancel_task(docname: str, task_key: str):
 	frappe.db.commit()
 
 	# 广播实时失败事件
-	frappe.publish_realtime(f"{task_key}_failed", {"docname": docname, "error": "任务被用户强制终止"})
+	frappe.publish_realtime(
+		f"{task_key}_failed", {"docname": docname, "doctype": doctype, "error": "任务被用户强制终止"}
+	)
 
 	return {"success": True, "message": f"{task_key} 已被终止"}
 
 
-@frappe.whitelist()
-def update_heartbeat(docname: str, task_key: str):
-	"""
-	手动更新任务心跳时间（供长时间运行的API调用）
-	这是心跳机制的核心API，长时间任务应定期调用此接口
-	"""
-	try:
-		doc = frappe.get_doc("Patent Workflow", docname)
-		is_running_field = f"is_running_{task_key}"
-
-		# 只有运行中的任务才能更新心跳
-		if getattr(doc, is_running_field, 0) != 1:
-			return {"success": False, "message": "任务未处于运行状态"}
-
-		update_task_heartbeat(doc, task_key)
-		frappe.db.commit()
-
-		heartbeat_timeout = TASK_TIMEOUTS.get(task_key, 600)
-		return {
-			"success": True,
-			"message": f"任务 {task_key} 心跳已更新",
-			"heartbeat_timeout": heartbeat_timeout,
-			"recommended_interval": HEARTBEAT_INTERVAL,
-		}
-	except Exception as e:
-		logger.error(f"更新心跳失败: {e!s}")
-		return {"success": False, "message": f"更新心跳失败: {e!s}"}
+# @frappe.whitelist()
+# def reset_task_status(docname: str, task_key: str, doctype: str):
+# 	"""
+# 	手动重置任务状态（用于用户在界面点击重置按钮）
+# 	:param docname: 文档名称
+# 	:param task_key: 任务键名
+# 	:param doctype: 文档类型名称（如 "Patent Workflow"）
+# 	"""
+# 	doc = frappe.get_doc(doctype, docname)
+# 	fail_task_fields(doc, task_key, error="用户手动重置任务状态")
+# 	frappe.db.commit()
+# 	return {"success": True, "message": f"任务 {task_key} 状态已重置为 Failed"}
 
 
-@frappe.whitelist()
-def get_heartbeat_config(task_key: str = None):
-	"""
-	获取心跳配置信息，供前端或API调用方参考
-	"""
-	if task_key:
-		return {
-			"task_key": task_key,
-			"heartbeat_timeout": TASK_TIMEOUTS.get(task_key, 600),
-			"recommended_interval": HEARTBEAT_INTERVAL,
-			"max_safe_interval": TASK_TIMEOUTS.get(task_key, 600) - 60,  # 留60秒缓冲
-		}
-	else:
-		return {
-			"all_timeouts": TASK_TIMEOUTS,
-			"recommended_interval": HEARTBEAT_INTERVAL,
-			"description": "建议长时间任务每5分钟更新一次心跳，避免被误判为超时",
-		}
+# @frappe.whitelist()
+# def update_heartbeat(docname: str, task_key: str, doctype: str):
+# 	"""
+# 	手动更新任务心跳时间（供长时间运行的API调用）
+# 	注意：通常不需要手动调用，使用 @with_heartbeat 装饰器即可自动处理
+# 	:param docname: 文档名称
+# 	:param task_key: 任务键名
+# 	:param doctype: 文档类型名称（如 "Patent Workflow"）
+# 	"""
+# 	try:
+# 		doc = frappe.get_doc(doctype, docname)
+# 		is_running_field = f"is_running_{task_key}"
+# 		# 只有运行中的任务才能更新心跳
+# 		if getattr(doc, is_running_field, 0) != 1:
+# 			return {"success": False, "message": "任务未处于运行状态"}
+# 		update_task_heartbeat(doc, task_key)
+# 		frappe.db.commit()
+# 		heartbeat_timeout = TASK_TIMEOUTS.get(task_key, 300)
+# 		return {
+# 			"success": True,
+# 			"message": f"任务 {task_key} 心跳已更新",
+# 			"doctype": doctype,
+# 			"heartbeat_timeout": heartbeat_timeout,
+# 			"recommended_interval": HEARTBEAT_INTERVAL,
+# 		}
+# 	except Exception as e:
+# 		logger.error(f"更新心跳失败: {e!s}")
+# 		return {"success": False, "message": f"更新心跳失败: {e!s}"}
+
+
+# @frappe.whitelist()
+# def get_heartbeat_config(task_key: str = None):
+# 	"""
+# 	获取心跳配置信息，供前端或API调用方参考
+# 	:param task_key: 任务键名，可选
+# 	"""
+# 	if task_key:
+# 		return {
+# 			"task_key": task_key,
+# 			"heartbeat_timeout": TASK_TIMEOUTS.get(task_key, 300),
+# 			"recommended_interval": HEARTBEAT_INTERVAL,
+# 			"max_safe_interval": TASK_TIMEOUTS.get(task_key, 300) - 60,  # 留60秒缓冲
+# 		}
+# 	else:
+# 		return {
+# 			"all_timeouts": TASK_TIMEOUTS,
+# 			"recommended_interval": HEARTBEAT_INTERVAL,
+# 			"description": "建议长时间任务使用 @with_heartbeat 装饰器自动处理心跳更新",
+# 		}

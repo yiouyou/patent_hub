@@ -35,7 +35,8 @@
   "section_break_fucj",
   "md2docx_id",
   "md2docx_started_at",
-  "last_md2docx_error"
+  "last_md2docx_error",
+  "md2docx_last_heartbeat"
  ],
  "fields": [
   {
@@ -198,12 +199,19 @@
    "fieldname": "is_patent_md2docx",
    "fieldtype": "Check",
    "label": "is Patent Application"
+  },
+  {
+   "fieldname": "md2docx_last_heartbeat",
+   "fieldtype": "Datetime",
+   "hidden": 1,
+   "label": "md2docx Last Heartbeat",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-08-16 11:38:08.441879",
+ "modified": "2025-08-19 01:15:11.330633",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Md2docx",

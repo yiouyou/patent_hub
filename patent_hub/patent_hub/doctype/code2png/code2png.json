@@ -35,7 +35,8 @@
   "section_break_yxus",
   "code2png_id",
   "code2png_started_at",
-  "last_code2png_error"
+  "last_code2png_error",
+  "code2png_last_heartbeat"
  ],
  "fields": [
   {
@@ -198,12 +199,19 @@
    "fieldtype": "Link",
    "label": "png",
    "options": "File"
+  },
+  {
+   "fieldname": "code2png_last_heartbeat",
+   "fieldtype": "Datetime",
+   "hidden": 1,
+   "label": "code2png Last Heartbeat",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-08-16 11:38:24.647556",
+ "modified": "2025-08-19 01:14:30.360923",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Code2png",
