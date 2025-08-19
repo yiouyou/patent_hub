@@ -19,6 +19,27 @@ frappe.ui.form.on('Patent Workflow', {
 
     bind_table_events_once(frm, 'table_upload_info2tech');
     bind_table_events_once(frm, 'table_upload_review2revise');
+
+    frm.add_custom_button(__('+ Md2docx'), () => {
+      if (frm.doc.patent_title) {
+        frappe.new_doc('Md2docx', {}, (doc) => {
+          doc.related_patent_workflow = frm.doc.name
+          doc.save();
+        });
+      } else {
+        frappe.msgprint(__('Cannot proceed. patent_title must NOT be empty.'));
+      }
+    });
+    frm.add_custom_button(__('+ Code2png'), () => {
+      if (frm.doc.patent_title) {
+        frappe.new_doc('Code2png', {}, (doc) => {
+          doc.related_patent_workflow = frm.doc.name
+          doc.save();
+        });
+      } else {
+        frappe.msgprint(__('Cannot proceed. patent_title must NOT be empty.'));
+      }
+    });
   },
 
   // 主要输入字段变更 => 刷新按钮状态

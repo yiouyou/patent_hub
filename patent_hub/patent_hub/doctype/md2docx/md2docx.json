@@ -36,7 +36,9 @@
   "md2docx_id",
   "md2docx_started_at",
   "last_md2docx_error",
-  "md2docx_last_heartbeat"
+  "md2docx_last_heartbeat",
+  "section_break_epza",
+  "related_patent_workflow"
  ],
  "fields": [
   {
@@ -206,12 +208,22 @@
    "hidden": 1,
    "label": "md2docx Last Heartbeat",
    "read_only": 1
+  },
+  {
+   "fieldname": "related_patent_workflow",
+   "fieldtype": "Link",
+   "label": "Related Patent Workflow",
+   "options": "Patent Workflow"
+  },
+  {
+   "fieldname": "section_break_epza",
+   "fieldtype": "Section Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-08-19 01:15:11.330633",
+ "modified": "2025-08-19 09:20:13.202310",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Md2docx",

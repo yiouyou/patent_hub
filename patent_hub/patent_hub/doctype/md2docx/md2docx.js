@@ -7,6 +7,14 @@ frappe.ui.form.on('Md2docx', {
       bind_realtime_md2docx_events(frm);
       frm._realtime_bound = true;
     }
+
+    frm.add_custom_button(__('→ Patent Workflow'), () => {
+      if (frm.doc.related_patent_workflow) {
+        frappe.set_route('Form', 'Patent Workflow', frm.doc.related_patent_workflow);
+      } else {
+        frappe.msgprint(__('No associated Patent Workflow found.'));
+      }
+    });
   },
 
   // 主要输入字段变更 => 刷新按钮状态

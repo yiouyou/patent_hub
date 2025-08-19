@@ -36,7 +36,9 @@
   "code2png_id",
   "code2png_started_at",
   "last_code2png_error",
-  "code2png_last_heartbeat"
+  "code2png_last_heartbeat",
+  "section_break_dpah",
+  "related_patent_workflow"
  ],
  "fields": [
   {
@@ -206,12 +208,22 @@
    "hidden": 1,
    "label": "code2png Last Heartbeat",
    "read_only": 1
+  },
+  {
+   "fieldname": "section_break_dpah",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "related_patent_workflow",
+   "fieldtype": "Link",
+   "label": "Related Patent Workflow",
+   "options": "Patent Workflow"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-08-19 01:14:30.360923",
+ "modified": "2025-08-19 09:21:38.378095",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Code2png",
