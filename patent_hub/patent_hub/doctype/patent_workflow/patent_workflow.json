@@ -49,6 +49,7 @@
   "title2scene_id",
   "title2scene_started_at",
   "last_title2scene_error",
+  "title2scene_last_heartbeat",
   "tab_info2tech",
   "section_break_zasr",
   "table_upload_info2tech",
@@ -78,6 +79,7 @@
   "info2tech_id",
   "info2tech_started_at",
   "last_info2tech_error",
+  "info2tech_last_heartbeat",
   "tab_scene2tech",
   "innovation_direction_0_column",
   "scene",
@@ -126,6 +128,7 @@
   "scene2tech_id",
   "scene2tech_started_at",
   "last_scene2tech_error",
+  "scene2tech_last_heartbeat",
   "tab_tech2application",
   "column_break_wmpp",
   "tech",
@@ -179,6 +182,7 @@
   "tech2application_id",
   "tech2application_started_at",
   "last_tech2application_error",
+  "tech2application_last_heartbeat",
   "tab_align2tex2docx",
   "application",
   "section_break_mnea",
@@ -215,6 +219,7 @@
   "align2tex2docx_id",
   "align2tex2docx_started_at",
   "last_align2tex2docx_error",
+  "align2tex2docx_last_heartbeat",
   "tab_proofreading",
   "proofreading_section",
   "before_tex",
@@ -223,6 +228,8 @@
   "tab_review2revise",
   "upload_section_review2revise",
   "table_upload_review2revise",
+  "section_break_reqd",
+  "current_application",
   "section_break_zslv",
   "call_review2revise",
   "column_break_hqct",
@@ -254,7 +261,8 @@
   "section_break_agoo",
   "review2revise_id",
   "review2revise_started_at",
-  "last_review2revise_error"
+  "last_review2revise_error",
+  "review2revise_last_heartbeat"
  ],
  "fields": [
   {
@@ -747,7 +755,7 @@
   {
    "fieldname": "upload_section_review2revise",
    "fieldtype": "Section Break",
-   "label": "Upload"
+   "label": "Upload Review"
   },
   {
    "fieldname": "table_upload_info2tech",
@@ -1587,12 +1595,61 @@
    "fieldname": "note",
    "fieldtype": "Small Text",
    "label": "Note"
+  },
+  {
+   "fieldname": "current_application",
+   "fieldtype": "Long Text",
+   "label": "Current Application"
+  },
+  {
+   "fieldname": "section_break_reqd",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "title2scene_last_heartbeat",
+   "fieldtype": "Datetime",
+   "hidden": 1,
+   "label": "Title2Scene Last Heartbeat",
+   "read_only": 1
+  },
+  {
+   "fieldname": "info2tech_last_heartbeat",
+   "fieldtype": "Datetime",
+   "hidden": 1,
+   "label": "Info2Tech Last Heartbeat",
+   "read_only": 1
+  },
+  {
+   "fieldname": "scene2tech_last_heartbeat",
+   "fieldtype": "Datetime",
+   "label": "Scene2Tech Last Heartbeat"
+  },
+  {
+   "fieldname": "tech2application_last_heartbeat",
+   "fieldtype": "Datetime",
+   "hidden": 1,
+   "label": "Tech2Application Last Heartbeat",
+   "read_only": 1
+  },
+  {
+   "fieldname": "align2tex2docx_last_heartbeat",
+   "fieldtype": "Datetime",
+   "hidden": 1,
+   "label": "Align2Tex2Docx Last Heartbeat",
+   "read_only": 1
+  },
+  {
+   "fieldname": "review2revise_last_heartbeat",
+   "fieldtype": "Datetime",
+   "hidden": 1,
+   "label": "Review2Revise Last Heartbeat",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-08-17 01:23:14.185652",
+ "modified": "2025-08-19 00:16:52.184904",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Patent Workflow",

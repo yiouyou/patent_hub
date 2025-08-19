@@ -233,7 +233,7 @@ def _job(docname: str, user=None):
 		payload = {
 			"input": {
 				"review_base64": base64.b64encode(last_review_base64).decode("ascii"),
-				"claims_base64": text_to_base64(doc.application_tex),
+				"claims_base64": text_to_base64(doc.current_application),
 				"tmp_folder": tmp_folder,
 			}
 		}

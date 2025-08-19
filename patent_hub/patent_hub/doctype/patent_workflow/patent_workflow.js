@@ -180,8 +180,9 @@ async function cancel_step_backend(frm, task_key, label) {
       freeze_message: `正在终止 ${label} ...`
     });
 
-    if (r.message) {
-      frappe.show_alert({ message: r.message, indicator: "red" }, 5);
+    if (r.message && r.message.message) {
+      const indicator = r.message.success ? "green" : "red";
+      frappe.show_alert({ message: r.message.message, indicator: indicator }, 5);
     }
 
     await frm.reload_doc();

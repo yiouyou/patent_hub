@@ -5,7 +5,7 @@
 #  - JSON 压缩/解压
 #  - 文件压缩/解压
 #  - ID 生成
-#  - 卡死任务检测与重置（心跳机制）
+#  - 卡死任务检测与重置
 #  - 通用任务状态重置
 # ===============================================
 
@@ -197,21 +197,18 @@ def generate_step_id(patent_id: str, prefix: str) -> str:
 
 
 # ---------------------------------------------------
-# 🔹 心跳机制配置和超时检测（优化版）
+# 🔹 重置超时未完成任务状态（通用函数）- 优化版
 # ---------------------------------------------------
 
-# 心跳超时时间配置（秒）- 大幅缩短，因为有心跳机制保障
+# 不同任务的超时时间配置（秒）
 TASK_TIMEOUTS = {
-	"title2scene": 300,  # 5分钟心跳超时
-	"info2tech": 300,  # 5分钟心跳超时
-	"scene2tech": 300,  # 5分钟心跳超时
-	"tech2application": 300,  # 5分钟心跳超时
-	"review2revise": 300,  # 5分钟心跳超时
-	"align2tex2docx": 300,  # 5分钟心跳超时
+	"title2scene": 3600,  # 60分钟
+	"info2tech": 3600,  # 60分钟
+	"scene2tech": 3600,  # 60分钟
+	"tech2application": 2400,  # 40分钟
+	"review2revise": 1800,  # 30分钟
+	"align2tex2docx": 1200,  # 20分钟
 }
-
-# 建议的心跳更新间隔（秒）
-HEARTBEAT_INTERVAL = 60  # 1分钟更新一次心跳
 
 
 def update_task_heartbeat(doc, task_key: str):
@@ -221,22 +218,22 @@ def update_task_heartbeat(doc, task_key: str):
 	:param task_key: 任务字段前缀
 	"""
 	heartbeat_field = f"{task_key}_last_heartbeat"
-	current_time = now_datetime()
-	setattr(doc, heartbeat_field, current_time)
+	setattr(doc, heartbeat_field, now_datetime())
 	doc.save()
-	logger.debug(f"[{task_key}] 心跳更新: {doc.name} at {current_time}")
+	logger.debug(f"[{task_key}] 更新心跳时间: {doc.name}")
 
 
 def detect_and_reset_stuck_task(task_key: str, label: str, timeout_seconds=None):
 	"""
-	基于心跳机制的任务超时检测，能快速发现真正卡死的任务
+	通用函数：检测任务是否卡死（超过 timeout 秒未完成），并自动重置状态
+	支持心跳机制，优先检查心跳时间
 	:param task_key: 任务字段前缀（如 align2tex2docx）
 	:param label: 中文任务名称（用于日志和评论）
-	:param timeout_seconds: 心跳超时时间（秒），如果为None则使用TASK_TIMEOUTS中的配置
+	:param timeout_seconds: 超时时间（秒），如果为None则使用TASK_TIMEOUTS中的配置
 	"""
-	# 使用优化后的短超时时间
+	# 使用配置的超时时间，如果没有配置则使用默认值
 	if timeout_seconds is None:
-		timeout_seconds = TASK_TIMEOUTS.get(task_key, 600)  # 默认10分钟
+		timeout_seconds = TASK_TIMEOUTS.get(task_key, 1800)
 
 	started_at_field = f"{task_key}_started_at"
 	heartbeat_field = f"{task_key}_last_heartbeat"
@@ -275,13 +272,11 @@ def detect_and_reset_stuck_task(task_key: str, label: str, timeout_seconds=None)
 				"comments",
 				{
 					"comment_type": "Comment",
-					"content": f"⚠️ 自动检测：{label} {timeout_type}超时（{delta}s > {timeout_seconds}s），任务可能已卡死，状态已重置为 Failed。建议心跳间隔: {HEARTBEAT_INTERVAL}s",
+					"content": f"⚠️ 自动检测：{label} {timeout_type}超时（{delta}s > {timeout_seconds}s），状态已重置为 Failed",
 				},
 			)
 			_doc.save()
-			logger.warning(
-				f"[{label}] 任务{timeout_type}超时自动重置: {_doc.name}, 超时: {delta}s > {timeout_seconds}s"
-			)
+			logger.warning(f"[{label}] 任务{timeout_type}超时自动重置: {_doc.name}, 超时时间: {delta}s")
 
 
 # ---------------------------------------------------
@@ -300,17 +295,15 @@ TASKS = [
 
 def detect_and_reset_all_stuck_tasks():
 	"""
-	批量检测所有任务，基于心跳机制快速发现卡死任务
-	使用优化后的短超时时间配置
+	批量检测所有任务，是否存在超时未完成的状态，并自动处理
+	使用各任务配置的超时时间
 	"""
-	logger.info("开始检测卡死任务（基于心跳机制）...")
 	for key, label in TASKS:
 		detect_and_reset_stuck_task(key, label)
-	logger.info("卡死任务检测完成")
 
 
 # ---------------------------------------------------
-# 🔹 task 相关工具（心跳机制优化版）
+# 🔹 task 相关工具 - 优化版
 # ---------------------------------------------------
 
 
@@ -344,14 +337,10 @@ def init_task_fields(doc, task_key: str, prefix: str, logger=None):
 	# 累加运行次数
 	setattr(doc, run_count_field, getattr(doc, run_count_field, 0) + 1)
 
-	# 获取该任务的心跳超时配置
-	heartbeat_timeout = TASK_TIMEOUTS.get(task_key, 600)
-
-	logger.info(
-		f"[{task_key}] 初始化任务: id={getattr(doc, id_field)}, status=Running, "
-		f"run_count={getattr(doc, run_count_field)}, 心跳超时={heartbeat_timeout}s, "
-		f"建议心跳间隔={HEARTBEAT_INTERVAL}s"
-	)
+	if logger:
+		logger.info(
+			f"[{task_key}] 初始化任务: id={getattr(doc, id_field)}, status=Running, run_count={getattr(doc, run_count_field)}, timeout={TASK_TIMEOUTS.get(task_key, 1800)}s"
+		)
 
 
 def complete_task_fields(doc, task_key: str, extra_fields: dict = None, logger=None):
@@ -395,11 +384,13 @@ def complete_task_fields(doc, task_key: str, extra_fields: dict = None, logger=N
 					new_value = float(value or 0)
 					setattr(doc, total_field, current_total + new_value)
 				except (ValueError, TypeError) as e:
-					logger.info(f"Error converting time values: {e}")
+					if logger:
+						logger.info(f"Error converting time values: {e}")
 					setattr(doc, total_field, float(value or 0))
 
 	doc.save()
-	logger.info(f"[{task_key}] 任务完成: status=Done, success_count={getattr(doc, success_count_field)}")
+	if logger:
+		logger.info(f"[{task_key}] 任务完成: status=Done, success_count={getattr(doc, success_count_field)}")
 
 
 def fail_task_fields(doc, task_key: str, error: str = None, logger=None):
@@ -422,7 +413,8 @@ def fail_task_fields(doc, task_key: str, error: str = None, logger=None):
 		setattr(doc, error_field, error_msg)
 
 	doc.save()
-	logger.error(f"[{task_key}] 任务失败: error={error_msg}")
+	if logger:
+		logger.error(f"[{task_key}] 任务失败: error={error_msg}")
 
 
 @frappe.whitelist()
@@ -461,7 +453,6 @@ def cancel_task(docname: str, task_key: str):
 def update_heartbeat(docname: str, task_key: str):
 	"""
 	手动更新任务心跳时间（供长时间运行的API调用）
-	这是心跳机制的核心API，长时间任务应定期调用此接口
 	"""
 	try:
 		doc = frappe.get_doc("Patent Workflow", docname)
@@ -474,33 +465,7 @@ def update_heartbeat(docname: str, task_key: str):
 		update_task_heartbeat(doc, task_key)
 		frappe.db.commit()
 
-		heartbeat_timeout = TASK_TIMEOUTS.get(task_key, 600)
-		return {
-			"success": True,
-			"message": f"任务 {task_key} 心跳已更新",
-			"heartbeat_timeout": heartbeat_timeout,
-			"recommended_interval": HEARTBEAT_INTERVAL,
-		}
+		return {"success": True, "message": f"任务 {task_key} 心跳已更新"}
 	except Exception as e:
 		logger.error(f"更新心跳失败: {e!s}")
 		return {"success": False, "message": f"更新心跳失败: {e!s}"}
-
-
-@frappe.whitelist()
-def get_heartbeat_config(task_key: str = None):
-	"""
-	获取心跳配置信息，供前端或API调用方参考
-	"""
-	if task_key:
-		return {
-			"task_key": task_key,
-			"heartbeat_timeout": TASK_TIMEOUTS.get(task_key, 600),
-			"recommended_interval": HEARTBEAT_INTERVAL,
-			"max_safe_interval": TASK_TIMEOUTS.get(task_key, 600) - 60,  # 留60秒缓冲
-		}
-	else:
-		return {
-			"all_timeouts": TASK_TIMEOUTS,
-			"recommended_interval": HEARTBEAT_INTERVAL,
-			"description": "建议长时间任务每5分钟更新一次心跳，避免被误判为超时",
-		}
