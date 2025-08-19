@@ -372,23 +372,36 @@ def with_heartbeat(task_key: str, doctype: str, heartbeat_interval: int = None):
 # 🔹 批量任务字段映射（统一处理多个任务）
 # ---------------------------------------------------
 
-TASKS = [
-	("title2scene", "Title2Scene"),
-	("info2tech", "Info2Tech"),
-	("scene2tech", "Scene2Tech"),
-	("tech2application", "Tech2Application"),
-	("review2revise", "Review2Revise"),
-	("align2tex2docx", "Align2Tex2Docx"),
-]
+# 按 DocType 分组的任务配置
+DOCTYPE_TASKS = {
+	"Patent Workflow": [
+		("title2scene", "Title2Scene"),
+		("info2tech", "Info2Tech"),
+		("scene2tech", "Scene2Tech"),
+		("tech2application", "Tech2Application"),
+		("review2revise", "Review2Revise"),
+		("align2tex2docx", "Align2Tex2Docx"),
+	],
+	"Code2png": [
+		("code2png", "Code2png"),
+	],
+	"Md2docx": [
+		("md2docx", "Md2docx"),
+	],
+}
 
 
 def detect_and_reset_all_stuck_tasks(doctype: str):
 	"""
-	批量检测所有任务，基于心跳机制快速发现卡死任务
+	批量检测指定 DocType 的所有任务，基于心跳机制快速发现卡死任务
 	:param doctype: 文档类型名称（如 "Patent Workflow"）
 	"""
-	logger.info(f"开始检测卡死任务（基于心跳机制）: {doctype}...")
-	for key, label in TASKS:
+	if doctype not in DOCTYPE_TASKS:
+		logger.warning(f"未找到 DocType '{doctype}' 的任务配置")
+		return
+	tasks = DOCTYPE_TASKS[doctype]
+	logger.info(f"开始检测卡死任务（基于心跳机制）: {doctype}，共 {len(tasks)} 个任务...")
+	for key, label in tasks:
 		detect_and_reset_stuck_task(key, label, doctype)
 	logger.info(f"卡死任务检测完成: {doctype}")
 
@@ -396,15 +409,9 @@ def detect_and_reset_all_stuck_tasks(doctype: str):
 def detect_and_reset_all_stuck_tasks_multi():
 	"""
 	多 DocType 的定时任务包装函数
-	可以同时检测多个 DocType 的卡死任务
+	自动检测所有已配置的 DocType
 	"""
-	doctypes_to_check = [
-		"Patent Workflow",
-		"Code2png",
-		"Md2docx",
-	]
-
-	for doctype in doctypes_to_check:
+	for doctype in DOCTYPE_TASKS.keys():
 		try:
 			detect_and_reset_all_stuck_tasks(doctype)
 		except Exception as e:
