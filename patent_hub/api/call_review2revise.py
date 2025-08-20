@@ -26,7 +26,7 @@ from patent_hub.api._utils import (
 
 # 配置
 logger = frappe.logger("app.patent_hub.patent_wf.call_review2revise")
-logger.setLevel(logging.DEBUG)
+# logger.setLevel(logging.DEBUG)
 
 TIMEOUT = 1800
 HTTP_CONFIG = {

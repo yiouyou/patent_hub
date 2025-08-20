@@ -275,6 +275,8 @@
   {
    "fieldname": "patent_title",
    "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Patent Title"
   },
   {
@@ -284,6 +286,8 @@
   {
    "fieldname": "writer_id",
    "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Writer ID",
    "options": "Patent Writer"
   },
@@ -1649,7 +1653,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-08-19 00:16:52.184904",
+ "modified": "2025-08-20 01:34:32.495736",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Patent Workflow",
