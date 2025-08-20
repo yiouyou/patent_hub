@@ -423,7 +423,7 @@ def detect_and_reset_all_stuck_tasks_multi():
 # ---------------------------------------------------
 
 
-def init_task_fields(doc, task_key: str, prefix: str):
+def init_task_fields(doc, task_key: str, prefix: str, logger=logger):
 	"""
 	初始化任务状态字段，并生成 ID。
 	- 设置为 Running 状态
@@ -474,7 +474,7 @@ def init_task_fields(doc, task_key: str, prefix: str):
 	)
 
 
-def complete_task_fields(doc, task_key: str, extra_fields: dict = None):
+def complete_task_fields(doc, task_key: str, extra_fields: dict = None, logger=logger):
 	"""
 	统一完成任务状态设置，并累加运行成功次数和累计耗时/成本。
 
@@ -529,7 +529,7 @@ def complete_task_fields(doc, task_key: str, extra_fields: dict = None):
 	)
 
 
-def fail_task_fields(doc, task_key: str, error: str = None):
+def fail_task_fields(doc, task_key: str, error: str = None, logger=logger):
 	"""
 	设置任务失败状态，并记录错误信息（不增加 success_count）
 

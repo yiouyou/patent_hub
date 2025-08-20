@@ -10,6 +10,8 @@
   "agency_id",
   "patent_title",
   "ipc_number",
+  "examination_mode",
+  "pay_mode",
   "note",
   "status_section_all",
   "status_title2scene",
@@ -1648,12 +1650,24 @@
    "hidden": 1,
    "label": "Review2Revise Last Heartbeat",
    "read_only": 1
+  },
+  {
+   "fieldname": "examination_mode",
+   "fieldtype": "Select",
+   "label": "\u5ba1\u67e5\u6a21\u5f0f",
+   "options": "\n\u9884\u5ba1\n\u4f18\u5ba1\n\u666e\u901a"
+  },
+  {
+   "fieldname": "pay_mode",
+   "fieldtype": "Select",
+   "label": "\u4ed8\u8d39\u6a21\u5f0f",
+   "options": "\n\u98ce\u9669\u53d1\u660e\u4e13\u5229\n\u9ad8\u8d28\u91cf\u53d1\u660e\u4e13\u5229"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-08-20 01:34:32.495736",
+ "modified": "2025-08-20 02:12:09.813357",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Patent Workflow",
