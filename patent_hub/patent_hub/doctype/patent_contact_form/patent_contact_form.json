@@ -17,16 +17,19 @@
   {
    "fieldname": "full_name",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Full Name"
   },
   {
    "fieldname": "email",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Email"
   },
   {
    "fieldname": "message",
    "fieldtype": "Small Text",
+   "in_list_view": 1,
    "label": "Message"
   },
   {
@@ -42,13 +45,14 @@
   {
    "fieldname": "turnstile_token",
    "fieldtype": "Data",
+   "hidden": 1,
    "label": "Turnstile Token"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-08-21 01:59:39.595021",
+ "modified": "2025-08-21 02:57:42.452268",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Patent Contact Form",
