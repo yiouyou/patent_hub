@@ -973,9 +973,7 @@
   {
    "fieldname": "tab_scene2tech",
    "fieldtype": "Tab Break",
-   "hidden": 1,
-   "label": "Scene2Tech",
-   "read_only": 1
+   "label": "Scene2Tech"
   },
   {
    "fieldname": "tab_tech2application",
@@ -1665,7 +1663,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-08-20 18:41:11.645104",
+ "modified": "2025-08-21 09:17:29.290157",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Patent Workflow",
