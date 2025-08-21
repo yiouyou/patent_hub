@@ -5,19 +5,22 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "llm_section",
+  "section_llm",
   "anthropic_api_key",
   "openai_api_key",
   "gemini_api_key",
   "deepseek_api_key",
-  "ali_section",
+  "section_ali",
   "ali_accesskey_id",
   "ali_accesskey_secret",
-  "section_break_mlfz",
+  "section_aws",
   "s3_bucket_name",
   "aws_region",
   "aws_access_key_id",
-  "aws_secret_access_key"
+  "aws_secret_access_key",
+  "section_turnstile",
+  "turnstile_site_key",
+  "turnstile_secret_key"
  ],
  "fields": [
   {
@@ -51,11 +54,6 @@
    "label": "DEEPSEEK_API_KEY"
   },
   {
-   "fieldname": "section_break_mlfz",
-   "fieldtype": "Section Break",
-   "label": "AWS"
-  },
-  {
    "fieldname": "s3_bucket_name",
    "fieldtype": "Data",
    "label": "S3_BUCKET_NAME"
@@ -66,16 +64,6 @@
    "label": "AWS Region"
   },
   {
-   "fieldname": "llm_section",
-   "fieldtype": "Section Break",
-   "label": "LLM"
-  },
-  {
-   "fieldname": "ali_section",
-   "fieldtype": "Section Break",
-   "label": "Ali"
-  },
-  {
    "fieldname": "ali_accesskey_id",
    "fieldtype": "Password",
    "label": "Ali AccessKey ID"
@@ -84,13 +72,43 @@
    "fieldname": "ali_accesskey_secret",
    "fieldtype": "Password",
    "label": "Ali AccessKey Secret"
+  },
+  {
+   "fieldname": "section_llm",
+   "fieldtype": "Section Break",
+   "label": "LLM"
+  },
+  {
+   "fieldname": "section_ali",
+   "fieldtype": "Section Break",
+   "label": "Ali"
+  },
+  {
+   "fieldname": "section_aws",
+   "fieldtype": "Section Break",
+   "label": "AWS"
+  },
+  {
+   "fieldname": "section_turnstile",
+   "fieldtype": "Section Break",
+   "label": "Turnstile"
+  },
+  {
+   "fieldname": "turnstile_site_key",
+   "fieldtype": "Password",
+   "label": "Turnstile Site Key"
+  },
+  {
+   "fieldname": "turnstile_secret_key",
+   "fieldtype": "Password",
+   "label": "Turnstile Secret Key"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2025-08-04 00:30:14.290261",
+ "modified": "2025-08-21 02:16:40.503020",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "API KEY",

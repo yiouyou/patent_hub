@@ -5,14 +5,14 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "server_section",
+  "section_server",
   "server_ip_port",
   "server_work_dir",
-  "remote_spot_section",
+  "section_remote_spot",
   "check_status",
   "spot_status",
   "start_ali_spot",
-  "section_break_wwpd",
+  "section_patent_workflow",
   "title2scene",
   "info2tech",
   "scene2tech",
@@ -21,7 +21,7 @@
   "review2revise",
   "md2docx",
   "code2png",
-  "section_break_ieft",
+  "section_patent",
   "scene_to_tech",
   "tech_to_claims",
   "claims_to_docx",
@@ -65,11 +65,6 @@
    "label": "Review To Revise"
   },
   {
-   "fieldname": "section_break_wwpd",
-   "fieldtype": "Section Break",
-   "label": "Patent Workflow"
-  },
-  {
    "fieldname": "title2scene",
    "fieldtype": "Data",
    "label": "Title2Scene"
@@ -93,21 +88,6 @@
    "fieldname": "review2revise",
    "fieldtype": "Data",
    "label": "Review2Revise"
-  },
-  {
-   "fieldname": "section_break_ieft",
-   "fieldtype": "Section Break",
-   "label": "Patent"
-  },
-  {
-   "fieldname": "server_section",
-   "fieldtype": "Section Break",
-   "label": "Server"
-  },
-  {
-   "fieldname": "remote_spot_section",
-   "fieldtype": "Section Break",
-   "label": "Remote Spot"
   },
   {
    "fieldname": "start_ali_spot",
@@ -138,13 +118,33 @@
    "fieldname": "code2png",
    "fieldtype": "Data",
    "label": "code2png"
+  },
+  {
+   "fieldname": "section_server",
+   "fieldtype": "Section Break",
+   "label": "Server"
+  },
+  {
+   "fieldname": "section_remote_spot",
+   "fieldtype": "Section Break",
+   "label": "Remote Spot"
+  },
+  {
+   "fieldname": "section_patent_workflow",
+   "fieldtype": "Section Break",
+   "label": "Patent Workflow"
+  },
+  {
+   "fieldname": "section_patent",
+   "fieldtype": "Section Break",
+   "label": "Patent"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2025-08-13 00:03:32.944837",
+ "modified": "2025-08-21 02:18:01.624751",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "API Endpoint",
