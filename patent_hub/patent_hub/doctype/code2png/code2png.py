@@ -11,4 +11,3 @@ class Code2png(Document):
 	def autoname(self):
 		# 自动生成主键和 code2png_id：C2P-YYYYMMDD-##
 		self.name = make_autoname("C2P-.YYYY.MM.DD.-.##")
-		self.code2png_id = self.name

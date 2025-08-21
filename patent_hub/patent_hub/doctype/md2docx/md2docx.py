@@ -11,4 +11,3 @@ class Md2docx(Document):
 	def autoname(self):
 		# 自动生成主键和 md2docx_id：M2D-YYYYMMDD-##
 		self.name = make_autoname("M2D-.YYYY.MM.DD.-.##")
-		self.md2docx_id = self.name
