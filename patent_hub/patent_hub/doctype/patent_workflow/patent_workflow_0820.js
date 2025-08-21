@@ -2,7 +2,6 @@ frappe.ui.form.on('Patent Workflow', {
   refresh(frm) {
     update_step_buttons(frm);
 
-    // 绑定 realtime（只需一次）
     if (!frm._realtime_bound) {
       const steps = [
         ["title2scene", "Title2Scene"],
@@ -12,12 +11,11 @@ frappe.ui.form.on('Patent Workflow', {
         ["align2tex2docx", "Align2Tex2Docx"],
         ["review2revise", "Review2Revise"]
       ];
-      steps.forEach(([step, label]) => bind_realtime_step_events(frm, step, label));
+      steps.forEach(([step, label]) => {
+        bind_realtime_step_events(frm, step, label);
+      });
       frm._realtime_bound = true;
     }
-
-    // 兜底轮询：若存在运行中的任务，10s 刷一次
-    start_or_stop_polling(frm);
 
     bind_table_events_once(frm, 'table_upload_info2tech');
     bind_table_events_once(frm, 'table_upload_review2revise');
@@ -25,7 +23,7 @@ frappe.ui.form.on('Patent Workflow', {
     frm.add_custom_button(__('+ Md2docx'), () => {
       if (frm.doc.patent_title) {
         frappe.new_doc('Md2docx', {}, (doc) => {
-          doc.related_patent_workflow = frm.doc.name;
+          doc.related_patent_workflow = frm.doc.name
           doc.save();
         });
       } else {
@@ -35,7 +33,7 @@ frappe.ui.form.on('Patent Workflow', {
     frm.add_custom_button(__('+ Code2png'), () => {
       if (frm.doc.patent_title) {
         frappe.new_doc('Code2png', {}, (doc) => {
-          doc.related_patent_workflow = frm.doc.name;
+          doc.related_patent_workflow = frm.doc.name
           doc.save();
         });
       } else {
@@ -44,13 +42,13 @@ frappe.ui.form.on('Patent Workflow', {
     });
   },
 
-  // 主字段变更 => 刷新按钮状态
+  // 主要输入字段变更 => 刷新按钮状态
   patent_title: update_step_buttons,
   scene: update_step_buttons,
   tech: update_step_buttons,
   application: update_step_buttons,
 
-  // ▶️ 首次运行（现在推荐后端 enqueue 后立即返回）
+  // ▶️ 正常运行按钮（首次）
   call_title2scene: async frm => await run_step_backend(frm, "patent_hub.api.call_title2scene.run", "Title2Scene"),
   call_info2tech: async frm => await run_step_backend(frm, "patent_hub.api.call_info2tech.run", "Info2Tech"),
   call_scene2tech: async frm => await run_step_backend(frm, "patent_hub.api.call_scene2tech.run", "Scene2Tech"),
@@ -58,7 +56,7 @@ frappe.ui.form.on('Patent Workflow', {
   call_align2tex2docx: async frm => await run_step_backend(frm, "patent_hub.api.call_align2tex2docx.run", "Align2Tex2Docx"),
   call_review2revise: async frm => await run_step_backend(frm, "patent_hub.api.call_review2revise.run", "Review2Revise"),
 
-  // 🔁 强制重跑
+  // 🔁 强制重跑按钮（已执行过的任务才可用）
   rerun_title2scene: async frm => await run_step_backend(frm, "patent_hub.api.call_title2scene.run", "Title2Scene", { force: true }),
   rerun_info2tech: async frm => await run_step_backend(frm, "patent_hub.api.call_info2tech.run", "Info2Tech", { force: true }),
   rerun_scene2tech: async frm => await run_step_backend(frm, "patent_hub.api.call_scene2tech.run", "Scene2Tech", { force: true }),
@@ -66,7 +64,7 @@ frappe.ui.form.on('Patent Workflow', {
   rerun_align2tex2docx: async frm => await run_step_backend(frm, "patent_hub.api.call_align2tex2docx.run", "Align2Tex2Docx", { force: true }),
   rerun_review2revise: async frm => await run_step_backend(frm, "patent_hub.api.call_review2revise.run", "Review2Revise", { force: true }),
 
-  // ❌ 取消运行
+  // ❌ 取消运行按钮
   cancel_title2scene: async frm => await cancel_step_backend(frm, "title2scene", "Title2Scene"),
   cancel_info2tech: async frm => await cancel_step_backend(frm, "info2tech", "Info2Tech"),
   cancel_scene2tech: async frm => await cancel_step_backend(frm, "scene2tech", "Scene2Tech"),
@@ -76,7 +74,7 @@ frappe.ui.form.on('Patent Workflow', {
 });
 
 /**
- * 🔄 根据字段与状态更新按钮
+ * 🔄 主函数：根据字段和状态更新按钮启用状态和样式
  */
 function update_step_buttons(frm) {
   const steps = [
@@ -107,25 +105,26 @@ function update_step_buttons(frm) {
       ? Array.isArray(frm.doc[field]) && frm.doc[field].length > 0
       : !!frm.doc[field]?.trim?.();
 
+    // 判断是否曾经成功执行过
     const has_ever_succeeded = success_count > 0;
 
+    // 控制按钮状态
     if (has_ever_succeeded) {
-      toggle_button_state(frm, `call_${step}`, false);
-      toggle_button_state(frm, `rerun_${step}`, has_value && !is_running);
-      toggle_button_state(frm, `cancel_${step}`, is_running, true);
+      // 曾经成功过：只显示 rerun 和 cancel 按钮
+      toggle_button_state(frm, `call_${step}`, false); // 隐藏首次执行按钮
+      toggle_button_state(frm, `rerun_${step}`, has_value && !is_running); // 重跑按钮
+      toggle_button_state(frm, `cancel_${step}`, is_running, true); // 取消按钮
     } else {
-      toggle_button_state(frm, `call_${step}`, has_value && !is_running && !is_done);
-      toggle_button_state(frm, `rerun_${step}`, false);
-      toggle_button_state(frm, `cancel_${step}`, is_running, true);
+      // 从未成功过：只显示 call 和 cancel 按钮
+      toggle_button_state(frm, `call_${step}`, has_value && !is_running && !is_done); // 首次执行
+      toggle_button_state(frm, `rerun_${step}`, false); // 隐藏重跑按钮
+      toggle_button_state(frm, `cancel_${step}`, is_running, true); // 取消按钮
     }
   });
-
-  // 变更后根据运行态决定是否轮询
-  start_or_stop_polling(frm);
 }
 
 /**
- * ✅ 控制按钮样式
+ * ✅ 控制按钮样式和启用状态
  */
 function toggle_button_state(frm, button_name, enabled, danger = false) {
   const btn = frm.get_field(button_name);
@@ -139,7 +138,7 @@ function toggle_button_state(frm, button_name, enabled, danger = false) {
 }
 
 /**
- * 🧩 绑定表格监听器（首次）
+ * 🧩 绑定表格监听器（首次绑定）
  */
 function bind_table_events_once(frm, table_fieldname) {
   if (frm[`_${table_fieldname}_bound`]) return;
@@ -153,34 +152,37 @@ function bind_table_events_once(frm, table_fieldname) {
 }
 
 /**
- * ▶️ 通用运行任务：后端应当 enqueue 并立刻返回
+ * ▶️ 通用运行任务：执行前自动保存表单，避免丢失字段
  */
 async function run_step_backend(frm, method_path, label, extraArgs = {}) {
+  console.log(`[DEBUG] 开始执行 ${label}`);
   try {
+    // 只在表单有未保存更改时才保存
     if (frm.is_dirty()) {
+      console.log(`[DEBUG] 检测到未保存更改，正在保存...`);
       await frm.save();
+      console.log(`[DEBUG] 表单保存完成`);
+    } else {
+      console.log(`[DEBUG] 表单无更改，跳过保存`);
     }
-    const r = await frappe.call({
+    console.log(`[DEBUG] 调用后端方法...`);
+    const response = await frappe.call({
       method: method_path,
-      args: { docname: frm.doc.name, ...extraArgs },
+      args: {
+        docname: frm.doc.name,
+        ...extraArgs
+      },
       freeze: true,
-      freeze_message: `已提交到队列：${label} ...`
+      freeze_message: `运行 ${label} 中，请稍候...`
     });
-
-    // 入队成功后，立即将界面置为“运行中”，避免等待下一次 reload
-    if (r && r.message && (r.message.ok || r.message.queued)) {
-      // 乐观锁定：设置本地运行态，改善UX
-      const step = label_to_step(label);
-      if (step) {
-        frm.doc[`is_running_${step}`] = 1;
-        update_step_buttons(frm);
-      }
-    }
-
-    // 轻量刷新一次，获取 init_task_fields 的回写字段（id / started_at）
+    console.log(`[DEBUG] 后端响应:`, response);
     await frm.reload_doc();
   } catch (e) {
-    frappe.show_alert({ message: e.message || `运行 ${label} 失败，请查看日志`, indicator: 'red' }, 7);
+    console.error(`[DEBUG] 执行失败:`, e);
+    frappe.show_alert({
+      message: e.message || `运行 ${label} 失败，请查看日志`,
+      indicator: 'red'
+    }, 7);
   }
 }
 
@@ -191,18 +193,26 @@ async function cancel_step_backend(frm, task_key, label) {
   try {
     const r = await frappe.call({
       method: "patent_hub.api._utils.cancel_task",
-      args: { docname: frm.doc.name, task_key, doctype: "Patent Workflow" },
+      args: {
+        docname: frm.doc.name,
+        task_key: task_key,
+        doctype: "Patent Workflow"
+      },
       freeze: true,
       freeze_message: `正在终止 ${label} ...`
     });
 
     if (r.message && r.message.message) {
       const indicator = r.message.success ? "green" : "red";
-      frappe.show_alert({ message: r.message.message, indicator }, 5);
+      frappe.show_alert({ message: r.message.message, indicator: indicator }, 5);
     }
+
     await frm.reload_doc();
   } catch (e) {
-    frappe.show_alert({ message: e.message || `终止 ${label} 失败`, indicator: "red" }, 7);
+    frappe.show_alert({
+      message: e.message || `终止 ${label} 失败`,
+      indicator: "red"
+    }, 7);
   }
 }
 
@@ -223,40 +233,4 @@ function bind_realtime_step_events(frm, step_name, label) {
       frm.reload_doc();
     }
   });
-}
-
-/**
- * 🕒 兜底轮询（防止丢失 realtime）
- */
-function start_or_stop_polling(frm) {
-  const steps = [
-    "title2scene", "info2tech", "scene2tech",
-    "tech2application", "align2tex2docx", "review2revise"
-  ];
-  const anyRunning = steps.some(s => frm.doc[`is_running_${s}`] === 1);
-
-  if (anyRunning && !frm._poll_timer) {
-    frm._poll_timer = setInterval(() => {
-      // 若标签页切后台，避免刷太频繁
-      if (!document.hidden) frm.reload_doc();
-    }, 10000); // 10s
-  } else if (!anyRunning && frm._poll_timer) {
-    clearInterval(frm._poll_timer);
-    frm._poll_timer = null;
-  }
-}
-
-/**
- * 小工具：Label -> step_name
- */
-function label_to_step(label) {
-  const map = {
-    "Title2Scene": "title2scene",
-    "Info2Tech": "info2tech",
-    "Scene2Tech": "scene2tech",
-    "Tech2Application": "tech2application",
-    "Align2Tex2Docx": "align2tex2docx",
-    "Review2Revise": "review2revise"
-  };
-  return map[label] || null;
 }

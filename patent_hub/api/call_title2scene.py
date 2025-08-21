@@ -1,27 +1,29 @@
 import asyncio
+import contextlib
 import json
-import logging
 import os
 from contextlib import contextmanager
 from typing import Any
 
 import frappe
 import httpx
-from frappe import enqueue
 
 from patent_hub.api._utils import (
 	complete_task_fields,
+	enqueue_long_task,
 	fail_task_fields,
 	init_task_fields,
 	universal_decompress,
-	with_heartbeat,
+	update_task_heartbeat,
 )
 
 # 配置
 logger = frappe.logger("app.patent_hub.patent_wf.call_title2scene")
 # logger.setLevel(logging.DEBUG)
 
+# 队列任务最大执行时长（秒）
 TIMEOUT = 1800
+
 HTTP_CONFIG = {
 	"timeout": httpx.Timeout(connect=10.0, read=300.0, write=30.0, pool=30.0),
 	"limits": httpx.Limits(max_keepalive_connections=5, max_connections=10, keepalive_expiry=30.0),
@@ -32,10 +34,15 @@ HTTP_CONFIG = {
 	},
 }
 
+TASK_KEY = "title2scene"
+TASK_LABEL = "Title2Scene"
+DOCTYPE = "Patent Workflow"
+STEP_PREFIX = "T2S"
+
 
 @contextmanager
 def atomic_transaction():
-	"""原子事务上下文管理器"""
+	"""原子事务（小范围使用，避免长事务）"""
 	try:
 		frappe.db.begin()
 		yield
@@ -45,115 +52,183 @@ def atomic_transaction():
 		raise
 
 
+# -------------------------------
+# Public API（whitelisted）：只入队
+# -------------------------------
 @frappe.whitelist()
 def run(docname: str, force: bool = False):
-	"""启动title2scene任务"""
+	"""
+	启动 Title2Scene：只做状态初始化与入队，立即返回。
+	返回结构与前端对齐：{ ok: True, queued: True, job_name: ... }
+	"""
 	try:
-		logger.info(f"启动任务: {docname}, force={force}")
-
-		# 获取文档并检查权限
-		doc = frappe.get_doc("Patent Workflow", docname)
+		doc = frappe.get_doc(DOCTYPE, docname)
 		if not doc:
-			return {"success": False, "error": f"文档 {docname} 不存在"}
+			return {"ok": False, "error": f"文档 {docname} 不存在"}
 		doc.check_permission("write")
 
-		# 原子性检查和更新状态
-		try:
-			_update_task_status(doc, force)
-		except ValueError as e:
-			logger.warning(f"任务状态检查失败 [{docname}]: {e}")
-			return {"success": False, "error": str(e)}
+		# 并发保护：短事务内检查并初始化
+		with atomic_transaction():
+			# 再取一遍状态（行级锁）
+			locked = frappe.db.sql(
+				"""
+                SELECT is_done_title2scene AS done, is_running_title2scene AS running
+                FROM `tabPatent Workflow`
+                WHERE name=%s FOR UPDATE
+                """,
+				(docname,),
+				as_dict=True,
+			)
+			if not locked:
+				return {"ok": False, "error": f"文档 {docname} 不存在"}
 
-		# 入队任务
-		job = _enqueue_task(docname, doc)
+			if locked[0].running:
+				return {"ok": False, "error": "任务正在运行中，请等待完成"}
+			if locked[0].done and not force:
+				return {"ok": False, "error": "任务已完成，未重复执行（传入 force=True 可重跑）"}
 
-		logger.info(f"任务已入队: {docname}, job_id: {job.id}")
-		return {"success": True, "message": "任务已提交执行队列", "job_id": job.id}
+			# 初始化任务字段：置 Running、生成 step_id、起始心跳
+			init_task_fields(doc, TASK_KEY, STEP_PREFIX)
+			doc.save(ignore_permissions=True, ignore_version=True)
+
+		# 入队（使用统一封装，返回 {ok, queued, job_name}）
+		return enqueue_long_task(
+			doctype=DOCTYPE,
+			docname=docname,
+			task_key=TASK_KEY,
+			prefix=STEP_PREFIX,
+			job_method="patent_hub.api.call_title2scene._job",  # 下面定义的真正任务
+			queue="long",
+			timeout=TIMEOUT,
+			job_kwargs={"force": force},
+		)
 
 	except frappe.PermissionError:
 		logger.warning(f"权限不足: {docname}, user: {frappe.session.user}")
-		return {"success": False, "error": "权限不足"}
+		return {"ok": False, "error": "权限不足"}
 	except Exception as e:
 		logger.error(f"启动任务失败 [{docname}]: {e}")
-		return {"success": False, "error": f"启动任务失败: {e!s}"}
+		return {"ok": False, "error": f"启动任务失败: {e!s}"}
 
 
-def _update_task_status(doc, force: bool):
-	"""原子性更新任务状态"""
-	with atomic_transaction():
-		# 使用 SELECT FOR UPDATE 锁定记录，防止并发修改
-		locked_doc = frappe.db.sql(
-			"""
-			SELECT name, is_done_title2scene, is_running_title2scene 
-			FROM `tabPatent Workflow` 
-			WHERE name = %s 
-			FOR UPDATE
-			""",
-			doc.name,
-			as_dict=True,
-		)
+# -------------------------------
+# 队列任务：真正执行逻辑
+# enqueue_long_task 会以 _job(doctype, docname, task_key, **job_kwargs) 调用
+# -------------------------------
+def _job(doctype: str, docname: str, task_key: str, *, force: bool = False):
+	"""
+	在 RQ 队列中执行 Title2Scene：
+	- 并发运行：远端 API 调用 + 周期心跳（async 协程，无线程）
+	- 成功：complete_task_fields（自动 realtime: title2scene_done）
+	- 失败：fail_task_fields（自动 realtime: title2scene_failed）
+	"""
+	assert doctype == DOCTYPE and task_key == TASK_KEY, "任务入参不匹配"
+	logger.info(f"[{TASK_LABEL}] 开始执行任务: {docname}, force={force}")
 
-		if not locked_doc:
-			raise ValueError(f"文档 {doc.name} 不存在")
-
-		locked_doc = locked_doc[0]
-
-		# 检查任务状态
-		if locked_doc.is_done_title2scene and not force:
-			raise ValueError("任务已完成，未重复执行")
-		if locked_doc.is_running_title2scene:
-			raise ValueError("任务正在运行中，请等待完成")
-
-		# 重新加载并更新状态
-		doc.reload()
-		init_task_fields(doc, "title2scene", "T2S", logger)
-		doc.save(ignore_permissions=True, ignore_version=True)
-
-
-def _enqueue_task(docname: str, doc):
-	"""入队任务并处理失败回滚"""
 	try:
-		return enqueue(
-			"patent_hub.api.call_title2scene._job",
-			queue="long",
-			timeout=TIMEOUT,
-			job_name=f"title2scene_{docname}",
-			docname=docname,
-			user=frappe.session.user,
-		)
+		# 读取一次，确认仍处于运行态（避免误触）
+		status = frappe.db.get_value(DOCTYPE, docname, f"is_running_{TASK_KEY}", as_dict=False)
+		if not status:
+			logger.warning(f"[{TASK_LABEL}] 任务已非运行状态，跳过执行: {docname}")
+			return
+
+		# 准备 API 目标与 payload（不在事务内）
+		api_endpoint = frappe.get_single("API Endpoint")
+		if not api_endpoint:
+			raise ValueError("未配置 API Endpoint")
+
+		url = f"{api_endpoint.server_ip_port.rstrip('/')}/{api_endpoint.title2scene.strip('/')}/invoke"
+
+		# 读取 step_id 以便拼接工作目录
+		step_id = frappe.db.get_value(DOCTYPE, docname, f"{TASK_KEY}_id")
+		if not step_id:
+			raise ValueError("未找到任务 step_id")
+
+		tmp_folder = os.path.join(api_endpoint.get_password("server_work_dir"), step_id)
+		payload = {
+			"input": {
+				"patent_title": frappe.db.get_value(DOCTYPE, docname, "patent_title"),
+				"tmp_folder": tmp_folder,
+			}
+		}
+
+		# 并发：远端调用 + 心跳
+		result = asyncio.run(_run_api_with_heartbeat(url, payload, doctype, docname, task_key))
+
+		# 处理结果并写回
+		_process_api_result(docname, result)
+
 	except Exception as e:
-		# 入队失败，回滚状态
-		logger.error(f"入队失败，回滚状态: {e}")
+		logger.error(f"[{TASK_LABEL}] 执行失败 [{docname}]: {e}")
+		_handle_task_failure(docname, str(e))
+		raise
+
+
+# -------------------------------
+# 并发：API 调用 + 心跳
+# -------------------------------
+async def _run_api_with_heartbeat(url: str, payload: dict, doctype: str, docname: str, task_key: str):
+	"""
+	使用 asyncio 并发执行：
+	  - call_chain_with_retry_async：远端调用（可能数百秒）
+	  - heartbeat_loop：每 HEARTBEAT_INTERVAL 秒写一次 last_heartbeat
+	"""
+	api_task = asyncio.create_task(call_chain_with_retry_async(url, payload))
+	hb_task = asyncio.create_task(_heartbeat_loop(doctype, docname, task_key))
+
+	done, pending = await asyncio.wait({api_task, hb_task}, return_when=asyncio.FIRST_COMPLETED)
+
+	# 若 API 先完成，停止心跳
+	if api_task in done:
 		try:
-			with atomic_transaction():
-				doc.reload()
-				doc.is_running_title2scene = False
-				doc.last_title2scene_error = f"入队失败: {e}"
-				doc.save(ignore_permissions=True, ignore_version=True)
-		except Exception as rollback_error:
-			logger.error(f"状态回滚失败: {rollback_error}")
-		raise Exception(f"任务入队失败: {e}")
+			result = api_task.result()
+		finally:
+			hb_task.cancel()
+			with contextlib.suppress(asyncio.CancelledError):
+				await hb_task
+		return result
+
+	# 若心跳异常结束（几乎不该发生），取消 API 并报错
+	api_task.cancel()
+	with contextlib.suppress(asyncio.CancelledError):
+		await api_task
+	raise RuntimeError("心跳任务异常终止")
 
 
-async def call_chain_with_retry(url: str, payload: dict, max_retries: int = 5) -> dict[str, Any]:
-	"""API调用重试机制"""
+async def _heartbeat_loop(doctype: str, docname: str, task_key: str, interval: int = 100):
+	"""
+	协程心跳：同一线程内周期写库；避免跨线程 DB。
+	"""
+	try:
+		while True:
+			update_task_heartbeat(doctype, task_key, name=docname)
+			await asyncio.sleep(interval)
+	except asyncio.CancelledError:
+		# 退出前再写一次，尽量让外界看到“刚更新过”
+		update_task_heartbeat(doctype, task_key, name=docname)
+		raise
+
+
+# -------------------------------
+# HTTP 调用与重试（async 版）
+# -------------------------------
+async def call_chain_with_retry_async(url: str, payload: dict, max_retries: int = 5) -> dict[str, Any]:
 	for attempt in range(max_retries):
 		try:
 			async with httpx.AsyncClient(**HTTP_CONFIG) as client:
 				logger.info(f"API调用尝试 {attempt + 1}/{max_retries}")
-				response = await client.post(url, json=payload)
+				resp = await client.post(url, json=payload)
+				if resp.status_code == 200:
+					logger.info(f"API调用成功，响应大小: {len(resp.content)} 字节")
+					return resp.json()
 
-				if response.status_code == 200:
-					logger.info(f"API调用成功，响应大小: {len(response.content)} 字节")
-					return response.json()
+				# 5xx 可重试，4xx 直接抛出
+				if resp.status_code < 500:
+					resp.raise_for_status()
 
-				# 5xx错误重试，4xx错误直接抛出
-				if response.status_code < 500:
-					response.raise_for_status()
-
-				logger.warning(f"服务器错误 {response.status_code}，将重试")
+				logger.warning(f"服务器错误 {resp.status_code}，将重试")
 				if attempt == max_retries - 1:
-					response.raise_for_status()
+					resp.raise_for_status()
 
 		except (httpx.RemoteProtocolError, httpx.ReadTimeout, httpx.ConnectTimeout) as e:
 			logger.warning(f"网络错误 (尝试 {attempt + 1}): {e}")
@@ -161,7 +236,7 @@ async def call_chain_with_retry(url: str, payload: dict, max_retries: int = 5) -
 				raise
 		except httpx.HTTPStatusError as e:
 			if e.response.status_code < 500:
-				raise  # 客户端错误不重试
+				raise
 			logger.warning(f"服务器错误 (尝试 {attempt + 1}): {e}")
 			if attempt == max_retries - 1:
 				raise
@@ -175,147 +250,49 @@ async def call_chain_with_retry(url: str, payload: dict, max_retries: int = 5) -
 	raise Exception("所有重试都失败了")
 
 
-@with_heartbeat("align2tex2docx", "Patent Workflow")
-def _job(docname: str, user=None):
-	"""执行title2scene任务 - 自动心跳更新"""
-	logger.info(f"开始执行任务: {docname}")
-	doc = None
-
-	try:
-		# 验证任务状态
-		with atomic_transaction():
-			doc = frappe.get_doc("Patent Workflow", docname)
-
-			# 使用数据库锁验证状态
-			locked_status = frappe.db.sql(
-				"""
-				SELECT is_running_title2scene 
-				FROM `tabPatent Workflow` 
-				WHERE name = %s 
-				FOR UPDATE
-				""",
-				docname,
-				as_dict=True,
-			)
-
-			if not locked_status or not locked_status[0].is_running_title2scene:
-				logger.warning(f"任务已非运行状态，跳过执行: {docname}")
-				return
-
-		# 构建API请求（在事务外执行）
-		api_endpoint = frappe.get_single("API Endpoint")
-		if not api_endpoint:
-			raise ValueError("未配置 API Endpoint")
-
-		url = f"{api_endpoint.server_ip_port.rstrip('/')}/{api_endpoint.title2scene.strip('/')}/invoke"
-		logger.info(f"请求 URL: {url}")
-
-		# 准备请求数据
-		tmp_folder = os.path.join(api_endpoint.get_password("server_work_dir"), doc.title2scene_id)
-
-		payload = {
-			"input": {
-				"patent_title": doc.patent_title,
-				"tmp_folder": tmp_folder,
-			}
-		}
-
-		# 调用API（长时间操作，在事务外执行）
-		result = asyncio.run(call_chain_with_retry(url, payload))
-
-		# 处理结果（在新事务中）
-		_process_api_result(doc, result, user)
-		logger.info(f"执行成功: {docname}")
-
-	except Exception as e:
-		logger.error(f"执行失败 [{docname}]: {e}")
-		_handle_task_failure(doc, docname, str(e), user)
-
-
-def _process_api_result(doc, result: dict, user):
-	"""处理API结果并更新文档"""
+# -------------------------------
+# 结果处理 / 成功落库
+# -------------------------------
+def _process_api_result(docname: str, result: dict, user: str | None = None):
 	with atomic_transaction():
-		# 锁定文档并验证状态
-		locked_status = frappe.db.sql(
-			"""
-			SELECT is_running_title2scene 
-			FROM `tabPatent Workflow` 
-			WHERE name = %s 
-			FOR UPDATE
-			""",
-			doc.name,
-			as_dict=True,
-		)
+		doc = frappe.get_doc(DOCTYPE, docname)
 
-		if not locked_status or not locked_status[0].is_running_title2scene:
-			logger.warning(f"任务在执行过程中被取消: {doc.name}")
+		# 若执行途中被取消，直接退出
+		running = getattr(doc, f"is_running_{TASK_KEY}", 0)
+		if not running:
+			logger.warning(f"[{TASK_LABEL}] 任务在执行过程中被取消: {docname}")
 			return
 
-		# 重新加载文档获取最新状态
-		doc.reload()
-
-		# 解析API响应
 		output = result.get("output")
 		if not output:
-			raise ValueError("API响应格式错误：缺少output字段")
+			raise ValueError("API响应格式错误：缺少 output 字段")
 
 		if isinstance(output, str):
 			output = json.loads(output)
 
-		res_data = universal_decompress(output.get("res", ""), as_json=True)
+		res_data = universal_decompress(output.get("res", ""), as_json=True) or {}
 
-		# 更新文档字段
+		# 写回业务字段
 		doc.scene = res_data.get("scene")
 
-		# 完成任务
+		# 统一完成（会自动 publish_realtime: title2scene_done）
 		complete_task_fields(
 			doc,
-			"title2scene",
-			{
+			TASK_KEY,
+			extra_fields={
 				"time_s_title2scene": output.get("TIME(s)", 0.0),
 				"cost_title2scene": output.get("cost", 0),
 			},
-			logger,
 		)
 
-		doc.save(ignore_permissions=True, ignore_version=True)
 
-	# 在事务外发布成功事件
-	_publish_success_event(doc, user)
-
-
-def _publish_success_event(doc, user):
-	"""发布成功事件"""
-	try:
-		frappe.publish_realtime(
-			"patent_workflow_update",
-			{"docname": doc.name, "event": "title2scene_done", "message": "Title2Scene 任务完成"},
-			user=user,
-		)
-	except Exception as e:
-		logger.warning(f"发布成功事件失败: {e}")
-
-
-def _handle_task_failure(doc, docname: str, error_msg: str, user):
-	"""处理任务失败"""
+# -------------------------------
+# 失败处理
+# -------------------------------
+def _handle_task_failure(docname: str, error_msg: str):
 	try:
 		with atomic_transaction():
-			if doc:
-				doc.reload()
-			else:
-				doc = frappe.get_doc("Patent Workflow", docname)
-
-			fail_task_fields(doc, "title2scene", error_msg, logger)
-			doc.save(ignore_permissions=True, ignore_version=True)
+			doc = frappe.get_doc(DOCTYPE, docname)
+			fail_task_fields(doc, TASK_KEY, error_msg)
 	except Exception as save_error:
-		logger.error(f"保存失败状态时出错: {save_error}")
-
-	# 在事务外发布失败事件
-	try:
-		frappe.publish_realtime(
-			"patent_workflow_update",
-			{"docname": docname, "event": "title2scene_failed", "error": error_msg},
-			user=user,
-		)
-	except Exception as e:
-		logger.warning(f"发布失败事件失败: {e}")
+		logger.error(f"[{TASK_LABEL}] 保存失败状态时出错: {save_error}")
