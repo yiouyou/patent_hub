@@ -15,5 +15,5 @@ class MDToDocx(Document):
 		clean_name = re.sub(r"[^a-zA-Z0-9]", "", full_name)
 		# 只有新建时才赋值（也可以根据 is_new 判断）
 		if not self.name or not self.name.startswith("MD2DOCX-"):
-			self.md_to_docx_id = make_autoname(f"MD2DOCX-{clean_name}-.YY.-.MM.-.DD.-.###")
+			self.md_to_docx_id = make_autoname(f"MD2DOCX-{clean_name}-.YYYY.MM.DD.-.##")
 			self.name = self.md_to_docx_id

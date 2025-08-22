@@ -18,5 +18,5 @@ class LLMChatSession(Document):
 		full_name = frappe.db.get_value("User", user_id, "full_name") or user_id
 		clean_name = re.sub(r"[^\w\s-]", "", full_name)
 		safe_name = re.sub(r"\s", "_", clean_name).replace("-", "_")
-		self.chat_id = make_autoname(f"CHAT-{self.llm_provider}-{safe_name}-.YY.-.MM.-.DD.-.###")
+		self.chat_id = make_autoname(f"CHAT-{safe_name}-{self.llm_provider}-.YYYY.MM.DD.-.##")
 		self.name = self.chat_id
