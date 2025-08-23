@@ -9,13 +9,14 @@
   "writer_id",
   "patent_title",
   "examination_mode",
-  "note",
+  "has_paid",
   "column_break_xeef",
   "agency_id",
   "ipc_number",
   "pay_mode",
-  "paid",
-  "to_be_paid",
+  "not_paid",
+  "section_break_ewbw",
+  "note",
   "status_section_all",
   "status_title2scene",
   "status_info2tech",
@@ -567,17 +568,19 @@
    "read_only": 1
   },
   {
-   "default": "0",
+   "default": "0.00",
    "fieldname": "cost_scene2tech",
-   "fieldtype": "Data",
+   "fieldtype": "Float",
    "label": "Cost",
+   "precision": "2",
    "read_only": 1
   },
   {
-   "default": "0",
+   "default": "0.00",
    "fieldname": "time_s_scene2tech",
-   "fieldtype": "Data",
+   "fieldtype": "Float",
    "label": "Times(s)",
+   "precision": "2",
    "read_only": 1
   },
   {
@@ -630,17 +633,19 @@
    "read_only": 1
   },
   {
-   "default": "0",
+   "default": "0.00",
    "fieldname": "cost_align2tex2docx",
-   "fieldtype": "Data",
+   "fieldtype": "Float",
    "label": "Cost",
+   "precision": "2",
    "read_only": 1
   },
   {
-   "default": "0",
+   "default": "0.00",
    "fieldname": "time_s_align2tex2docx",
-   "fieldtype": "Data",
+   "fieldtype": "Float",
    "label": "Time(s)",
+   "precision": "2",
    "read_only": 1
   },
   {
@@ -675,17 +680,19 @@
    "read_only": 1
   },
   {
-   "default": "0",
+   "default": "0.00",
    "fieldname": "cost_review2revise",
-   "fieldtype": "Data",
+   "fieldtype": "Float",
    "label": "Cost",
+   "precision": "2",
    "read_only": 1
   },
   {
-   "default": "0",
+   "default": "0.00",
    "fieldname": "time_s_review2revise",
-   "fieldtype": "Data",
+   "fieldtype": "Float",
    "label": "Time(s)",
+   "precision": "2",
    "read_only": 1
   },
   {
@@ -708,17 +715,19 @@
    "read_only": 1
   },
   {
-   "default": "0",
+   "default": "0.00",
    "fieldname": "cost_tech2application",
-   "fieldtype": "Data",
+   "fieldtype": "Float",
    "label": "Cost",
+   "precision": "2",
    "read_only": 1
   },
   {
-   "default": "0",
+   "default": "0.00",
    "fieldname": "time_s_tech2application",
-   "fieldtype": "Data",
+   "fieldtype": "Float",
    "label": "Time(s)",
+   "precision": "2",
    "read_only": 1
   },
   {
@@ -1060,17 +1069,19 @@
    "read_only": 1
   },
   {
-   "default": "0",
+   "default": "0.00",
    "fieldname": "cost_title2scene",
-   "fieldtype": "Data",
+   "fieldtype": "Float",
    "label": "Cost",
+   "precision": "2",
    "read_only": 1
   },
   {
-   "default": "0",
+   "default": "0.00",
    "fieldname": "time_s_title2scene",
-   "fieldtype": "Data",
+   "fieldtype": "Float",
    "label": "Time(s)",
+   "precision": "2",
    "read_only": 1
   },
   {
@@ -1088,10 +1099,11 @@
    "read_only": 1
   },
   {
-   "default": "0",
+   "default": "0.00",
    "fieldname": "cost_info2tech",
-   "fieldtype": "Data",
+   "fieldtype": "Float",
    "label": "Cost",
+   "precision": "2",
    "read_only": 1
   },
   {
@@ -1179,10 +1191,11 @@
    "fieldtype": "Column Break"
   },
   {
-   "default": "0",
+   "default": "0.00",
    "fieldname": "total_cost_title2scene",
-   "fieldtype": "Data",
+   "fieldtype": "Float",
    "label": "Total Cost",
+   "precision": "2",
    "read_only": 1
   },
   {
@@ -1190,17 +1203,19 @@
    "fieldtype": "Column Break"
   },
   {
-   "default": "0",
+   "default": "0.00",
    "fieldname": "total_time_s_title2scene",
-   "fieldtype": "Data",
+   "fieldtype": "Float",
    "label": "Total Time(s)",
+   "precision": "2",
    "read_only": 1
   },
   {
-   "default": "0",
+   "default": "0.00",
    "fieldname": "time_s_info2tech",
-   "fieldtype": "Data",
+   "fieldtype": "Float",
    "label": "Time(s)",
+   "precision": "2",
    "read_only": 1
   },
   {
@@ -1230,10 +1245,11 @@
    "fieldtype": "Column Break"
   },
   {
-   "default": "0",
+   "default": "0.00",
    "fieldname": "total_cost_info2tech",
-   "fieldtype": "Data",
+   "fieldtype": "Float",
    "label": "Total Cost",
+   "precision": "2",
    "read_only": 1
   },
   {
@@ -1241,10 +1257,11 @@
    "fieldtype": "Column Break"
   },
   {
-   "default": "0",
+   "default": "0.00",
    "fieldname": "total_time_s_info2tech",
-   "fieldtype": "Data",
+   "fieldtype": "Float",
    "label": "Total Time(s)",
+   "precision": "2",
    "read_only": 1
   },
   {
@@ -1260,10 +1277,11 @@
    "fieldtype": "Column Break"
   },
   {
-   "default": "0",
+   "default": "0.00",
    "fieldname": "total_cost_scene2tech",
-   "fieldtype": "Data",
+   "fieldtype": "Float",
    "label": "Total Cost",
+   "precision": "2",
    "read_only": 1
   },
   {
@@ -1271,10 +1289,11 @@
    "fieldtype": "Column Break"
   },
   {
-   "default": "0",
+   "default": "0.00",
    "fieldname": "total_time_s_scene2tech",
-   "fieldtype": "Data",
+   "fieldtype": "Float",
    "label": "Total Times(s)",
+   "precision": "2",
    "read_only": 1
   },
   {
@@ -1304,10 +1323,11 @@
    "fieldtype": "Column Break"
   },
   {
-   "default": "0",
+   "default": "0.00",
    "fieldname": "total_cost_tech2application",
-   "fieldtype": "Data",
+   "fieldtype": "Float",
    "label": "Total Cost",
+   "precision": "2",
    "read_only": 1
   },
   {
@@ -1315,10 +1335,11 @@
    "fieldtype": "Column Break"
   },
   {
-   "default": "0",
+   "default": "0.00",
    "fieldname": "total_time_s_tech2application",
-   "fieldtype": "Data",
+   "fieldtype": "Float",
    "label": "Total Time(s)",
+   "precision": "2",
    "read_only": 1
   },
   {
@@ -1348,10 +1369,11 @@
    "fieldtype": "Column Break"
   },
   {
-   "default": "0",
+   "default": "0.00",
    "fieldname": "total_cost_align2tex2docx",
-   "fieldtype": "Data",
+   "fieldtype": "Float",
    "label": "Total Cost",
+   "precision": "2",
    "read_only": 1
   },
   {
@@ -1359,10 +1381,11 @@
    "fieldtype": "Column Break"
   },
   {
-   "default": "0",
+   "default": "0.00",
    "fieldname": "total_time_s_align2tex2docx",
-   "fieldtype": "Data",
+   "fieldtype": "Float",
    "label": "Total Time(s)",
+   "precision": "2",
    "read_only": 1
   },
   {
@@ -1392,10 +1415,11 @@
    "fieldtype": "Column Break"
   },
   {
-   "default": "0",
+   "default": "0.00",
    "fieldname": "total_cost_review2revise",
-   "fieldtype": "Data",
+   "fieldtype": "Float",
    "label": "Total Cost",
+   "precision": "2",
    "read_only": 1
   },
   {
@@ -1403,10 +1427,11 @@
    "fieldtype": "Column Break"
   },
   {
-   "default": "0",
+   "default": "0.00",
    "fieldname": "total_time_s_review2revise",
-   "fieldtype": "Data",
+   "fieldtype": "Float",
    "label": "Total Time(s)",
+   "precision": "2",
    "read_only": 1
   },
   {
@@ -1667,20 +1692,28 @@
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "paid",
-   "fieldtype": "Data",
-   "label": "\u5df2\u4ed8"
+   "fieldname": "section_break_ewbw",
+   "fieldtype": "Section Break"
   },
   {
-   "fieldname": "to_be_paid",
-   "fieldtype": "Data",
-   "label": "\u5f85\u4ed8"
+   "default": "0.00",
+   "fieldname": "has_paid",
+   "fieldtype": "Float",
+   "label": "\u5df2\u4ed8",
+   "precision": "2"
+  },
+  {
+   "default": "0.00",
+   "fieldname": "not_paid",
+   "fieldtype": "Float",
+   "label": "\u672a\u4ed8",
+   "precision": "2"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-08-23 00:38:49.720328",
+ "modified": "2025-08-23 02:55:06.734422",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Patent Workflow",
