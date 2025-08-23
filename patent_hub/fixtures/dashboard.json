@@ -18,6 +18,20 @@
     "width": "Half"
    },
    {
+    "chart": "Total Paid",
+    "parent": "Patent Workflow Dashboard",
+    "parentfield": "charts",
+    "parenttype": "Dashboard",
+    "width": "Half"
+   },
+   {
+    "chart": "Total Unpaid",
+    "parent": "Patent Workflow Dashboard",
+    "parentfield": "charts",
+    "parenttype": "Dashboard",
+    "width": "Half"
+   },
+   {
     "chart": "Top Agency",
     "parent": "Patent Workflow Dashboard",
     "parentfield": "charts",
@@ -44,7 +58,7 @@
   "doctype": "Dashboard",
   "is_default": 0,
   "is_standard": 0,
-  "modified": "2025-08-15 03:21:31.907688",
+  "modified": "2025-08-23 01:11:39.601830",
   "module": "Patent Hub",
   "name": "Patent Workflow Dashboard"
  }

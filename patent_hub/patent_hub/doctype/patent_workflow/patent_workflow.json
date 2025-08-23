@@ -7,12 +7,15 @@
  "field_order": [
   "tab_agent",
   "writer_id",
-  "agency_id",
   "patent_title",
-  "ipc_number",
   "examination_mode",
-  "pay_mode",
   "note",
+  "column_break_xeef",
+  "agency_id",
+  "ipc_number",
+  "pay_mode",
+  "paid",
+  "to_be_paid",
   "status_section_all",
   "status_title2scene",
   "status_info2tech",
@@ -1658,12 +1661,26 @@
    "fieldtype": "Select",
    "label": "\u4ed8\u8d39\u6a21\u5f0f",
    "options": "\n\u98ce\u9669\u53d1\u660e\u4e13\u5229\n\u9ad8\u8d28\u91cf\u53d1\u660e\u4e13\u5229"
+  },
+  {
+   "fieldname": "column_break_xeef",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "paid",
+   "fieldtype": "Data",
+   "label": "\u5df2\u4ed8"
+  },
+  {
+   "fieldname": "to_be_paid",
+   "fieldtype": "Data",
+   "label": "\u5f85\u4ed8"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-08-21 09:17:29.290157",
+ "modified": "2025-08-23 00:38:49.720328",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Patent Workflow",

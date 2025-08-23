@@ -34,7 +34,19 @@ fixtures = [
 	{
 		"dt": "Dashboard Chart",
 		"filters": [
-			["name", "in", ["Total Task", "Total Done", "Top Agency", "Top Writer", "Step Avg Cost"]]
+			[
+				"name",
+				"in",
+				[
+					"Total Task",
+					"Total Done",
+					"Total Paid",
+					"Total Unpaid",
+					"Top Agency",
+					"Top Writer",
+					"Step Avg Cost",
+				],
+			]
 		],
 	},
 	{"dt": "Dashboard", "filters": [["name", "in", ["Patent Workflow Dashboard"]]]},
