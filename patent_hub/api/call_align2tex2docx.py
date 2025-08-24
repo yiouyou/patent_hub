@@ -275,7 +275,7 @@ def _process_api_result(docname: str, result: dict, user: str | None = None):
 		update_fields = {
 			"application_align": res_data.get("application_align"),
 			"application_tex": res_data.get("application_tex"),
-			"before_tex": res_data.get("before_tex"),  # 修正：从 before_tex 读，而不是 application_align
+			"before_tex": res_data.get("before_tex"),
 			"figure_codes": "\n".join(
 				f"========== {i} ==========\n{code}" for i, code in enumerate(figure_codes_list, 1)
 			)
