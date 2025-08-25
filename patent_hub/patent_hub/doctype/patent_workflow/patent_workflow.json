@@ -191,6 +191,7 @@
   "tech2application_last_heartbeat",
   "tab_align2tex2docx",
   "application",
+  "no_tex",
   "section_break_mnea",
   "call_align2tex2docx",
   "column_break_gsbi",
@@ -1708,12 +1709,18 @@
    "fieldtype": "Float",
    "label": "\u672a\u4ed8",
    "precision": "2"
+  },
+  {
+   "default": "1",
+   "fieldname": "no_tex",
+   "fieldtype": "Check",
+   "label": "No Tex"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-08-23 02:55:06.734422",
+ "modified": "2025-08-25 12:25:02.906333",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Patent Workflow",

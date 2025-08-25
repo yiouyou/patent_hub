@@ -137,9 +137,16 @@ def _job(doctype: str, docname: str, task_key: str, *, force: bool = False):
 			return
 
 		# 读取必要输入（避免长事务）
-		patent_title, application = frappe.db.get_value(DOCTYPE, docname, ["patent_title", "application"])
+		patent_title, application, no_tex = frappe.db.get_value(
+			DOCTYPE, docname, ["patent_title", "application", "no_tex"]
+		)
 		if not isinstance(application, str) or not application.strip():
 			raise ValueError("缺少 application 内容")
+
+		# 规整为字符串，保证是 "0" 或 "1"
+		no_tex_val = "1"
+		if no_tex in (0, "0", False):
+			no_tex_val = "0"
 
 		# API 目标与 payload（不在事务中）
 		api_endpoint = frappe.get_single("API Endpoint")
@@ -158,6 +165,7 @@ def _job(doctype: str, docname: str, task_key: str, *, force: bool = False):
 				"patent_title": patent_title,
 				"base64file": text_to_base64(application),
 				"tmp_folder": tmp_folder,
+				"no_tex": no_tex_val,  # 字符串 "0"/"1"
 			}
 		}
 
