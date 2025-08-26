@@ -257,7 +257,6 @@ def detect_and_reset_stuck_task(task_key: str, label: str, doctype: str, timeout
 			setattr(_doc, is_running_field, 0)
 			setattr(_doc, status_field, "Failed")
 
-			# 区分是心跳超时还是启动超时
 			timeout_type = "心跳" if doc.get(heartbeat_field) else "启动"
 			_doc.append(
 				"comments",
@@ -268,11 +267,19 @@ def detect_and_reset_stuck_task(task_key: str, label: str, doctype: str, timeout
 			)
 			_doc.save()
 			frappe.db.commit()
-			# ✅ 实时广播失败
+			# ✅ 实时广播失败（带房间 + after_commit）
 			try:
 				frappe.publish_realtime(
-					f"{task_key}_failed",
-					{"docname": _doc.name, "doctype": doctype, "error": f"{label}{timeout_type}超时"},
+					event=f"{task_key}_failed",
+					message={
+						"docname": _doc.name,
+						"doctype": doctype,
+						"error": f"{label}{timeout_type}超时",
+						"step": task_key,
+					},
+					doctype=doctype,
+					docname=_doc.name,
+					after_commit=True,
 				)
 			except Exception as e:
 				logger.error(f"[{label}] publish_realtime 失败: {e}")
@@ -414,7 +421,13 @@ def complete_task_fields(
 
 	if push_realtime:
 		try:
-			frappe.publish_realtime(f"{task_key}_done", {"docname": doc.name, "doctype": doc.doctype})
+			frappe.publish_realtime(
+				event=f"{task_key}_done",
+				message={"docname": doc.name, "doctype": doc.doctype, "step": task_key},
+				doctype=doc.doctype,
+				docname=doc.name,
+				after_commit=True,
+			)
 		except Exception as e:
 			logger.error(f"[{task_key}] publish_realtime(_done) 失败: {e}")
 
@@ -442,8 +455,11 @@ def fail_task_fields(doc, task_key: str, error: str = None, logger=logger, push_
 	if push_realtime:
 		try:
 			frappe.publish_realtime(
-				f"{task_key}_failed",
-				{"docname": doc.name, "doctype": doc.doctype, "error": error_msg},
+				event=f"{task_key}_failed",
+				message={"docname": doc.name, "doctype": doc.doctype, "error": error_msg, "step": task_key},
+				doctype=doc.doctype,
+				docname=doc.name,
+				after_commit=True,
 			)
 		except Exception as e:
 			logger.error(f"[{task_key}] publish_realtime(_failed) 失败: {e}")
@@ -459,10 +475,14 @@ def cancel_task(docname: str, task_key: str, doctype: str):
 	fail_task_fields(doc, task_key, "任务被用户强制终止")
 	frappe.db.commit()
 
-	# 广播实时失败事件（fail_task_fields 已做，这里容错再发一次）
+	# 广播实时失败事件（容错再次发送；带房间 + after_commit）
 	try:
 		frappe.publish_realtime(
-			f"{task_key}_failed", {"docname": docname, "doctype": doctype, "error": "任务被用户强制终止"}
+			event=f"{task_key}_failed",
+			message={"docname": docname, "doctype": doctype, "error": "任务被用户强制终止", "step": task_key},
+			doctype=doctype,
+			docname=docname,
+			after_commit=True,
 		)
 	except Exception as e:
 		logger.error(f"[{task_key}] publish_realtime(cancel) 失败: {e}")
