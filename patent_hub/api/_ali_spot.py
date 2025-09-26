@@ -16,7 +16,7 @@ logger.setLevel(logging.INFO)
 ALIYUN_CONFIG = {
 	"region": "us-west-1",
 	"zone_id": "us-west-1b",
-	"image_id": "m-rj9fgzzfoe0robnldsap",
+	"image_id": "m-rj93w2was4jdlx4ug7qi",
 	"instance_type": [
 		"ecs.n1.medium",
 		"ecs.sn1.medium",
