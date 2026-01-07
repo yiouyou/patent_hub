@@ -13,11 +13,14 @@
   {
    "fieldname": "file",
    "fieldtype": "Attach",
-   "label": "File"
+   "in_list_view": 1,
+   "label": "File",
+   "reqd": 1
   },
   {
    "fieldname": "note",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Note"
   }
  ],
@@ -25,7 +28,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-07-22 13:50:34.446118",
+ "modified": "2026-01-06 20:22:39.671674",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Patent Workflow Upload File",
