@@ -53,6 +53,8 @@
   "total_cost_title2scene",
   "column_break_xwbf",
   "total_time_s_title2scene",
+  "scene_section",
+  "scene_deepsearch",
   "section_break_prwl",
   "title2scene_id",
   "title2scene_started_at",
@@ -1721,19 +1723,31 @@
   {
    "fieldname": "title",
    "fieldtype": "Data",
-   "label": "Title"
+   "label": "Title",
+   "read_only": 1
   },
   {
    "fieldname": "patent_domain",
    "fieldtype": "Select",
    "label": "Patent Domain",
    "options": "\u901a\u7528\u9886\u57df\n\u751f\u5316\u533b\u836f\n\u6570\u636e\u7b97\u6cd5"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "scene_section",
+   "fieldtype": "Section Break",
+   "label": "Scene"
+  },
+  {
+   "fieldname": "scene_deepsearch",
+   "fieldtype": "Long Text",
+   "label": "Scene Deepsearch"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-01-12 04:28:10.843871",
+ "modified": "2026-01-12 06:22:53.400568",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Patent Workflow",
