@@ -29,6 +29,8 @@
   "patent_id",
   "current_stage",
   "tab_title2scene",
+  "title",
+  "patent_domain",
   "section_break_wwdu",
   "call_title2scene",
   "column_break_tpwh",
@@ -1715,12 +1717,23 @@
    "fieldname": "no_tex",
    "fieldtype": "Check",
    "label": "No Tex"
+  },
+  {
+   "fieldname": "title",
+   "fieldtype": "Data",
+   "label": "Title"
+  },
+  {
+   "fieldname": "patent_domain",
+   "fieldtype": "Select",
+   "label": "Patent Domain",
+   "options": "\u901a\u7528\u9886\u57df\n\u751f\u5316\u533b\u836f\n\u6570\u636e\u7b97\u6cd5"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-08-25 12:25:02.906333",
+ "modified": "2026-01-12 04:28:10.843871",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Patent Workflow",
