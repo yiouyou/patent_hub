@@ -282,7 +282,6 @@ def _process_api_result(docname: str, result: dict, user: str | None = None):
 		# 字段映射
 		field_mapping = {
 			"scene_deepsearch": "scene_deepsearch",
-			"scene": "scene",
 		}
 
 		# 批量回填
