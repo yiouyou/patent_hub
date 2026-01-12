@@ -8,14 +8,10 @@ from typing import Any
 import frappe
 import httpx
 
-from patent_hub.api._utils import (
-	complete_task_fields,
-	enqueue_long_task,
-	fail_task_fields,
-	init_task_fields,
-	universal_decompress,
-	update_task_heartbeat,
-)
+from patent_hub.api._utils import (complete_task_fields, enqueue_long_task,
+                                   fail_task_fields, init_task_fields,
+                                   universal_compress, universal_decompress,
+                                   update_task_heartbeat)
 
 # 配置
 logger = frappe.logger("app.patent_hub.patent_wf.call_title2scene")
@@ -145,10 +141,21 @@ def _job(doctype: str, docname: str, task_key: str, *, force: bool = False):
 			raise ValueError("未找到任务 step_id")
 
 		tmp_folder = os.path.join(api_endpoint.get_password("server_work_dir"), step_id)
+
+		# 读取必要字段
+		title = frappe.db.get_value(DOCTYPE, docname, "title")
+		patent_domain = frappe.db.get_value(DOCTYPE, docname, "patent_domain")
+
+		# 中间文件
+		doc = frappe.get_doc(DOCTYPE, docname)
+		mid_files = _get_title2scene_mid_files(doc)
+
 		payload = {
 			"input": {
-				"patent_title": frappe.db.get_value(DOCTYPE, docname, "patent_title"),
+				"patent_title": title,
+				"patent_domain": patent_domain,
 				"tmp_folder": tmp_folder,
+				"mid_files": universal_compress(mid_files),
 			}
 		}
 
@@ -272,8 +279,22 @@ def _process_api_result(docname: str, result: dict, user: str | None = None):
 
 		res_data = universal_decompress(output.get("res", ""), as_json=True) or {}
 
-		# 写回业务字段
-		doc.scene = res_data.get("scene")
+		# 字段映射
+		field_mapping = {
+			"scene_deepsearch": "scene_deepsearch",
+			"scene": "scene",
+		}
+
+		# 批量回填
+		for api_field, doc_field in field_mapping.items():
+			if api_field in res_data:
+				value = res_data.get(api_field)
+				if value is not None:
+					doc.set(doc_field, value)
+		
+		# 提供给下一步
+		if res_data.get("scene_deepsearch"):
+			doc.scene = res_data.get("scene_deepsearch")
 
 		# 统一完成（会自动 publish_realtime: title2scene_done）
 		complete_task_fields(
@@ -296,3 +317,22 @@ def _handle_task_failure(docname: str, error_msg: str):
 			fail_task_fields(doc, TASK_KEY, error_msg)
 	except Exception as save_error:
 		logger.error(f"[{TASK_LABEL}] 保存失败状态时出错: {save_error}")
+
+
+# -------------------------------
+# 中间文件收集
+# -------------------------------
+def _get_title2scene_mid_files(doc) -> list[dict]:
+	"""获取 title2scene 中间文件"""
+	field_to_filename = {
+		"scene_deepsearch": "scene_deepsearch.txt",
+	}
+
+	files = []
+	for field, filename in field_to_filename.items():
+		content = getattr(doc, field, "")
+		if isinstance(content, str) and content.strip():
+			files.append({"content": content, "original_filename": filename})
+
+	logger.info(f"[{TASK_LABEL}] 找到 {len(files)} 个中间文件")
+	return files
