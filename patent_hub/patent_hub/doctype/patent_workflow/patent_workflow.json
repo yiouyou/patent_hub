@@ -1582,7 +1582,7 @@
    "fieldname": "current_stage",
    "fieldtype": "Select",
    "label": "Current Stage",
-   "options": "\n\u4e13\u5229\u9898\u76ee\u2192\u5e94\u7528\u5206\u6790\uff08Title2Scene\uff09\n\u5e94\u7528\u5206\u6790\u2192\u6280\u672f\u4ea4\u5e95\uff08Scene2Tech\n\u8865\u5145\u6750\u6599\u2192\u6280\u672f\u4ea4\u5e95\uff08Info2Tech\uff09\n\u6280\u672f\u4ea4\u5e95\u2192\u7533\u8bf7txt\uff08Tech2Application\uff09\n\u7533\u8bf7txt\u2192\u7533\u8bf7docx\uff08Align2Tex2Docx\uff09\n\u6821\u5bf9\u4e2d\n\u5ba1\u67e5\u4e2d\n\u5df2\u5b8c\u6210",
+   "options": "\n\u4e13\u5229\u9898\u76ee\u2192\u5e94\u7528\u5206\u6790\uff08Title2Scene\uff09\n\u5e94\u7528\u5206\u6790\u2192\u6280\u672f\u4ea4\u5e95\uff08Scene2Tech\uff09\n\u8865\u5145\u6750\u6599\u2192\u6280\u672f\u4ea4\u5e95\uff08Info2Tech\uff09\n\u6280\u672f\u4ea4\u5e95\u2192\u7533\u8bf7txt\uff08Tech2Application\uff09\n\u7533\u8bf7txt\u2192\u7533\u8bf7docx\uff08Align2Tex2Docx\uff09\n\u6821\u5bf9\u4e2d\n\u5ba1\u67e5\u4e2d\n\u5df2\u5b8c\u6210",
    "read_only": 1
   },
   {
@@ -1747,7 +1747,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-01-12 06:22:53.400568",
+ "modified": "2026-01-12 10:04:43.067764",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Patent Workflow",

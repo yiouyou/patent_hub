@@ -12,7 +12,7 @@ class PatentWorkflow(Document):
 		# 自动生成主键和 patent_id：PAT-YYYYMMDD-##
 		self.name = make_autoname("PAT-.YYYY.MM.DD.-.##")
 		self.patent_id = self.name
-	
+
 	def before_insert(self):
 		if not self.writer_id:
 			frappe.throw(_("Writer ID is required to generate Patent Workflow"))
