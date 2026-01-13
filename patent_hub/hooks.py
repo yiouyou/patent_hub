@@ -30,7 +30,7 @@ fixtures = [
 	},
 	# {"dt": "Client Script", "filters": [["name", "in", []]]},
 	# 工作区和仪表盘
-	{"dt": "Workspace", "filters": [["name", "in", ["Patent WF"]]]},
+	# {"dt": "Workspace", "filters": [["name", "in", ["Patent WF"]]]},
 	{
 		"dt": "Dashboard Chart",
 		"filters": [
