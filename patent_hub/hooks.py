@@ -28,7 +28,7 @@ fixtures = [
 			["name", "in", ["Sync Patent Writer and User - Add", "Sync Patent Writer and User - Del"]]
 		],
 	},
-	{"dt": "Client Script", "filters": [["name", "in", []]]},
+	# {"dt": "Client Script", "filters": [["name", "in", []]]},
 	# 工作区和仪表盘
 	{"dt": "Workspace", "filters": [["name", "in", ["Patent WF"]]]},
 	{
@@ -55,13 +55,6 @@ fixtures = [
 		"dt": "Report",
 		"filters": [["name", "in", ["Cost Distribution by Step", "Writer Patent Cost Summary"]]],
 	},
-	# 物料与库存（目前为空）
-	{"dt": "UOM", "filters": [["name", "in", []]]},
-	{"dt": "UOM Category", "filters": [["name", "in", []]]},
-	{"dt": "UOM Conversion Factor", "filters": [["from_uom", "in", []]]},
-	{"dt": "Warehouse", "filters": [["name", "in", []]]},
-	{"dt": "Item Group", "filters": [["name", "in", []]]},
-	{"dt": "Item", "filters": [["item_code", "in", []]]},
 ]
 
 

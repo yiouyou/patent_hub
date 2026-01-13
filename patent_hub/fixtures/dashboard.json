@@ -5,51 +5,30 @@
   "charts": [
    {
     "chart": "Total Task",
-    "parent": "Patent Workflow Dashboard",
-    "parentfield": "charts",
-    "parenttype": "Dashboard",
     "width": "Half"
    },
    {
     "chart": "Total Done",
-    "parent": "Patent Workflow Dashboard",
-    "parentfield": "charts",
-    "parenttype": "Dashboard",
     "width": "Half"
    },
    {
     "chart": "Total Paid",
-    "parent": "Patent Workflow Dashboard",
-    "parentfield": "charts",
-    "parenttype": "Dashboard",
     "width": "Half"
    },
    {
     "chart": "Total Unpaid",
-    "parent": "Patent Workflow Dashboard",
-    "parentfield": "charts",
-    "parenttype": "Dashboard",
     "width": "Half"
    },
    {
     "chart": "Top Agency",
-    "parent": "Patent Workflow Dashboard",
-    "parentfield": "charts",
-    "parenttype": "Dashboard",
     "width": "Half"
    },
    {
     "chart": "Top Writer",
-    "parent": "Patent Workflow Dashboard",
-    "parentfield": "charts",
-    "parenttype": "Dashboard",
     "width": "Half"
    },
    {
     "chart": "Step Avg Cost",
-    "parent": "Patent Workflow Dashboard",
-    "parentfield": "charts",
-    "parenttype": "Dashboard",
     "width": "Half"
    }
   ],

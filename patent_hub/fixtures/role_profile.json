@@ -7,9 +7,6 @@
   "role_profile": "Patent Writer",
   "roles": [
    {
-    "parent": "Patent Writer",
-    "parentfield": "roles",
-    "parenttype": "Role Profile",
     "role": "Patent Writer"
    }
   ]

@@ -23,15 +23,9 @@
   "report_type": "Script Report",
   "roles": [
    {
-    "parent": "Writer Patent Cost Summary",
-    "parentfield": "roles",
-    "parenttype": "Report",
     "role": "System Manager"
    },
    {
-    "parent": "Writer Patent Cost Summary",
-    "parentfield": "roles",
-    "parenttype": "Report",
     "role": "Patent Writer"
    }
   ],
@@ -61,15 +55,9 @@
   "report_type": "Script Report",
   "roles": [
    {
-    "parent": "Cost Distribution by Step",
-    "parentfield": "roles",
-    "parenttype": "Report",
     "role": "System Manager"
    },
    {
-    "parent": "Cost Distribution by Step",
-    "parentfield": "roles",
-    "parenttype": "Report",
     "role": "Patent Writer"
    }
   ],
