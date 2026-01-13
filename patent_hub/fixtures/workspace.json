@@ -45,7 +45,7 @@
   "link_to": null,
   "link_type": null,
   "links": [],
-  "modified": "2025-08-23 01:13:53.958890",
+  "modified": "2026-01-13 13:27:53.616951",
   "module": "Patent Hub",
   "name": "Patent WF",
   "number_cards": [],
@@ -169,6 +169,6 @@
    }
   ],
   "title": "Patent WF",
-  "type": "Module"
+  "type": "Workspace"
  }
 ]
