@@ -80,7 +80,7 @@
    {
     "document_type": "Patent Workflow",
     "label": "Pending Start",
-    "quick_list_filter": "[[\"Patent Workflow\",\"run_count_title2scene\",\"=\",0,false],[\"Patent Workflow\",\"run_count_info2tech\",\"=\",0,false]]"
+    "quick_list_filter": "[[\"run_count_title2scene\",\"=\",0],[\"run_count_info2tech\",\"=\",0]]"
    },
    {
     "document_type": "Patent Workflow",
