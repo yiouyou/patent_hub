@@ -32,6 +32,7 @@ fixtures = [
 	# 工作区和仪表盘
 	{"dt": "Workspace", "filters": [["name", "in", ["Patent WF"]]]},
 	{"dt": "Workspace Sidebar", "filters": [["name", "in", ["Patent WF"]]]},
+	{"dt": "Desktop Icon", "filters": [["name", "in", ["Patent WF"]]]},
 	{
 		"dt": "Dashboard Chart",
 		"filters": [
