@@ -15,7 +15,7 @@ from frappe.utils import add_to_date, now_datetime
 logger = frappe.logger("app_patent_hub")
 logger.setLevel(logging.INFO)
 
-TIMEOUT = 1800
+TIMEOUT = 4000
 
 
 @frappe.whitelist()
