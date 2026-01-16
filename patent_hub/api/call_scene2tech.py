@@ -8,26 +8,20 @@ from typing import Any
 import frappe
 import httpx
 
-from patent_hub.api._utils import (
-	complete_task_fields,
-	enqueue_long_task,
-	fail_task_fields,
-	init_task_fields,
-	text_to_base64,
-	universal_compress,
-	universal_decompress,
-	update_task_heartbeat,
-)
+from patent_hub.api._utils import (complete_task_fields, enqueue_long_task,
+                                   fail_task_fields, init_task_fields,
+                                   text_to_base64, universal_compress,
+                                   universal_decompress, update_task_heartbeat)
 
 # 日志
 logger = frappe.logger("app.patent_hub.patent_wf.call_scene2tech")
 # logger.setLevel(logging.DEBUG)
 
 # 队列任务最大执行时长（秒）
-TIMEOUT = 1800
+TIMEOUT = 4000
 
 HTTP_CONFIG = {
-	"timeout": httpx.Timeout(connect=10.0, read=300.0, write=30.0, pool=30.0),
+	"timeout": httpx.Timeout(connect=10.0, read=3600.0, write=30.0, pool=30.0),
 	"limits": httpx.Limits(max_keepalive_connections=5, max_connections=10, keepalive_expiry=30.0),
 	"headers": {
 		"User-Agent": "PatentHub/1.0",
