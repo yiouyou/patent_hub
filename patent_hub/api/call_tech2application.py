@@ -8,10 +8,16 @@ from typing import Any
 import frappe
 import httpx
 
-from patent_hub.api._utils import (complete_task_fields, enqueue_long_task,
-                                   fail_task_fields, init_task_fields,
-                                   text_to_base64, universal_compress,
-                                   universal_decompress, update_task_heartbeat)
+from patent_hub.api._utils import (
+	complete_task_fields,
+	enqueue_long_task,
+	fail_task_fields,
+	init_task_fields,
+	text_to_base64,
+	universal_compress,
+	universal_decompress,
+	update_task_heartbeat,
+)
 
 # 日志
 logger = frappe.logger("app.patent_hub.patent_wf.call_tech2application")
@@ -288,7 +294,7 @@ def _process_api_result(docname: str, result: dict, user: str | None = None):
 			"claim_structure_blueprint": "claim_structure_blueprint",
 			"innovation_and_science_gate_result": "innovation_and_science_gate_result",
 			"claims_full_draft": "claims_full_draft",
-			"claims_compliance_and_format_checked": "claims_compliance_and_format_checked",
+			"claims_format_corrected": "claims_format_corrected",
 			"description_initial": "description_initial",
 			"description_issue_analysis": "description_issue_analysis",
 			"description_revised_0": "description_revised_0",
@@ -362,7 +368,7 @@ def _get_tech2application_mid_files(doc) -> list[dict]:
 		"claim_structure_blueprint": "4.2_claim_structure_blueprint.txt",
 		"innovation_and_science_gate_result": "4.3_innovation_and_science_gate_result.txt",
 		"claims_full_draft": "4.4_claims_full_draft.txt",
-		"claims_compliance_and_format_checked": "4.5_claims_compliance_and_format_checked.txt",
+		"claims_format_corrected": "4.5_claims_format_corrected.txt",
 		"description_initial": "5.1_description_initial.txt",
 		"description_issue_analysis": "5.2_description_issue_analysis.txt",
 		"description_revised_0": "5.3_description_revised_0.txt",

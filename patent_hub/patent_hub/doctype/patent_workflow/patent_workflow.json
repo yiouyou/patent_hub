@@ -176,12 +176,11 @@
   "claims_science_optimized",
   "claims_insufficiency_analysis",
   "claims_insufficiency_optimized",
-  "claims_format_corrected",
   "strategic_innovation_plan",
   "claim_structure_blueprint",
   "innovation_and_science_gate_result",
   "claims_full_draft",
-  "claims_compliance_and_format_checked",
+  "claims_format_corrected",
   "description_section",
   "description_initial",
   "description_issue_analysis",
@@ -429,7 +428,6 @@
   {
    "fieldname": "claims_format_corrected",
    "fieldtype": "Long Text",
-   "hidden": 1,
    "label": "claims format corrected"
   },
   {
@@ -1784,11 +1782,6 @@
    "label": "claims full draft"
   },
   {
-   "fieldname": "claims_compliance_and_format_checked",
-   "fieldtype": "Long Text",
-   "label": "claims compliance and format checked"
-  },
-  {
    "fieldname": "description_issue_analysis",
    "fieldtype": "Long Text",
    "label": "description issue analysis"
@@ -1822,7 +1815,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-01-17 08:36:55.449357",
+ "modified": "2026-01-17 09:27:21.227195",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Patent Workflow",
