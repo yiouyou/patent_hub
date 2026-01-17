@@ -177,12 +177,23 @@
   "claims_insufficiency_analysis",
   "claims_insufficiency_optimized",
   "claims_format_corrected",
+  "strategic_innovation_plan",
+  "claim_structure_blueprint",
+  "innovation_and_science_gate_result",
+  "claims_full_draft",
+  "claims_compliance_and_format_checked",
   "description_section",
   "description_initial",
+  "description_issue_analysis",
+  "description_revised_0",
+  "qa_check_0",
+  "description_revised_1",
+  "qa_check_1",
   "description_innovation_analysis",
   "description_innovation_optimized",
   "description_science_analysis",
   "description_science_optimized",
+  "description",
   "description_abstract",
   "application_section",
   "merged_application",
@@ -394,26 +405,31 @@
   {
    "fieldname": "claims_plan",
    "fieldtype": "Long Text",
+   "hidden": 1,
    "label": "claims plan"
   },
   {
    "fieldname": "claims_science_optimized",
    "fieldtype": "Long Text",
+   "hidden": 1,
    "label": "claims science optimized"
   },
   {
    "fieldname": "claims_insufficiency_analysis",
    "fieldtype": "Long Text",
+   "hidden": 1,
    "label": "claims insufficiency analysis"
   },
   {
    "fieldname": "claims_insufficiency_optimized",
    "fieldtype": "Long Text",
+   "hidden": 1,
    "label": "claims insufficiency optimized"
   },
   {
    "fieldname": "claims_format_corrected",
    "fieldtype": "Long Text",
+   "hidden": 1,
    "label": "claims format corrected"
   },
   {
@@ -424,21 +440,25 @@
   {
    "fieldname": "description_innovation_analysis",
    "fieldtype": "Long Text",
+   "hidden": 1,
    "label": "description innovation analysis"
   },
   {
    "fieldname": "description_innovation_optimized",
    "fieldtype": "Long Text",
+   "hidden": 1,
    "label": "description innovation optimized"
   },
   {
    "fieldname": "description_science_analysis",
    "fieldtype": "Long Text",
+   "hidden": 1,
    "label": "description science analysis"
   },
   {
    "fieldname": "description_science_optimized",
    "fieldtype": "Long Text",
+   "hidden": 1,
    "label": "description science optimized"
   },
   {
@@ -1742,12 +1762,67 @@
    "fieldname": "scene_deepsearch",
    "fieldtype": "Long Text",
    "label": "Scene Deepsearch"
+  },
+  {
+   "fieldname": "strategic_innovation_plan",
+   "fieldtype": "Long Text",
+   "label": "strategic innovation plan"
+  },
+  {
+   "fieldname": "claim_structure_blueprint",
+   "fieldtype": "Long Text",
+   "label": "claim structure blueprint"
+  },
+  {
+   "fieldname": "innovation_and_science_gate_result",
+   "fieldtype": "Long Text",
+   "label": "innovation and science gate result"
+  },
+  {
+   "fieldname": "claims_full_draft",
+   "fieldtype": "Long Text",
+   "label": "claims full draft"
+  },
+  {
+   "fieldname": "claims_compliance_and_format_checked",
+   "fieldtype": "Long Text",
+   "label": "claims compliance and format checked"
+  },
+  {
+   "fieldname": "description_issue_analysis",
+   "fieldtype": "Long Text",
+   "label": "description issue analysis"
+  },
+  {
+   "fieldname": "description_revised_0",
+   "fieldtype": "Long Text",
+   "label": "description revised 0"
+  },
+  {
+   "fieldname": "qa_check_0",
+   "fieldtype": "Long Text",
+   "label": "qa check 0"
+  },
+  {
+   "fieldname": "description_revised_1",
+   "fieldtype": "Long Text",
+   "label": "description revised 1"
+  },
+  {
+   "fieldname": "qa_check_1",
+   "fieldtype": "Long Text",
+   "label": "qa check 1"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Long Text",
+   "label": "description"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-01-12 10:04:43.067764",
+ "modified": "2026-01-17 08:36:55.449357",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Patent Workflow",
