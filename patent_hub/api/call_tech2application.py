@@ -8,16 +8,10 @@ from typing import Any
 import frappe
 import httpx
 
-from patent_hub.api._utils import (
-	complete_task_fields,
-	enqueue_long_task,
-	fail_task_fields,
-	init_task_fields,
-	text_to_base64,
-	universal_compress,
-	universal_decompress,
-	update_task_heartbeat,
-)
+from patent_hub.api._utils import (complete_task_fields, enqueue_long_task,
+                                   fail_task_fields, init_task_fields,
+                                   text_to_base64, universal_compress,
+                                   universal_decompress, update_task_heartbeat)
 
 # 日志
 logger = frappe.logger("app.patent_hub.patent_wf.call_tech2application")
