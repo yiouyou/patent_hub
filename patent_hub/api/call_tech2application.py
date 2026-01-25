@@ -300,8 +300,8 @@ def _process_api_result(docname: str, result: dict, user: str | None = None):
 			"claims": "claims",
 			"description": "description",
 			"description_abstract": "description_abstract",
-			"merged_application": "merged_application",
-			"refined_technical_solution": "refined_technical_solution",
+			# "merged_application": "merged_application",
+			# "refined_technical_solution": "refined_technical_solution",
 			"final_application": "final_application",
 		}
 
@@ -368,11 +368,11 @@ def _get_tech2application_mid_files(doc) -> list[dict]:
 		"claims_format_corrected": "4.5_claims_format_corrected.txt",
 		"description_initial": "5.1_description_initial.txt",
 		"description_issue_analysis": "5.2_description_issue_analysis.txt",
-		"claims": "5.5_claims.txt",
-		"description": "5.5_description.txt",
-		"description_abstract": "5.5_description_abstract.txt",
-		"merged_application": "6_merged_application.txt",
-		"refined_technical_solution": "7_refined_technical_solution.txt",
+		"claims": "5.6_claims.txt",
+		"description": "5.6_description.txt",
+		"description_abstract": "5.7_description_abstract.txt",
+		# "merged_application": "6_merged_application.txt",
+		# "refined_technical_solution": "7_refined_technical_solution.txt",
 		"final_application": "application.txt",
 	}
 
