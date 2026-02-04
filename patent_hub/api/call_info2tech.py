@@ -8,10 +8,16 @@ from typing import Any
 import frappe
 import httpx
 
-from patent_hub.api._utils import (complete_task_fields, enqueue_long_task,
-                                   fail_task_fields, get_attached_files,
-                                   init_task_fields, universal_compress,
-                                   universal_decompress, update_task_heartbeat)
+from patent_hub.api._utils import (
+	complete_task_fields,
+	enqueue_long_task,
+	fail_task_fields,
+	get_attached_files,
+	init_task_fields,
+	universal_compress,
+	universal_decompress,
+	update_task_heartbeat,
+)
 
 # 日志
 logger = frappe.logger("app.patent_hub.patent_wf.call_info2tech")
@@ -263,8 +269,8 @@ def _process_api_result(docname: str, result: dict, user: str | None = None):
 		res_data = universal_decompress(output.get("res", ""), as_json=True) or {}
 
 		# 回填核心字段
-		if "tech" in res_data:
-			doc.tech = res_data.get("tech")
+		if "info_tech" in res_data:
+			doc.info_tech = res_data.get("info_tech")
 
 		# 统一完成（会自动 publish_realtime: info2tech_done）
 		complete_task_fields(

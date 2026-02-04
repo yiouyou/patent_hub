@@ -85,6 +85,8 @@
   "total_cost_info2tech",
   "column_break_osuy",
   "total_time_s_info2tech",
+  "tech_section_info2tech",
+  "info_tech",
   "section_break_stmk",
   "info2tech_id",
   "info2tech_started_at",
@@ -129,11 +131,11 @@
   "design_10",
   "design_11",
   "innovation_evaluation",
-  "tech_section",
+  "tech_section_scene2tech",
+  "patentability_analysis_scene",
   "patent_tech",
   "validation_report",
   "final_tech",
-  "patentability_analysis_scene",
   "section_break_ptbh",
   "scene2tech_id",
   "scene2tech_started_at",
@@ -165,10 +167,10 @@
   "column_break_aptu",
   "total_time_s_tech2application",
   "prior_section_tech2application",
+  "patentability_analysis_tech",
   "tech_disclosure",
   "search_keywords_tech",
   "prior_art_tech",
-  "patentability_analysis_tech",
   "prior_art_analysis",
   "diff_analysis",
   "claims_section",
@@ -226,6 +228,7 @@
   "column_break_rnbh",
   "total_time_s_align2tex2docx",
   "align_section",
+  "column_break_evpz",
   "application_align",
   "tex_section",
   "application_tex",
@@ -295,7 +298,7 @@
    "fieldtype": "Data",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "Patent Title"
+   "label": "\u4e13\u5229\u6807\u9898"
   },
   {
    "fieldname": "section_break_sgac",
@@ -316,7 +319,7 @@
   {
    "fieldname": "scene",
    "fieldtype": "Long Text",
-   "label": "Scene"
+   "label": "\u5e94\u7528\u573a\u666f"
   },
   {
    "fieldname": "core_problem_analysis",
@@ -366,7 +369,7 @@
   {
    "fieldname": "tech",
    "fieldtype": "Long Text",
-   "label": "Tech"
+   "label": "\u6280\u672f\u4ea4\u5e95"
   },
   {
    "fieldname": "search_keywords_tech",
@@ -496,40 +499,35 @@
   {
    "fieldname": "reply_review",
    "fieldtype": "Long Text",
-   "label": "Reply Review"
+   "label": "\u5ba1\u67e5\u610f\u89c1\u56de\u590d"
   },
   {
    "fieldname": "revised_application",
    "fieldtype": "Long Text",
-   "label": "Revised Application"
+   "label": "\u4fee\u6539\u540e\u7684\u7533\u8bf7md"
   },
   {
    "fieldname": "application",
    "fieldtype": "Long Text",
-   "label": "Application"
+   "label": "\u7533\u8bf7md"
   },
   {
    "collapsible": 1,
    "fieldname": "align_section",
    "fieldtype": "Section Break",
-   "label": "Align"
+   "hidden": 1,
+   "label": "\u5bf9\u9f50"
   },
   {
    "collapsible": 1,
    "fieldname": "tex_section",
    "fieldtype": "Section Break",
-   "label": "Tex"
+   "label": "Tex\u516c\u5f0f(\u5982\u6709)"
   },
   {
    "fieldname": "application_tex",
    "fieldtype": "Long Text",
    "label": "application tex"
-  },
-  {
-   "collapsible": 1,
-   "fieldname": "tech_section",
-   "fieldtype": "Section Break",
-   "label": "Tech"
   },
   {
    "fieldname": "column_break_wmpp",
@@ -540,19 +538,19 @@
    "collapsible": 1,
    "fieldname": "application_section",
    "fieldtype": "Section Break",
-   "label": "Application"
+   "label": "\u7533\u8bf7md"
   },
   {
    "collapsible": 1,
    "fieldname": "description_section",
    "fieldtype": "Section Break",
-   "label": "Description"
+   "label": "\u8bf4\u660e\u4e66"
   },
   {
    "collapsible": 1,
    "fieldname": "claims_section",
    "fieldtype": "Section Break",
-   "label": "Claims"
+   "label": "\u6743\u5229\u8981\u6c42\u4e66"
   },
   {
    "fieldname": "column_break_utxs",
@@ -621,7 +619,7 @@
   {
    "fieldname": "status_section_scene2tech",
    "fieldtype": "Section Break",
-   "label": "Status"
+   "label": "\u8fd0\u884c\u72b6\u6001"
   },
   {
    "fieldname": "column_break_ogxf",
@@ -638,7 +636,7 @@
   {
    "fieldname": "status_section_align2tex2docx",
    "fieldtype": "Section Break",
-   "label": "Status"
+   "label": "\u8fd0\u884c\u72b6\u6001"
   },
   {
    "default": "0",
@@ -685,7 +683,7 @@
   {
    "fieldname": "status_section_review2revise",
    "fieldtype": "Section Break",
-   "label": "Status"
+   "label": "\u8fd0\u884c\u72b6\u6001"
   },
   {
    "default": "0",
@@ -720,7 +718,7 @@
   {
    "fieldname": "status_section_tech2application",
    "fieldtype": "Section Break",
-   "label": "Status"
+   "label": "\u8fd0\u884c\u72b6\u6001"
   },
   {
    "default": "0",
@@ -762,30 +760,24 @@
    "collapsible": 1,
    "fieldname": "response_section",
    "fieldtype": "Section Break",
-   "label": "Response"
+   "label": "\u7b54\u590d"
   },
   {
    "fieldname": "status_section_all",
    "fieldtype": "Section Break",
-   "label": "Status"
-  },
-  {
-   "collapsible": 1,
-   "fieldname": "innovation_section",
-   "fieldtype": "Section Break",
-   "label": "Innovation"
+   "label": "\u8fd0\u884c\u72b6\u6001"
   },
   {
    "collapsible": 1,
    "fieldname": "prior_section_scene2tech",
    "fieldtype": "Section Break",
-   "label": "Prior"
+   "label": "\u73b0\u6709\u6280\u672f"
   },
   {
    "collapsible": 1,
    "fieldname": "prior_section_tech2application",
    "fieldtype": "Section Break",
-   "label": "Prior"
+   "label": "\u73b0\u6709\u6280\u672f"
   },
   {
    "fieldname": "upload_section_proofreading",
@@ -795,7 +787,7 @@
   {
    "fieldname": "upload_section_review2revise",
    "fieldtype": "Section Break",
-   "label": "Upload Review"
+   "label": "\u4e0a\u4f20\u5ba1\u67e5\u610f\u89c1"
   },
   {
    "fieldname": "table_upload_info2tech",
@@ -848,32 +840,32 @@
   {
    "fieldname": "call_title2scene",
    "fieldtype": "Button",
-   "label": "Call Title2Scene"
+   "label": "\u542f\u52a8\u6d41\u7a0b"
   },
   {
    "fieldname": "call_info2tech",
    "fieldtype": "Button",
-   "label": "Call Info2Tech"
+   "label": "\u542f\u52a8\u6d41\u7a0b"
   },
   {
    "fieldname": "call_scene2tech",
    "fieldtype": "Button",
-   "label": "Call Scene2Tech"
+   "label": "\u542f\u52a8\u6d41\u7a0b"
   },
   {
    "fieldname": "call_tech2application",
    "fieldtype": "Button",
-   "label": "Call Tech2Application"
+   "label": "\u542f\u52a8\u6d41\u7a0b"
   },
   {
    "fieldname": "call_align2tex2docx",
    "fieldtype": "Button",
-   "label": "Call Align2Tex2Docx"
+   "label": "\u542f\u52a8\u6d41\u7a0b"
   },
   {
    "fieldname": "call_review2revise",
    "fieldtype": "Button",
-   "label": "Call Review2Revise"
+   "label": "\u542f\u52a8\u6d41\u7a0b"
   },
   {
    "fieldname": "patent_tech",
@@ -888,12 +880,12 @@
   {
    "fieldname": "patentability_analysis_scene",
    "fieldtype": "Long Text",
-   "label": "patentability analysis"
+   "label": "\u53ef\u4e13\u5229\u6027\u5206\u6790"
   },
   {
    "fieldname": "patentability_analysis_tech",
    "fieldtype": "Long Text",
-   "label": "patentability analysis"
+   "label": "\u53ef\u4e13\u5229\u6027\u5206\u6790"
   },
   {
    "fieldname": "tech_disclosure",
@@ -914,7 +906,7 @@
    "collapsible": 1,
    "fieldname": "figures_section",
    "fieldtype": "Section Break",
-   "label": "Figures"
+   "label": "\u9644\u56fe\u4ee3\u7801"
   },
   {
    "fieldname": "tech2application_id",
@@ -997,41 +989,43 @@
   {
    "fieldname": "tab_title2scene",
    "fieldtype": "Tab Break",
-   "label": "Title2Scene"
+   "label": "\u6807\u9898\u2192\u5e94\u7528\u573a\u666f"
   },
   {
    "fieldname": "tab_info2tech",
    "fieldtype": "Tab Break",
-   "label": "Info2Tech"
+   "label": "\u6750\u6599\u2192\u6280\u672f\u4ea4\u5e95"
   },
   {
    "fieldname": "tab_scene2tech",
    "fieldtype": "Tab Break",
-   "label": "Scene2Tech"
+   "label": "\u5e94\u7528\u573a\u666f\u2192\u6280\u672f\u4ea4\u5e95"
   },
   {
    "fieldname": "tab_tech2application",
    "fieldtype": "Tab Break",
-   "label": "Tech2Application"
+   "label": "\u6280\u672f\u4ea4\u5e95\u2192\u7533\u8bf7md"
   },
   {
    "fieldname": "tab_align2tex2docx",
    "fieldtype": "Tab Break",
-   "label": "Align2Tex2Docx"
+   "label": "\u7533\u8bf7md\u2192\u7533\u8bf7docx"
   },
   {
    "fieldname": "tab_proofreading",
    "fieldtype": "Tab Break",
+   "hidden": 1,
    "label": "Proofreading"
   },
   {
    "fieldname": "tab_review2revise",
    "fieldtype": "Tab Break",
-   "label": "Review2Revise"
+   "label": "\u5ba1\u67e5\u610f\u89c1\u2192\u56de\u590d"
   },
   {
    "fieldname": "section_break_zasr",
-   "fieldtype": "Section Break"
+   "fieldtype": "Section Break",
+   "label": "\u4e0a\u4f20\u76f8\u5173\u6750\u6599"
   },
   {
    "fieldname": "title2scene_id",
@@ -1052,17 +1046,17 @@
   {
    "fieldname": "tab_agent",
    "fieldtype": "Tab Break",
-   "label": "Agent"
+   "label": "\u4ee3\u7406\u4fe1\u606f"
   },
   {
    "fieldname": "status_section_title2scene",
    "fieldtype": "Section Break",
-   "label": "Status"
+   "label": "\u8fd0\u884c\u72b6\u6001"
   },
   {
    "fieldname": "status_section_info2tech",
    "fieldtype": "Section Break",
-   "label": "Status"
+   "label": "\u8fd0\u884c\u72b6\u6001"
   },
   {
    "fieldname": "column_break_prbn",
@@ -1459,32 +1453,32 @@
   {
    "fieldname": "cancel_title2scene",
    "fieldtype": "Button",
-   "label": "Cancel Call"
+   "label": "\u53d6\u6d88\u6d41\u7a0b"
   },
   {
    "fieldname": "cancel_info2tech",
    "fieldtype": "Button",
-   "label": "Cancel Call"
+   "label": "\u53d6\u6d88\u6d41\u7a0b"
   },
   {
    "fieldname": "cancel_scene2tech",
    "fieldtype": "Button",
-   "label": "Cancel Call"
+   "label": "\u53d6\u6d88\u6d41\u7a0b"
   },
   {
    "fieldname": "cancel_tech2application",
    "fieldtype": "Button",
-   "label": "Cancel Call"
+   "label": "\u53d6\u6d88\u6d41\u7a0b"
   },
   {
    "fieldname": "cancel_align2tex2docx",
    "fieldtype": "Button",
-   "label": "Cancel Call"
+   "label": "\u53d6\u6d88\u6d41\u7a0b"
   },
   {
    "fieldname": "cancel_review2revise",
    "fieldtype": "Button",
-   "label": "Cancel Call"
+   "label": "\u53d6\u6d88\u6d41\u7a0b"
   },
   {
    "fieldname": "section_break_wwdu",
@@ -1501,7 +1495,7 @@
   {
    "fieldname": "rerun_title2scene",
    "fieldtype": "Button",
-   "label": "Rerun Call"
+   "label": "\u91cd\u65b0\u542f\u52a8"
   },
   {
    "fieldname": "section_break_iyqo",
@@ -1518,7 +1512,7 @@
   {
    "fieldname": "rerun_info2tech",
    "fieldtype": "Button",
-   "label": "Rerun Call"
+   "label": "\u91cd\u65b0\u542f\u52a8"
   },
   {
    "fieldname": "section_break_mqwr",
@@ -1535,7 +1529,7 @@
   {
    "fieldname": "rerun_scene2tech",
    "fieldtype": "Button",
-   "label": "Rerun Call"
+   "label": "\u91cd\u65b0\u542f\u52a8"
   },
   {
    "fieldname": "section_break_yean",
@@ -1552,7 +1546,7 @@
   {
    "fieldname": "rerun_tech2application",
    "fieldtype": "Button",
-   "label": "Rerun Call"
+   "label": "\u91cd\u65b0\u542f\u52a8"
   },
   {
    "fieldname": "section_break_mnea",
@@ -1569,7 +1563,7 @@
   {
    "fieldname": "rerun_align2tex2docx",
    "fieldtype": "Button",
-   "label": "Rerun Call"
+   "label": "\u91cd\u65b0\u542f\u52a8"
   },
   {
    "fieldname": "section_break_zslv",
@@ -1593,7 +1587,7 @@
   {
    "fieldname": "rerun_review2revise",
    "fieldtype": "Button",
-   "label": "Rerun Call"
+   "label": "\u91cd\u65b0\u542f\u52a8"
   },
   {
    "fieldname": "current_stage",
@@ -1635,12 +1629,12 @@
   {
    "fieldname": "link_section_align2tex2docx",
    "fieldtype": "Section Break",
-   "label": "Link"
+   "label": "\u4e0b\u8f7d\u94fe\u63a5"
   },
   {
    "fieldname": "link_section_review2revise",
    "fieldtype": "Section Break",
-   "label": "Link"
+   "label": "\u4e0b\u8f7d\u94fe\u63a5"
   },
   {
    "fieldname": "ipc_number",
@@ -1650,12 +1644,12 @@
   {
    "fieldname": "note",
    "fieldtype": "Small Text",
-   "label": "Note"
+   "label": "\u5907\u6ce8"
   },
   {
    "fieldname": "current_application",
    "fieldtype": "Long Text",
-   "label": "Current Application"
+   "label": "\u5f53\u524d\u7533\u8bf7md"
   },
   {
    "fieldname": "section_break_reqd",
@@ -1740,25 +1734,25 @@
   {
    "fieldname": "title",
    "fieldtype": "Data",
-   "label": "Title",
+   "label": "\u6807\u9898",
    "read_only": 1
   },
   {
    "fieldname": "patent_domain",
    "fieldtype": "Select",
-   "label": "Patent Domain",
+   "label": "\u9886\u57df",
    "options": "\u901a\u7528\u9886\u57df\n\u751f\u5316\u533b\u836f\n\u6570\u636e\u7b97\u6cd5"
   },
   {
    "collapsible": 1,
    "fieldname": "scene_section",
    "fieldtype": "Section Break",
-   "label": "Scene"
+   "label": "\u5e94\u7528\u573a\u666f"
   },
   {
    "fieldname": "scene_deepsearch",
    "fieldtype": "Long Text",
-   "label": "Scene Deepsearch"
+   "label": "\u6df1\u5ea6\u7814\u7a76"
   },
   {
    "fieldname": "strategic_innovation_plan",
@@ -1794,12 +1788,40 @@
    "fieldname": "claims",
    "fieldtype": "Long Text",
    "label": "claims"
+  },
+  {
+   "fieldname": "column_break_evpz",
+   "fieldtype": "Column Break",
+   "hidden": 1
+  },
+  {
+   "fieldname": "info_tech",
+   "fieldtype": "Long Text",
+   "label": "info tech"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "tech_section_scene2tech",
+   "fieldtype": "Section Break",
+   "label": "\u6280\u672f\u4ea4\u5e95"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "innovation_section",
+   "fieldtype": "Section Break",
+   "label": "\u521b\u65b0\u63a2\u7d22"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "tech_section_info2tech",
+   "fieldtype": "Section Break",
+   "label": "\u6280\u672f\u4ea4\u5e95"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-01-25 10:19:35.222731",
+ "modified": "2026-02-04 13:03:54.242683",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Patent Workflow",
