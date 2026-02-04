@@ -241,11 +241,6 @@
   "align2tex2docx_started_at",
   "last_align2tex2docx_error",
   "align2tex2docx_last_heartbeat",
-  "tab_proofreading",
-  "proofreading_section",
-  "before_tex",
-  "upload_section_proofreading",
-  "attach_xgcu",
   "tab_review2revise",
   "upload_section_review2revise",
   "table_upload_review2revise",
@@ -283,7 +278,12 @@
   "review2revise_id",
   "review2revise_started_at",
   "last_review2revise_error",
-  "review2revise_last_heartbeat"
+  "review2revise_last_heartbeat",
+  "tab_proofreading",
+  "proofreading_section",
+  "before_tex",
+  "upload_section_proofreading",
+  "attach_xgcu"
  ],
  "fields": [
   {
@@ -763,9 +763,10 @@
    "label": "\u7b54\u590d"
   },
   {
+   "collapsible": 1,
    "fieldname": "status_section_all",
    "fieldtype": "Section Break",
-   "label": "\u8fd0\u884c\u72b6\u6001"
+   "label": "\u7cfb\u7edf\u65e5\u5fd7"
   },
   {
    "collapsible": 1,
@@ -800,12 +801,16 @@
    "options": "Patent Workflow Upload File"
   },
   {
+   "collapsible": 1,
    "fieldname": "section_break_prwl",
-   "fieldtype": "Section Break"
+   "fieldtype": "Section Break",
+   "label": "\u7cfb\u7edf\u65e5\u5fd7"
   },
   {
+   "collapsible": 1,
    "fieldname": "section_break_ptbh",
-   "fieldtype": "Section Break"
+   "fieldtype": "Section Break",
+   "label": "\u7cfb\u7edf\u65e5\u5fd7"
   },
   {
    "fieldname": "scene2tech_id",
@@ -814,12 +819,16 @@
    "read_only": 1
   },
   {
+   "collapsible": 1,
    "fieldname": "section_break_enjb",
-   "fieldtype": "Section Break"
+   "fieldtype": "Section Break",
+   "label": "\u7cfb\u7edf\u65e5\u5fd7"
   },
   {
+   "collapsible": 1,
    "fieldname": "section_break_rknc",
-   "fieldtype": "Section Break"
+   "fieldtype": "Section Break",
+   "label": "\u7cfb\u7edf\u65e5\u5fd7"
   },
   {
    "fieldname": "align2tex2docx_id",
@@ -828,8 +837,10 @@
    "read_only": 1
   },
   {
+   "collapsible": 1,
    "fieldname": "section_break_agoo",
-   "fieldtype": "Section Break"
+   "fieldtype": "Section Break",
+   "label": "\u7cfb\u7edf\u65e5\u5fd7"
   },
   {
    "fieldname": "review2revise_id",
@@ -1034,8 +1045,10 @@
    "read_only": 1
   },
   {
+   "collapsible": 1,
    "fieldname": "section_break_stmk",
-   "fieldtype": "Section Break"
+   "fieldtype": "Section Break",
+   "label": "\u7cfb\u7edf\u65e5\u5fd7"
   },
   {
    "fieldname": "info2tech_id",
@@ -1821,7 +1834,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-02-04 13:03:54.242683",
+ "modified": "2026-02-04 13:26:26.268388",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Patent Workflow",
