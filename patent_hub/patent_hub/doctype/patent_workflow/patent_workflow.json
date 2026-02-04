@@ -23,8 +23,8 @@
   "status_scene2tech",
   "status_tech2application",
   "status_align2tex2docx",
-  "status_proofreading",
   "status_review2revise",
+  "status_proofreading",
   "section_break_sgac",
   "patent_id",
   "current_stage",
@@ -1138,34 +1138,35 @@
   {
    "fieldname": "status_scene2tech",
    "fieldtype": "Select",
-   "label": "Scene2Tech",
+   "label": "\u5e94\u7528\u573a\u666f\u2192\u6280\u672f\u4ea4\u5e95",
    "options": "Pending\nRunning\nDone\nFailed",
    "read_only": 1
   },
   {
    "fieldname": "status_title2scene",
    "fieldtype": "Select",
-   "label": "Title2Scene",
+   "label": "\u6807\u9898\u2192\u5e94\u7528\u573a\u666f",
    "options": "Pending\nRunning\nDone\nFailed",
    "read_only": 1
   },
   {
    "fieldname": "status_info2tech",
    "fieldtype": "Select",
-   "label": "Info2Tech",
+   "label": "\u6750\u6599\u2192\u6280\u672f\u4ea4\u5e95",
    "options": "Pending\nRunning\nDone\nFailed",
    "read_only": 1
   },
   {
    "fieldname": "status_tech2application",
    "fieldtype": "Select",
-   "label": "Tech2Application",
+   "label": "\u6280\u672f\u4ea4\u5e95\u2192\u7533\u8bf7md",
    "options": "Pending\nRunning\nDone\nFailed",
    "read_only": 1
   },
   {
    "fieldname": "status_proofreading",
    "fieldtype": "Select",
+   "hidden": 1,
    "label": "Proofreading",
    "options": "Pending\nRunning\nDone\nFailed",
    "read_only": 1
@@ -1173,7 +1174,7 @@
   {
    "fieldname": "status_review2revise",
    "fieldtype": "Select",
-   "label": "Review2Revise",
+   "label": "\u5ba1\u67e5\u610f\u89c1\u2192\u56de\u590d",
    "options": "Pending\nRunning\nDone\nFailed",
    "read_only": 1
   },
@@ -1185,7 +1186,7 @@
   {
    "fieldname": "status_align2tex2docx",
    "fieldtype": "Select",
-   "label": "Align2Tex2Docx",
+   "label": "\u7533\u8bf7md\u2192\u7533\u8bf7docx",
    "options": "Pending\nRunning\nDone\nFailed",
    "read_only": 1
   },
@@ -1834,7 +1835,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-02-04 13:26:26.268388",
+ "modified": "2026-02-04 13:52:39.827137",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Patent Workflow",
