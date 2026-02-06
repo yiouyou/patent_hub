@@ -21,6 +21,8 @@
   "review2revise",
   "md2docx",
   "code2png",
+  "review_reply",
+  "patentability",
   "section_patent",
   "scene_to_tech",
   "tech_to_claims",
@@ -138,13 +140,23 @@
    "fieldname": "section_patent",
    "fieldtype": "Section Break",
    "label": "Patent"
+  },
+  {
+   "fieldname": "review_reply",
+   "fieldtype": "Data",
+   "label": "review_reply"
+  },
+  {
+   "fieldname": "patentability",
+   "fieldtype": "Data",
+   "label": "patentability"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2025-08-21 02:18:01.624751",
+ "modified": "2026-02-04 14:09:36.677727",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "API Endpoint",

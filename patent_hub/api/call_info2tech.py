@@ -145,6 +145,7 @@ def _job(doctype: str, docname: str, task_key: str, *, force: bool = False):
 
 		url = f"{api_endpoint.server_ip_port.rstrip('/')}/{api_endpoint.info2tech.strip('/')}/invoke"
 
+		# step_id 决定 tmp 工作目录
 		step_id = frappe.db.get_value(DOCTYPE, docname, f"{TASK_KEY}_id")
 		if not step_id:
 			raise ValueError("未找到任务 step_id")
@@ -268,9 +269,21 @@ def _process_api_result(docname: str, result: dict, user: str | None = None):
 
 		res_data = universal_decompress(output.get("res", ""), as_json=True) or {}
 
-		# 回填核心字段
-		if "info_tech" in res_data:
-			doc.info_tech = res_data.get("info_tech")
+		# 字段映射
+		field_mapping = {
+			"info_tech": "info_tech",
+		}
+
+		# 批量回填
+		for api_field, doc_field in field_mapping.items():
+			if api_field in res_data:
+				value = res_data.get(api_field)
+				if value is not None:
+					doc.set(doc_field, value)
+
+		# 提供给下一步
+		if res_data.get("info_tech"):
+			doc.tech = res_data.get("info_tech")
 
 		# 统一完成（会自动 publish_realtime: info2tech_done）
 		complete_task_fields(
