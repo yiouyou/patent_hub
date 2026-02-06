@@ -3,128 +3,47 @@
   "app": "patent_hub",
   "charts": [
    {
-    "chart_name": "Total Paid",
-    "label": "Total Paid"
+    "chart_name": "Total Patentability",
+    "label": "总数 - 可专利性"
    },
    {
-    "chart_name": "Top Agency",
-    "label": "Top Agency"
+    "chart_name": "Total Review Reply",
+    "label": "总数 - 审查答复"
    },
    {
-    "chart_name": "Step Avg Cost",
-    "label": "Step Avg Cost"
+    "chart_name": "Total Cost - Patentability",
+    "label": "总成本 - 可专利性"
    },
    {
-    "chart_name": "Total Unpaid",
-    "label": "Total Unpaid"
-   },
-   {
-    "chart_name": "Top Writer",
-    "label": "Top Writer"
-   },
-   {
-    "chart_name": "Total Task",
-    "label": "Total Task"
-   },
-   {
-    "chart_name": "Total Done",
-    "label": "Total Done"
+    "chart_name": "Total Cost - Review Reply",
+    "label": "总成本 - 审查答复"
    }
   ],
-  "content": "[{\"id\":\"8xDJezRq7F\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Patent WF</span>\",\"col\":12}},{\"id\":\"cPJn1LAZyN\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"uhygse8RBs\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>工具设置</b></span>\",\"col\":12}},{\"id\":\"Z0EbKncgF9\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"选题讨论\",\"col\":3}},{\"id\":\"bBjxkNem82\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"分类查询\",\"col\":3}},{\"id\":\"BluggnxqPS\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"EBO9qEXGau\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"md2docx\",\"col\":3}},{\"id\":\"Ia4ejMZ1Qa\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"code2png\",\"col\":3}},{\"id\":\"SBy3KgdqKg\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"API Endpoint\",\"col\":3}},{\"id\":\"11LcUJ4ai0\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"wqEXw0tuGs\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">等待启动</span>\",\"col\":12}},{\"id\":\"vqBmqt2u89\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Pending Start\",\"col\":4}},{\"id\":\"DMfWuI_Qii\",\"type\":\"spacer\",\"data\":{\"col\":4}},{\"id\":\"5ADTq_TZSk\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Patent Contact\",\"col\":4}},{\"id\":\"V7iEtBh_ej\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"0tEwrPZu-d\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>统计信息</b></span>\",\"col\":12}},{\"id\":\"Q1jMDRQ58k\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Total Task\",\"col\":6}},{\"id\":\"28EcrcPjdB\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Total Done\",\"col\":6}},{\"id\":\"-Ve4MvD9nA\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Total Paid\",\"col\":6}},{\"id\":\"-rXQtm06G9\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Total Unpaid\",\"col\":6}},{\"id\":\"vxvnQ36rkP\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Top Agency\",\"col\":6}},{\"id\":\"sBKH18VNjE\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Top Writer\",\"col\":6}},{\"id\":\"Uz49CJQpuJ\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Step Avg Cost\",\"col\":6}},{\"id\":\"WMi1_WUoyI\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"45BiTMVyew\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>待查步骤</b></span>\",\"col\":12}},{\"id\":\"2xww8sVDbA\",\"type\":\"paragraph\",\"data\":{\"text\":\"<b>Title / Info</b>\",\"col\":12}},{\"id\":\"bmEvU2DMWc\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"❌Title2Scene\",\"col\":4}},{\"id\":\"W_4-opCsnS\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"❌Info2Tech\",\"col\":4}},{\"id\":\"kxl9cVTNw6\",\"type\":\"paragraph\",\"data\":{\"text\":\"<b>Scene</b>→<b>Tech</b>→<b>Applica</b>\",\"col\":12}},{\"id\":\"qifagaRoQj\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"❌Scene2Tech\",\"col\":4}},{\"id\":\"KU3LTN13gT\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"❌Tech2Application\",\"col\":4}},{\"id\":\"byzIdSo5Q_\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"❌Align2Tex2Docx\",\"col\":4}},{\"id\":\"z1SElum4NJ\",\"type\":\"paragraph\",\"data\":{\"text\":\"<b>Review</b>\",\"col\":12}},{\"id\":\"VcF7z1kCr-\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"❌Review2Revise\",\"col\":4}}]",
+  "content": "[{\"id\":\"tYwd6t0lQP\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">工具</span>\",\"col\":12}},{\"id\":\"LJIKRixAp0\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"gNtIsaS5TH\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"选题讨论\",\"col\":3}},{\"id\":\"iXtJDsnm8U\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"分类查询\",\"col\":3}},{\"id\":\"PKxUi1Uy6y\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"Ti1bs2Hwy9\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"可专利性\",\"col\":3}},{\"id\":\"tqXDkNkVo1\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"VzOy2Gp5Fw\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"审查答复\",\"col\":3}},{\"id\":\"b9GhYyp9Xb\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"aCCWfYuVFK\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>统计信息</b></span>\",\"col\":12}},{\"id\":\"h4iU2DXtgU\",\"type\":\"chart\",\"data\":{\"chart_name\":\"总数 - 可专利性\",\"col\":6}},{\"id\":\"y3PSsTUwYN\",\"type\":\"chart\",\"data\":{\"chart_name\":\"总成本 - 可专利性\",\"col\":6}},{\"id\":\"YpqKs-zMmG\",\"type\":\"chart\",\"data\":{\"chart_name\":\"总数 - 审查答复\",\"col\":6}},{\"id\":\"1NcLvhljfH\",\"type\":\"chart\",\"data\":{\"chart_name\":\"总成本 - 审查答复\",\"col\":6}}]",
   "custom_blocks": [],
   "docstatus": 0,
   "doctype": "Workspace",
   "external_link": null,
   "for_user": "",
   "hide_custom": 0,
-  "icon": "workflow",
+  "icon": "tool-case",
   "indicator_color": "green",
   "is_hidden": 0,
-  "label": "Patent WF",
+  "label": "专利工具",
   "link_to": null,
-  "link_type": null,
+  "link_type": "DocType",
   "links": [],
-  "modified": "2026-01-13 13:27:53.616951",
+  "modified": "2026-02-06 16:25:42.946451",
   "module": "Patent Hub",
-  "name": "Patent WF",
+  "name": "专利工具",
   "number_cards": [],
   "parent_page": "",
   "public": 1,
-  "quick_lists": [
-   {
-    "document_type": "Patent Contact Form",
-    "label": "Patent Contact",
-    "quick_list_filter": "[]"
-   },
-   {
-    "document_type": "Patent Workflow",
-    "label": "❌Title2Scene",
-    "quick_list_filter": "[[\"Patent Workflow\",\"status_title2scene\",\"=\",\"Failed\",false]]"
-   },
-   {
-    "document_type": "Patent Workflow",
-    "label": "❌Info2Tech",
-    "quick_list_filter": "[[\"Patent Workflow\",\"status_info2tech\",\"=\",\"Failed\",false]]"
-   },
-   {
-    "document_type": "Patent Workflow",
-    "label": "❌Scene2Tech",
-    "quick_list_filter": "[[\"Patent Workflow\",\"status_scene2tech\",\"=\",\"Failed\",false]]"
-   },
-   {
-    "document_type": "Patent Workflow",
-    "label": "❌Review2Revise",
-    "quick_list_filter": "[[\"Patent Workflow\",\"status_review2revise\",\"=\",\"Failed\",false]]"
-   },
-   {
-    "document_type": "Patent Workflow",
-    "label": "Pending Start",
-    "quick_list_filter": "[[\"run_count_title2scene\",\"=\",0],[\"run_count_info2tech\",\"=\",0]]"
-   },
-   {
-    "document_type": "Patent Workflow",
-    "label": "❌Tech2Application",
-    "quick_list_filter": "[[\"Patent Workflow\",\"status_tech2application\",\"=\",\"Failed\",false]]"
-   },
-   {
-    "document_type": "Patent Workflow",
-    "label": "❌Align2Tex2Docx",
-    "quick_list_filter": "[[\"Patent Workflow\",\"status_align2tex2docx\",\"=\",\"Failed\",false]]"
-   }
-  ],
+  "quick_lists": [],
   "restrict_to_domain": null,
   "roles": [],
-  "sequence_id": 3.0,
+  "sequence_id": 26.0,
   "shortcuts": [
-   {
-    "color": "Grey",
-    "doc_view": "New",
-    "format": null,
-    "icon": null,
-    "kanban_board": null,
-    "label": "code2png",
-    "link_to": "Code2png",
-    "report_ref_doctype": null,
-    "restrict_to_domain": null,
-    "stats_filter": "[]",
-    "type": "DocType",
-    "url": null
-   },
-   {
-    "color": "Grey",
-    "doc_view": "New",
-    "format": null,
-    "icon": null,
-    "kanban_board": null,
-    "label": "md2docx",
-    "link_to": "Md2docx",
-    "report_ref_doctype": null,
-    "restrict_to_domain": null,
-    "stats_filter": "[]",
-    "type": "DocType",
-    "url": null
-   },
    {
     "color": "Grey",
     "doc_view": "New",
@@ -145,11 +64,145 @@
     "format": null,
     "icon": null,
     "kanban_board": null,
-    "label": "API Endpoint",
-    "link_to": "API Endpoint",
+    "label": "分类查询",
+    "link_to": null,
     "report_ref_doctype": null,
     "restrict_to_domain": null,
     "stats_filter": null,
+    "type": "URL",
+    "url": "https://ipc.incopat.com/index"
+   },
+   {
+    "color": "Grey",
+    "doc_view": "New",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "可专利性",
+    "link_to": "Patentability",
+    "report_ref_doctype": null,
+    "restrict_to_domain": null,
+    "stats_filter": "[]",
+    "type": "DocType",
+    "url": null
+   },
+   {
+    "color": "Grey",
+    "doc_view": "New",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "审查答复",
+    "link_to": "Review Reply",
+    "report_ref_doctype": null,
+    "restrict_to_domain": null,
+    "stats_filter": "[]",
+    "type": "DocType",
+    "url": null
+   }
+  ],
+  "title": "专利工具",
+  "type": "Workspace"
+ },
+ {
+  "app": "patent_hub",
+  "charts": [
+   {
+    "chart_name": "Total Task",
+    "label": "总任务"
+   },
+   {
+    "chart_name": "Step Avg Cost",
+    "label": "各步骤平均成本"
+   },
+   {
+    "chart_name": "Total Done",
+    "label": "总完成"
+   },
+   {
+    "chart_name": "Total Paid",
+    "label": "总付款"
+   },
+   {
+    "chart_name": "Total Unpaid",
+    "label": "总未付"
+   },
+   {
+    "chart_name": "Top Agency",
+    "label": "Top 代理"
+   },
+   {
+    "chart_name": "Top Writer",
+    "label": "Top 工程师"
+   }
+  ],
+  "content": "[{\"id\":\"EqH0RzU5WJ\",\"type\":\"header\",\"data\":{\"text\":\"<span style=\\\"font-size: 16px;\\\">相关工具</span>\",\"col\":12}},{\"id\":\"0aQF9qCAZH\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"选题讨论\",\"col\":3}},{\"id\":\"OT_hUmiSHK\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"分类查询\",\"col\":3}},{\"id\":\"Ls6fsWYL_C\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"VQg07mgOLo\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"md→docx\",\"col\":3}},{\"id\":\"cNg4N1_Qba\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"代码作图\",\"col\":3}},{\"id\":\"SHM0Qpk5wY\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"hCBC13cKNK\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>统计信息</b></span>\",\"col\":12}},{\"id\":\"-BF5pwKIf2\",\"type\":\"chart\",\"data\":{\"chart_name\":\"总任务\",\"col\":6}},{\"id\":\"sDJNuU8NEJ\",\"type\":\"chart\",\"data\":{\"chart_name\":\"总完成\",\"col\":6}},{\"id\":\"5t8LSKi55D\",\"type\":\"chart\",\"data\":{\"chart_name\":\"总付款\",\"col\":6}},{\"id\":\"i27HR72IF7\",\"type\":\"chart\",\"data\":{\"chart_name\":\"总未付\",\"col\":6}},{\"id\":\"Qwm3TbpOus\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Top 代理\",\"col\":6}},{\"id\":\"Cs58RDp20Q\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Top 工程师\",\"col\":6}},{\"id\":\"xJ7G2zTkuC\",\"type\":\"chart\",\"data\":{\"chart_name\":\"各步骤平均成本\",\"col\":12}},{\"id\":\"eBuLVyabu7\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"Davx_nUNKI\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>待查步骤</b></span>\",\"col\":12}},{\"id\":\"7aV3mmEFPH\",\"type\":\"paragraph\",\"data\":{\"text\":\"<b>标题 / 信息 / 应用场景</b>\",\"col\":12}},{\"id\":\"IMLLqxGBiz\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"❌标题→应用场景\",\"col\":4}},{\"id\":\"mQy-56O3YS\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"❌应用场景→技术交底\",\"col\":4}},{\"id\":\"99JTnbdb-v\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"❌材料→技术交底\",\"col\":4}},{\"id\":\"gESit3i5XC\",\"type\":\"paragraph\",\"data\":{\"text\":\"<b>技术交底&nbsp;</b>→&nbsp;<b>申请文档&nbsp;</b>→ 审查答复\",\"col\":12}},{\"id\":\"s7v4OI9S1g\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"❌技术交底→申请md\",\"col\":4}},{\"id\":\"1JGfcQcUU-\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"❌申请md→申请docx\",\"col\":4}},{\"id\":\"O7I9Ziq1P8\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"❌审查意见→答复\",\"col\":4}},{\"id\":\"JLep_vhqkG\",\"type\":\"spacer\",\"data\":{\"col\":12}}]",
+  "custom_blocks": [],
+  "docstatus": 0,
+  "doctype": "Workspace",
+  "external_link": null,
+  "for_user": "",
+  "hide_custom": 0,
+  "icon": "workflow",
+  "indicator_color": "green",
+  "is_hidden": 0,
+  "label": "专利流程",
+  "link_to": null,
+  "link_type": "DocType",
+  "links": [],
+  "modified": "2026-02-06 16:26:09.327960",
+  "module": "Patent Hub",
+  "name": "专利流程",
+  "number_cards": [],
+  "parent_page": "",
+  "public": 1,
+  "quick_lists": [
+   {
+    "document_type": "Patent Workflow",
+    "label": "❌材料→技术交底",
+    "quick_list_filter": "[]"
+   },
+   {
+    "document_type": "Patent Workflow",
+    "label": "❌标题→应用场景",
+    "quick_list_filter": "[[\"Patent Workflow\",\"is_done_title2scene\",\"=\",0]]"
+   },
+   {
+    "document_type": "Patent Workflow",
+    "label": "❌应用场景→技术交底",
+    "quick_list_filter": "[]"
+   },
+   {
+    "document_type": "Patent Workflow",
+    "label": "❌技术交底→申请md",
+    "quick_list_filter": "[]"
+   },
+   {
+    "document_type": "Patent Workflow",
+    "label": "❌申请md→申请docx",
+    "quick_list_filter": "[]"
+   },
+   {
+    "document_type": "Patent Workflow",
+    "label": "❌审查意见→答复",
+    "quick_list_filter": "[]"
+   }
+  ],
+  "restrict_to_domain": null,
+  "roles": [],
+  "sequence_id": 27.0,
+  "shortcuts": [
+   {
+    "color": "Grey",
+    "doc_view": "New",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "选题讨论",
+    "link_to": "LLM Chat Session",
+    "report_ref_doctype": null,
+    "restrict_to_domain": null,
+    "stats_filter": "[]",
     "type": "DocType",
     "url": null
    },
@@ -166,9 +219,37 @@
     "stats_filter": null,
     "type": "URL",
     "url": "https://ipc.incopat.com/index"
+   },
+   {
+    "color": "Grey",
+    "doc_view": "New",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "md→docx",
+    "link_to": "Md2docx",
+    "report_ref_doctype": null,
+    "restrict_to_domain": null,
+    "stats_filter": "[]",
+    "type": "DocType",
+    "url": null
+   },
+   {
+    "color": "Grey",
+    "doc_view": "New",
+    "format": null,
+    "icon": null,
+    "kanban_board": null,
+    "label": "代码作图",
+    "link_to": "Code2png",
+    "report_ref_doctype": null,
+    "restrict_to_domain": null,
+    "stats_filter": "[]",
+    "type": "DocType",
+    "url": null
    }
   ],
-  "title": "Patent WF",
+  "title": "专利流程",
   "type": "Workspace"
  }
 ]

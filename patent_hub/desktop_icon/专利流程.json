@@ -1,0 +1,21 @@
+{
+ "app": "patent_hub",
+ "creation": "2026-02-06 17:21:28.504353",
+ "docstatus": 0,
+ "doctype": "Desktop Icon",
+ "hidden": 0,
+ "icon": "",
+ "icon_type": "App",
+ "idx": 0,
+ "label": "\u4e13\u5229\u6d41\u7a0b",
+ "link": "/desk/\u4e13\u5229\u6d41\u7a0b",
+ "link_type": "External",
+ "logo_url": "/assets/patent_hub/logo.png",
+ "modified": "2026-02-06 17:24:58.128192",
+ "modified_by": "Administrator",
+ "name": "\u4e13\u5229\u6d41\u7a0b",
+ "owner": "Administrator",
+ "restrict_removal": 0,
+ "roles": [],
+ "standard": 1
+}

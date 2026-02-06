@@ -30,9 +30,9 @@ fixtures = [
 	},
 	# {"dt": "Client Script", "filters": [["name", "in", []]]},
 	# 工作区和仪表盘
-	{"dt": "Workspace", "filters": [["name", "in", ["Patent WF"]]]},
-	{"dt": "Workspace Sidebar", "filters": [["name", "in", ["Patent WF"]]]},
-	{"dt": "Desktop Icon", "filters": [["name", "in", ["Patent WF"]]]},
+	{"dt": "Workspace", "filters": [["name", "in", ["专利工具", "专利流程"]]]},
+	{"dt": "Workspace Sidebar", "filters": [["name", "in", ["专利工具", "专利流程"]]]},
+	{"dt": "Desktop Icon", "filters": [["name", "in", ["专利工具", "专利流程"]]]},
 	{
 		"dt": "Dashboard Chart",
 		"filters": [
@@ -47,11 +47,15 @@ fixtures = [
 					"Top Agency",
 					"Top Writer",
 					"Step Avg Cost",
+					"Total Patentability",
+					"Total Review Reply",
+					"Total Cost - Patentability",
+					"Total Cost - Review Reply",
 				],
 			]
 		],
 	},
-	{"dt": "Dashboard", "filters": [["name", "in", ["Patent Workflow Dashboard"]]]},
+	{"dt": "Dashboard", "filters": [["name", "in", ["Patent Workflow Dashboard", "Patent Tools Dashboard"]]]},
 	# 报表
 	{
 		"dt": "Report",

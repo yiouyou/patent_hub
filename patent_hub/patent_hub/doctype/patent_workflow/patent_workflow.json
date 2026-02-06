@@ -37,6 +37,7 @@
   "cancel_title2scene",
   "column_break_jnks",
   "rerun_title2scene",
+  "column_break_hgtq",
   "status_section_title2scene",
   "is_done_title2scene",
   "column_break_utxs",
@@ -60,38 +61,6 @@
   "title2scene_started_at",
   "last_title2scene_error",
   "title2scene_last_heartbeat",
-  "tab_info2tech",
-  "section_break_zasr",
-  "table_upload_info2tech",
-  "section_break_iyqo",
-  "call_info2tech",
-  "column_break_hiio",
-  "cancel_info2tech",
-  "column_break_nbnr",
-  "rerun_info2tech",
-  "status_section_info2tech",
-  "is_done_info2tech",
-  "column_break_prbn",
-  "is_running_info2tech",
-  "column_break_grbg",
-  "cost_info2tech",
-  "column_break_seuk",
-  "time_s_info2tech",
-  "section_break_werw",
-  "run_count_info2tech",
-  "column_break_ckre",
-  "success_count_info2tech",
-  "column_break_qqpl",
-  "total_cost_info2tech",
-  "column_break_osuy",
-  "total_time_s_info2tech",
-  "tech_section_info2tech",
-  "info_tech",
-  "section_break_stmk",
-  "info2tech_id",
-  "info2tech_started_at",
-  "last_info2tech_error",
-  "info2tech_last_heartbeat",
   "tab_scene2tech",
   "innovation_direction_0_column",
   "scene",
@@ -101,6 +70,7 @@
   "cancel_scene2tech",
   "column_break_vdiv",
   "rerun_scene2tech",
+  "column_break_jpgs",
   "status_section_scene2tech",
   "is_done_scene2tech",
   "column_break_mbcf",
@@ -141,6 +111,39 @@
   "scene2tech_started_at",
   "last_scene2tech_error",
   "scene2tech_last_heartbeat",
+  "tab_info2tech",
+  "section_break_zasr",
+  "table_upload_info2tech",
+  "section_break_iyqo",
+  "call_info2tech",
+  "column_break_hiio",
+  "cancel_info2tech",
+  "column_break_nbnr",
+  "rerun_info2tech",
+  "column_break_rzfg",
+  "status_section_info2tech",
+  "is_done_info2tech",
+  "column_break_prbn",
+  "is_running_info2tech",
+  "column_break_grbg",
+  "cost_info2tech",
+  "column_break_seuk",
+  "time_s_info2tech",
+  "section_break_werw",
+  "run_count_info2tech",
+  "column_break_ckre",
+  "success_count_info2tech",
+  "column_break_qqpl",
+  "total_cost_info2tech",
+  "column_break_osuy",
+  "total_time_s_info2tech",
+  "tech_section_info2tech",
+  "info_tech",
+  "section_break_stmk",
+  "info2tech_id",
+  "info2tech_started_at",
+  "last_info2tech_error",
+  "info2tech_last_heartbeat",
   "tab_tech2application",
   "column_break_wmpp",
   "tech",
@@ -150,6 +153,7 @@
   "cancel_tech2application",
   "column_break_qyhc",
   "rerun_tech2application",
+  "column_break_yryb",
   "status_section_tech2application",
   "is_done_tech2application",
   "column_break_kxbo",
@@ -211,6 +215,7 @@
   "cancel_align2tex2docx",
   "column_break_aock",
   "rerun_align2tex2docx",
+  "column_break_gvrs",
   "status_section_align2tex2docx",
   "is_done_align2tex2docx",
   "column_break_ogxf",
@@ -252,6 +257,7 @@
   "cancel_review2revise",
   "column_break_ybgi",
   "rerun_review2revise",
+  "column_break_qwkh",
   "status_section_review2revise",
   "is_done_review2revise",
   "column_break_uusn",
@@ -577,7 +583,7 @@
    "default": "0",
    "fieldname": "is_done_scene2tech",
    "fieldtype": "Check",
-   "label": "is Done",
+   "label": "is Done - s2t",
    "read_only": 1
   },
   {
@@ -642,7 +648,7 @@
    "default": "0",
    "fieldname": "is_done_align2tex2docx",
    "fieldtype": "Check",
-   "label": "is Done",
+   "label": "is Done - m2d",
    "read_only": 1
   },
   {
@@ -689,7 +695,7 @@
    "default": "0",
    "fieldname": "is_done_review2revise",
    "fieldtype": "Check",
-   "label": "is Done",
+   "label": "is Done - r2r",
    "read_only": 1
   },
   {
@@ -724,7 +730,7 @@
    "default": "0",
    "fieldname": "is_done_tech2application",
    "fieldtype": "Check",
-   "label": "is Done",
+   "label": "is Done - t2a",
    "read_only": 1
   },
   {
@@ -1031,7 +1037,7 @@
   {
    "fieldname": "tab_review2revise",
    "fieldtype": "Tab Break",
-   "label": "\u5ba1\u67e5\u610f\u89c1\u2192\u56de\u590d"
+   "label": "\u5ba1\u67e5\u610f\u89c1\u2192\u7b54\u590d"
   },
   {
    "fieldname": "section_break_zasr",
@@ -1087,7 +1093,7 @@
    "default": "0",
    "fieldname": "is_done_title2scene",
    "fieldtype": "Check",
-   "label": "is Done",
+   "label": "is Done - t2s",
    "read_only": 1
   },
   {
@@ -1117,7 +1123,7 @@
    "default": "0",
    "fieldname": "is_done_info2tech",
    "fieldtype": "Check",
-   "label": "is Done",
+   "label": "is Done - i2t",
    "read_only": 1
   },
   {
@@ -1830,12 +1836,36 @@
    "fieldname": "tech_section_info2tech",
    "fieldtype": "Section Break",
    "label": "\u6280\u672f\u4ea4\u5e95"
+  },
+  {
+   "fieldname": "column_break_hgtq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_rzfg",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_jpgs",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_yryb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_gvrs",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_qwkh",
+   "fieldtype": "Column Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-02-04 13:52:39.827137",
+ "modified": "2026-02-06 16:20:36.243222",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Patent Workflow",

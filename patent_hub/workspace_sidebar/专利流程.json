@@ -1,0 +1,77 @@
+{
+ "app": "patent_hub",
+ "creation": "2026-02-06 14:38:08.448034",
+ "docstatus": 0,
+ "doctype": "Workspace Sidebar",
+ "header_icon": "workflow",
+ "idx": 0,
+ "items": [
+  {
+   "child": 0,
+   "collapsible": 1,
+   "icon": "airplay",
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "Home",
+   "link_to": "\u4e13\u5229\u6d41\u7a0b",
+   "link_type": "Workspace",
+   "show_arrow": 0,
+   "type": "Link"
+  },
+  {
+   "child": 0,
+   "collapsible": 1,
+   "icon": "pickaxe",
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "\u9009\u9898\u8ba8\u8bba",
+   "link_to": "LLM Chat Session",
+   "link_type": "DocType",
+   "show_arrow": 0,
+   "type": "Link"
+  },
+  {
+   "child": 0,
+   "collapsible": 1,
+   "icon": "picture-in-picture",
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "\u4ee3\u7801\u4f5c\u56fe",
+   "link_to": "Code2png",
+   "link_type": "DocType",
+   "show_arrow": 0,
+   "type": "Link"
+  },
+  {
+   "child": 0,
+   "collapsible": 1,
+   "icon": "arrow-right-to-line",
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "md\u2192docx",
+   "link_to": "Md2docx",
+   "link_type": "DocType",
+   "show_arrow": 0,
+   "type": "Link"
+  },
+  {
+   "child": 0,
+   "collapsible": 1,
+   "icon": "link-2",
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "API\u8bbe\u7f6e",
+   "link_to": "API Endpoint",
+   "link_type": "DocType",
+   "show_arrow": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2026-02-06 16:27:11.481829",
+ "modified_by": "Administrator",
+ "module": "Patent Hub",
+ "name": "\u4e13\u5229\u6d41\u7a0b",
+ "owner": "Administrator",
+ "standard": 1,
+ "title": "\u4e13\u5229\u6d41\u7a0b"
+}

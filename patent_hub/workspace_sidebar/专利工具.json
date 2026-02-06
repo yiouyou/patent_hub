@@ -1,0 +1,65 @@
+{
+ "app": "patent_hub",
+ "creation": "2026-02-06 14:33:19.482665",
+ "docstatus": 0,
+ "doctype": "Workspace Sidebar",
+ "header_icon": "tool-case",
+ "idx": 0,
+ "items": [
+  {
+   "child": 0,
+   "collapsible": 1,
+   "icon": "airplay",
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "Home",
+   "link_to": "\u4e13\u5229\u5de5\u5177",
+   "link_type": "Workspace",
+   "show_arrow": 0,
+   "type": "Link"
+  },
+  {
+   "child": 0,
+   "collapsible": 1,
+   "icon": "pickaxe",
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "\u9009\u9898\u8ba8\u8bba",
+   "link_to": "LLM Chat Session",
+   "link_type": "DocType",
+   "show_arrow": 0,
+   "type": "Link"
+  },
+  {
+   "child": 0,
+   "collapsible": 1,
+   "icon": "file-question-mark",
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "\u53ef\u4e13\u5229\u6027",
+   "link_to": "Patentability",
+   "link_type": "DocType",
+   "show_arrow": 0,
+   "type": "Link"
+  },
+  {
+   "child": 0,
+   "collapsible": 1,
+   "icon": "edit",
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "\u5ba1\u67e5\u7b54\u590d",
+   "link_to": "Review Reply",
+   "link_type": "DocType",
+   "show_arrow": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2026-02-06 15:19:37.328746",
+ "modified_by": "Administrator",
+ "module": "Patent Hub",
+ "name": "\u4e13\u5229\u5de5\u5177",
+ "owner": "Administrator",
+ "standard": 1,
+ "title": "\u4e13\u5229\u5de5\u5177"
+}

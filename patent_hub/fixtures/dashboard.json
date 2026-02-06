@@ -36,9 +36,39 @@
   "docstatus": 0,
   "doctype": "Dashboard",
   "is_default": 0,
-  "is_standard": 0,
-  "modified": "2025-08-23 01:11:39.601830",
+  "is_standard": 1,
+  "modified": "2026-02-06 14:45:44.857214",
   "module": "Patent Hub",
   "name": "Patent Workflow Dashboard"
+ },
+ {
+  "cards": [],
+  "chart_options": null,
+  "charts": [
+   {
+    "chart": "Total Patentability",
+    "width": "Half"
+   },
+   {
+    "chart": "Total Cost - Patentability",
+    "width": "Half"
+   },
+   {
+    "chart": "Total Review Reply",
+    "width": "Half"
+   },
+   {
+    "chart": "Total Cost - Review Reply",
+    "width": "Half"
+   }
+  ],
+  "dashboard_name": "Patent Tools Dashboard",
+  "docstatus": 0,
+  "doctype": "Dashboard",
+  "is_default": 0,
+  "is_standard": 1,
+  "modified": "2026-02-06 14:45:31.739023",
+  "module": "Patent Hub",
+  "name": "Patent Tools Dashboard"
  }
 ]

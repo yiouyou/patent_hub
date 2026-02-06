@@ -1,25 +1,261 @@
 {
  "actions": [],
- "allow_rename": 1,
+ "autoname": "field:patent_title",
  "creation": "2026-02-04 14:13:52.054383",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "section_break_8h1x"
+  "section_break_drtr",
+  "patent_title",
+  "\u4e0a\u4f20\u4e13\u5229\u7533\u8bf7\u4e66_section",
+  "table_upload_patentability",
+  "section_break_tnle",
+  "call_patentability",
+  "column_break_daem",
+  "cancel_patentability",
+  "column_break_dovv",
+  "rerun_patentability",
+  "column_break_uilq",
+  "\u8fd0\u884c\u72b6\u6001_section",
+  "is_done_patentability",
+  "column_break_sbun",
+  "is_running_patentability",
+  "column_break_qqfj",
+  "cost_patentability",
+  "column_break_emfv",
+  "time_s_patentability",
+  "section_break_vgap",
+  "run_count_patentability",
+  "column_break_qbyd",
+  "success_count_patentability",
+  "column_break_ilvh",
+  "total_cost_patentability",
+  "column_break_paub",
+  "total_time_s_patentability",
+  "\u5206\u6790\u641c\u7d22_section",
+  "patent_doc",
+  "patent_core_problem_analysis",
+  "patent_search_keywords",
+  "patent_prior_art",
+  "\u53ef\u4e13\u5229\u6027_section",
+  "patent_patentability_analysis",
+  "\u7cfb\u7edf\u65e5\u5fd7_section",
+  "patentability_id",
+  "patentability_started_at",
+  "last_patentability_error",
+  "patentability_last_heartbeat"
  ],
  "fields": [
   {
-   "fieldname": "section_break_8h1x",
+   "fieldname": "\u4e0a\u4f20\u4e13\u5229\u7533\u8bf7\u4e66_section",
+   "fieldtype": "Section Break",
+   "label": "\u4e0a\u4f20\u4e13\u5229\u7533\u8bf7\u4e66"
+  },
+  {
+   "fieldname": "table_upload_patentability",
+   "fieldtype": "Table",
+   "options": "Patent Workflow Upload File",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_tnle",
    "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "call_patentability",
+   "fieldtype": "Button",
+   "label": "\u542f\u52a8\u6d41\u7a0b"
+  },
+  {
+   "fieldname": "column_break_daem",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "cancel_patentability",
+   "fieldtype": "Button",
+   "label": "\u53d6\u6d88\u6d41\u7a0b"
+  },
+  {
+   "fieldname": "column_break_dovv",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "rerun_patentability",
+   "fieldtype": "Button",
+   "label": "\u91cd\u65b0\u542f\u52a8"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "\u5206\u6790\u641c\u7d22_section",
+   "fieldtype": "Section Break",
+   "label": "\u5206\u6790\u641c\u7d22"
+  },
+  {
+   "fieldname": "patent_doc",
+   "fieldtype": "Long Text",
+   "label": "patent_doc"
+  },
+  {
+   "fieldname": "patent_core_problem_analysis",
+   "fieldtype": "Long Text",
+   "label": "patent_core_problem_analysis"
+  },
+  {
+   "fieldname": "patent_search_keywords",
+   "fieldtype": "Long Text",
+   "label": "patent_search_keywords"
+  },
+  {
+   "fieldname": "patent_prior_art",
+   "fieldtype": "Long Text",
+   "label": "patent_prior_art"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "\u53ef\u4e13\u5229\u6027_section",
+   "fieldtype": "Section Break",
+   "label": "\u53ef\u4e13\u5229\u6027"
+  },
+  {
+   "fieldname": "patent_patentability_analysis",
+   "fieldtype": "Long Text",
+   "label": "patent_patentability_analysis"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "\u7cfb\u7edf\u65e5\u5fd7_section",
+   "fieldtype": "Section Break",
+   "label": "\u7cfb\u7edf\u65e5\u5fd7"
+  },
+  {
+   "fieldname": "patentability_started_at",
+   "fieldtype": "Datetime",
+   "label": "Patentability Started At"
+  },
+  {
+   "fieldname": "last_patentability_error",
+   "fieldtype": "Small Text",
+   "label": "Last Patentability Error"
+  },
+  {
+   "fieldname": "patentability_last_heartbeat",
+   "fieldtype": "Datetime",
+   "label": "Patentability Last Heartbeat"
+  },
+  {
+   "fieldname": "\u8fd0\u884c\u72b6\u6001_section",
+   "fieldtype": "Section Break",
+   "label": "\u8fd0\u884c\u72b6\u6001"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_done_patentability",
+   "fieldtype": "Check",
+   "label": "is Done",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_sbun",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_running_patentability",
+   "fieldtype": "Check",
+   "label": "is Running",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_qqfj",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "cost_patentability",
+   "fieldtype": "Float",
+   "label": "Cost",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_emfv",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "time_s_patentability",
+   "fieldtype": "Float",
+   "label": "Time(s)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_vgap",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "run_count_patentability",
+   "fieldtype": "Int",
+   "label": "Run # p",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_qbyd",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "success_count_patentability",
+   "fieldtype": "Int",
+   "label": "Success # p",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_ilvh",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "total_cost_patentability",
+   "fieldtype": "Float",
+   "label": "Total Cost",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_paub",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "total_time_s_patentability",
+   "fieldtype": "Float",
+   "label": "Total Time(s)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_uilq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "patentability_id",
+   "fieldtype": "Data",
+   "label": "Patentability ID",
+   "unique": 1
+  },
+  {
+   "fieldname": "section_break_drtr",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "patent_title",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "\u4e13\u5229\u6807\u9898",
+   "reqd": 1,
+   "unique": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-02-04 14:13:52.054383",
+ "modified": "2026-02-06 13:15:04.355172",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Patentability",
+ "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
   {
@@ -31,6 +267,18 @@
    "read": 1,
    "report": 1,
    "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Patent Writer",
    "share": 1,
    "write": 1
   }

@@ -1,0 +1,81 @@
+{
+ "app": "patent_hub",
+ "charts": [
+  {
+   "chart_name": "Total Patentability",
+   "label": "\u603b\u6570 - \u53ef\u4e13\u5229\u6027"
+  },
+  {
+   "chart_name": "Total Review Reply",
+   "label": "\u603b\u6570 - \u5ba1\u67e5\u7b54\u590d"
+  },
+  {
+   "chart_name": "Total Cost - Patentability",
+   "label": "\u603b\u6210\u672c - \u53ef\u4e13\u5229\u6027"
+  },
+  {
+   "chart_name": "Total Cost - Review Reply",
+   "label": "\u603b\u6210\u672c - \u5ba1\u67e5\u7b54\u590d"
+  }
+ ],
+ "content": "[{\"id\":\"tYwd6t0lQP\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">\u5de5\u5177</span>\",\"col\":12}},{\"id\":\"LJIKRixAp0\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"gNtIsaS5TH\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"\u9009\u9898\u8ba8\u8bba\",\"col\":3}},{\"id\":\"iXtJDsnm8U\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"\u5206\u7c7b\u67e5\u8be2\",\"col\":3}},{\"id\":\"PKxUi1Uy6y\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"Ti1bs2Hwy9\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"\u53ef\u4e13\u5229\u6027\",\"col\":3}},{\"id\":\"tqXDkNkVo1\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"VzOy2Gp5Fw\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"\u5ba1\u67e5\u7b54\u590d\",\"col\":3}},{\"id\":\"b9GhYyp9Xb\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"aCCWfYuVFK\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>\u7edf\u8ba1\u4fe1\u606f</b></span>\",\"col\":12}},{\"id\":\"h4iU2DXtgU\",\"type\":\"chart\",\"data\":{\"chart_name\":\"\u603b\u6570 - \u53ef\u4e13\u5229\u6027\",\"col\":6}},{\"id\":\"y3PSsTUwYN\",\"type\":\"chart\",\"data\":{\"chart_name\":\"\u603b\u6210\u672c - \u53ef\u4e13\u5229\u6027\",\"col\":6}},{\"id\":\"YpqKs-zMmG\",\"type\":\"chart\",\"data\":{\"chart_name\":\"\u603b\u6570 - \u5ba1\u67e5\u7b54\u590d\",\"col\":6}},{\"id\":\"1NcLvhljfH\",\"type\":\"chart\",\"data\":{\"chart_name\":\"\u603b\u6210\u672c - \u5ba1\u67e5\u7b54\u590d\",\"col\":6}}]",
+ "creation": "2026-02-06 15:18:35.494879",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "tool-case",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "\u4e13\u5229\u5de5\u5177",
+ "link_type": "DocType",
+ "links": [],
+ "modified": "2026-02-06 16:25:42.946451",
+ "modified_by": "Administrator",
+ "module": "Patent Hub",
+ "name": "\u4e13\u5229\u5de5\u5177",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 26.0,
+ "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "New",
+   "label": "\u9009\u9898\u8ba8\u8bba",
+   "link_to": "LLM Chat Session",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "\u5206\u7c7b\u67e5\u8be2",
+   "type": "URL",
+   "url": "https://ipc.incopat.com/index"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "New",
+   "label": "\u53ef\u4e13\u5229\u6027",
+   "link_to": "Patentability",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "New",
+   "label": "\u5ba1\u67e5\u7b54\u590d",
+   "link_to": "Review Reply",
+   "stats_filter": "[]",
+   "type": "DocType"
+  }
+ ],
+ "title": "\u4e13\u5229\u5de5\u5177",
+ "type": "Workspace"
+}

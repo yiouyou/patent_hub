@@ -1,0 +1,288 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:patent_title",
+ "creation": "2026-02-06 12:41:00.221359",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "patent_title",
+  "\u4e0a\u4f20_section",
+  "table_upload_review",
+  "table_upload_pdoc",
+  "section_break_asve",
+  "call_reviewreply",
+  "column_break_zntp",
+  "cancel_reviewreply",
+  "column_break_clkc",
+  "rerun_reviewreply",
+  "column_break_tfxw",
+  "\u8fd0\u884c\u72b6\u6001_section",
+  "is_done_reviewreply",
+  "column_break_ilrt",
+  "is_running_reviewreply",
+  "column_break_fhsx",
+  "cost_reviewreply",
+  "column_break_pwpb",
+  "time_s_reviewreply",
+  "section_break_buga",
+  "run_count_reviewreply",
+  "column_break_gmul",
+  "success_count_reviewreply",
+  "column_break_dopr",
+  "total_cost_reviewreply",
+  "column_break_awhm",
+  "total_time_s_reviewreply",
+  "section_break_uwpn",
+  "review_reply_txt",
+  "application_revised_txt",
+  "\u4e0b\u8f7d\u94fe\u63a5_section",
+  "review_reply_docx_link",
+  "application_revised_docx_link",
+  "\u7cfb\u7edf\u65e5\u5fd7_section",
+  "reviewreply_id",
+  "reviewreply_started_at",
+  "last_reviewreply_error",
+  "reviewreply_last_heartbeat"
+ ],
+ "fields": [
+  {
+   "fieldname": "\u4e0a\u4f20_section",
+   "fieldtype": "Section Break",
+   "label": "\u4e0a\u4f20"
+  },
+  {
+   "fieldname": "table_upload_review",
+   "fieldtype": "Table",
+   "label": "\u5ba1\u67e5\u610f\u89c1",
+   "options": "Patent Workflow Upload File",
+   "reqd": 1
+  },
+  {
+   "fieldname": "table_upload_pdoc",
+   "fieldtype": "Table",
+   "label": "\u4e13\u5229\u7533\u8bf7\u4e66",
+   "options": "Patent Workflow Upload File",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_asve",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "call_reviewreply",
+   "fieldtype": "Button",
+   "label": "\u542f\u52a8\u6d41\u7a0b"
+  },
+  {
+   "fieldname": "column_break_zntp",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "cancel_reviewreply",
+   "fieldtype": "Button",
+   "label": "\u53d6\u6d88\u6d41\u7a0b"
+  },
+  {
+   "fieldname": "column_break_clkc",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "rerun_reviewreply",
+   "fieldtype": "Button",
+   "label": "\u91cd\u65b0\u542f\u52a8"
+  },
+  {
+   "fieldname": "column_break_tfxw",
+   "fieldtype": "Column Break"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "section_break_uwpn",
+   "fieldtype": "Section Break",
+   "label": "\u7b54\u590d"
+  },
+  {
+   "fieldname": "review_reply_txt",
+   "fieldtype": "Long Text",
+   "label": "\u5ba1\u67e5\u610f\u89c1\u56de\u590dmd"
+  },
+  {
+   "fieldname": "application_revised_txt",
+   "fieldtype": "Long Text",
+   "label": "\u4fee\u6539\u540e\u7684\u7533\u8bf7md"
+  },
+  {
+   "fieldname": "\u4e0b\u8f7d\u94fe\u63a5_section",
+   "fieldtype": "Section Break",
+   "label": "\u4e0b\u8f7d\u94fe\u63a5"
+  },
+  {
+   "fieldname": "review_reply_docx_link",
+   "fieldtype": "Link",
+   "label": "\u5ba1\u67e5\u610f\u89c1\u56de\u590d",
+   "options": "File"
+  },
+  {
+   "fieldname": "application_revised_docx_link",
+   "fieldtype": "Link",
+   "label": "\u4fee\u6539\u540e\u7684\u7533\u8bf7",
+   "options": "File"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "\u7cfb\u7edf\u65e5\u5fd7_section",
+   "fieldtype": "Section Break",
+   "label": "\u7cfb\u7edf\u65e5\u5fd7"
+  },
+  {
+   "fieldname": "reviewreply_id",
+   "fieldtype": "Data",
+   "label": "ReviewReply ID"
+  },
+  {
+   "fieldname": "reviewreply_started_at",
+   "fieldtype": "Datetime",
+   "label": "ReviewReply Started At"
+  },
+  {
+   "fieldname": "last_reviewreply_error",
+   "fieldtype": "Small Text",
+   "label": "Last ReviewReply Error"
+  },
+  {
+   "fieldname": "reviewreply_last_heartbeat",
+   "fieldtype": "Datetime",
+   "label": "ReviewReply Last Heartbeat"
+  },
+  {
+   "fieldname": "\u8fd0\u884c\u72b6\u6001_section",
+   "fieldtype": "Section Break",
+   "label": "\u8fd0\u884c\u72b6\u6001"
+  },
+  {
+   "fieldname": "column_break_ilrt",
+   "fieldtype": "Column Break",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_fhsx",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_pwpb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_done_reviewreply",
+   "fieldtype": "Check",
+   "label": "Is Done",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "is_running_reviewreply",
+   "fieldtype": "Check",
+   "label": "Is Running"
+  },
+  {
+   "fieldname": "cost_reviewreply",
+   "fieldtype": "Float",
+   "label": "Cost",
+   "read_only": 1
+  },
+  {
+   "fieldname": "time_s_reviewreply",
+   "fieldtype": "Float",
+   "label": "Time(s)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_buga",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "run_count_reviewreply",
+   "fieldtype": "Int",
+   "label": "Run # rr",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_gmul",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "success_count_reviewreply",
+   "fieldtype": "Int",
+   "label": "Sucess # rr",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_dopr",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "total_cost_reviewreply",
+   "fieldtype": "Float",
+   "label": "Total Cost",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_awhm",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "total_time_s_reviewreply",
+   "fieldtype": "Float",
+   "label": "Total Time(s)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "patent_title",
+   "fieldtype": "Data",
+   "label": "\u4e13\u5229\u6807\u9898",
+   "unique": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-02-06 13:17:02.141394",
+ "modified_by": "Administrator",
+ "module": "Patent Hub",
+ "name": "Review Reply",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Patent Writer",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}
