@@ -304,7 +304,8 @@
    "fieldtype": "Data",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "\u4e13\u5229\u6807\u9898"
+   "label": "\u4e13\u5229\u6807\u9898",
+   "reqd": 1
   },
   {
    "fieldname": "section_break_sgac",
@@ -316,7 +317,8 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Writer ID",
-   "options": "Patent Writer"
+   "options": "Patent Writer",
+   "reqd": 1
   },
   {
    "fieldname": "innovation_direction_0_column",
@@ -760,7 +762,8 @@
    "fieldname": "agency_id",
    "fieldtype": "Link",
    "label": "Agency ID",
-   "options": "Patent Agency"
+   "options": "Patent Agency",
+   "reqd": 1
   },
   {
    "collapsible": 1,
@@ -1865,7 +1868,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-02-06 16:20:36.243222",
+ "modified": "2026-02-08 04:30:50.861596",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Patent Workflow",
@@ -1889,6 +1892,7 @@
    "delete": 1,
    "email": 1,
    "export": 1,
+   "if_owner": 1,
    "print": 1,
    "read": 1,
    "report": 1,

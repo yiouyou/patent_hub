@@ -1,6 +1,6 @@
 {
  "app": "patent_hub",
- "creation": "2026-02-06 14:38:08.448034",
+ "creation": "2026-02-07 05:52:42.232331",
  "docstatus": 0,
  "doctype": "Workspace Sidebar",
  "header_icon": "workflow",
@@ -33,6 +33,18 @@
   {
    "child": 0,
    "collapsible": 1,
+   "icon": "workflow",
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "\u4e13\u5229\u6d41\u7a0b",
+   "link_to": "Patent Workflow",
+   "link_type": "DocType",
+   "show_arrow": 0,
+   "type": "Link"
+  },
+  {
+   "child": 0,
+   "collapsible": 1,
    "icon": "picture-in-picture",
    "indent": 0,
    "keep_closed": 0,
@@ -53,21 +65,9 @@
    "link_type": "DocType",
    "show_arrow": 0,
    "type": "Link"
-  },
-  {
-   "child": 0,
-   "collapsible": 1,
-   "icon": "link-2",
-   "indent": 0,
-   "keep_closed": 0,
-   "label": "API\u8bbe\u7f6e",
-   "link_to": "API Endpoint",
-   "link_type": "DocType",
-   "show_arrow": 0,
-   "type": "Link"
   }
  ],
- "modified": "2026-02-06 16:27:11.481829",
+ "modified": "2026-02-08 01:03:41.174519",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "\u4e13\u5229\u6d41\u7a0b",

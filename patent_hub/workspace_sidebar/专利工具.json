@@ -1,6 +1,6 @@
 {
  "app": "patent_hub",
- "creation": "2026-02-06 14:33:19.482665",
+ "creation": "2026-02-07 05:52:42.221081",
  "docstatus": 0,
  "doctype": "Workspace Sidebar",
  "header_icon": "tool-case",
@@ -55,7 +55,7 @@
    "type": "Link"
   }
  ],
- "modified": "2026-02-06 15:19:37.328746",
+ "modified": "2026-02-07 07:00:08.561720",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "\u4e13\u5229\u5de5\u5177",
