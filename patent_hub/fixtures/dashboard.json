@@ -18,18 +18,6 @@
    {
     "chart": "Total Unpaid",
     "width": "Half"
-   },
-   {
-    "chart": "Top Agency",
-    "width": "Half"
-   },
-   {
-    "chart": "Top Writer",
-    "width": "Half"
-   },
-   {
-    "chart": "Step Avg Cost",
-    "width": "Half"
    }
   ],
   "dashboard_name": "Patent Workflow Dashboard",
@@ -37,7 +25,7 @@
   "doctype": "Dashboard",
   "is_default": 0,
   "is_standard": 1,
-  "modified": "2026-02-06 14:45:44.857214",
+  "modified": "2026-02-08 11:08:31.863391",
   "module": "Patent Hub",
   "name": "Patent Workflow Dashboard"
  },

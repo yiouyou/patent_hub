@@ -11,6 +11,23 @@
     "collapsible": 1,
     "display_depends_on": null,
     "filters": null,
+    "icon": "airplay",
+    "indent": 0,
+    "keep_closed": 0,
+    "label": "Home",
+    "link_to": "统计分析",
+    "link_type": "Workspace",
+    "navigate_to_tab": null,
+    "route_options": null,
+    "show_arrow": 0,
+    "type": "Link",
+    "url": null
+   },
+   {
+    "child": 0,
+    "collapsible": 1,
+    "display_depends_on": null,
+    "filters": null,
     "icon": "tool-case",
     "indent": 0,
     "keep_closed": 0,
@@ -58,7 +75,7 @@
     "url": null
    }
   ],
-  "modified": "2026-02-08 10:50:31.840703",
+  "modified": "2026-02-08 11:11:43.814148",
   "module": "Patent Hub",
   "name": "统计分析",
   "standard": 1,

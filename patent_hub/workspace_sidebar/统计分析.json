@@ -1,12 +1,24 @@
 {
  "app": "patent_hub",
- "creation": "2026-02-08 05:06:23.767292",
+ "creation": "2026-02-08 10:51:44.545635",
  "docstatus": 0,
  "doctype": "Workspace Sidebar",
  "for_user": "",
  "header_icon": "chart-bar-stacked",
  "idx": 0,
  "items": [
+  {
+   "child": 0,
+   "collapsible": 1,
+   "icon": "airplay",
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "Home",
+   "link_to": "\u7edf\u8ba1\u5206\u6790",
+   "link_type": "Workspace",
+   "show_arrow": 0,
+   "type": "Link"
+  },
   {
    "child": 0,
    "collapsible": 1,
@@ -44,7 +56,7 @@
    "type": "Link"
   }
  ],
- "modified": "2026-02-08 10:50:31.840703",
+ "modified": "2026-02-08 11:11:43.814148",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "\u7edf\u8ba1\u5206\u6790",
