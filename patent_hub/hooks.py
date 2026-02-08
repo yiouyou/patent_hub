@@ -30,9 +30,9 @@ fixtures = [
 	},
 	# {"dt": "Client Script", "filters": [["name", "in", []]]},
 	# 工作区和仪表盘
-	{"dt": "Workspace", "filters": [["name", "in", ["专利工具", "专利流程"]]]},
-	{"dt": "Workspace Sidebar", "filters": [["name", "in", ["专利工具", "专利流程"]]]},
-	{"dt": "Desktop Icon", "filters": [["name", "in", ["专利工具", "专利流程"]]]},
+	{"dt": "Workspace", "filters": [["name", "in", ["专利工具", "专利流程", "统计分析"]]]},
+	{"dt": "Workspace Sidebar", "filters": [["name", "in", ["专利工具", "专利流程", "统计分析"]]]},
+	{"dt": "Desktop Icon", "filters": [["name", "in", ["专利工具", "专利流程", "统计分析"]]]},
 	{
 		"dt": "Dashboard Chart",
 		"filters": [

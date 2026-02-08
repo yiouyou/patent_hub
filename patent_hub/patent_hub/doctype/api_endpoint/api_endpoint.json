@@ -139,6 +139,7 @@
   {
    "fieldname": "section_patent",
    "fieldtype": "Section Break",
+   "hidden": 1,
    "label": "Patent"
   },
   {
@@ -156,7 +157,7 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-02-04 14:09:36.677727",
+ "modified": "2026-02-08 10:46:40.472825",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "API Endpoint",

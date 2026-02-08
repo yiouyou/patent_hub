@@ -1,0 +1,54 @@
+{
+ "app": "patent_hub",
+ "creation": "2026-02-08 05:06:23.767292",
+ "docstatus": 0,
+ "doctype": "Workspace Sidebar",
+ "for_user": "",
+ "header_icon": "chart-bar-stacked",
+ "idx": 0,
+ "items": [
+  {
+   "child": 0,
+   "collapsible": 1,
+   "icon": "tool-case",
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "\u4e13\u5229\u5de5\u5177",
+   "link_to": "Patent Tools Dashboard",
+   "link_type": "Dashboard",
+   "show_arrow": 0,
+   "type": "Link"
+  },
+  {
+   "child": 0,
+   "collapsible": 1,
+   "icon": "workflow",
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "\u4e13\u5229\u6d41\u7a0b",
+   "link_to": "Patent Workflow Dashboard",
+   "link_type": "Dashboard",
+   "show_arrow": 0,
+   "type": "Link"
+  },
+  {
+   "child": 0,
+   "collapsible": 1,
+   "icon": "settings",
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "API Endpoint",
+   "link_to": "API Endpoint",
+   "link_type": "DocType",
+   "show_arrow": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2026-02-08 10:50:31.840703",
+ "modified_by": "Administrator",
+ "module": "Patent Hub",
+ "name": "\u7edf\u8ba1\u5206\u6790",
+ "owner": "Administrator",
+ "standard": 1,
+ "title": "\u7edf\u8ba1\u5206\u6790"
+}

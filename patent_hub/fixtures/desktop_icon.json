@@ -40,5 +40,26 @@
   "roles": [],
   "sidebar": null,
   "standard": 1
+ },
+ {
+  "app": "patent_hub",
+  "docstatus": 0,
+  "doctype": "Desktop Icon",
+  "hidden": 0,
+  "icon": null,
+  "icon_image": null,
+  "icon_type": "App",
+  "label": "统计分析",
+  "link": "/desk/统计分析",
+  "link_to": null,
+  "link_type": "External",
+  "logo_url": "/assets/patent_hub/logo.png",
+  "modified": "2026-02-08 10:49:25.247804",
+  "name": "统计分析",
+  "parent_icon": null,
+  "restrict_removal": 0,
+  "roles": [],
+  "sidebar": null,
+  "standard": 1
  }
 ]
