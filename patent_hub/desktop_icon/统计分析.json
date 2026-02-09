@@ -1,6 +1,6 @@
 {
  "app": "patent_hub",
- "creation": "2026-02-08 10:49:25.247804",
+ "creation": "2026-02-08 11:33:57.358227",
  "docstatus": 0,
  "doctype": "Desktop Icon",
  "hidden": 0,
@@ -9,8 +9,8 @@
  "label": "\u7edf\u8ba1\u5206\u6790",
  "link": "/desk/\u7edf\u8ba1\u5206\u6790",
  "link_type": "External",
- "logo_url": "/assets/patent_hub/logo.png",
- "modified": "2026-02-08 10:49:25.247804",
+ "logo_url": "",
+ "modified": "2026-02-08 19:45:34.539603",
  "modified_by": "Administrator",
  "name": "\u7edf\u8ba1\u5206\u6790",
  "owner": "Administrator",
