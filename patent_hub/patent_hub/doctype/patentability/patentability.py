@@ -9,5 +9,5 @@ from frappe.model.naming import make_autoname
 
 class Patentability(Document):
 	def autoname(self):
-		# 自动生成主键和 patentability_id：PTB-YYYYMMDD-##
-		self.name = make_autoname("PTB-.YYYY.MM.DD.-.##")
+		# 自动生成主键和 patentability_id：PAT-YYYYMMDD-##
+		self.name = make_autoname("PAT-.YYYY.MM.DD.-.##")
