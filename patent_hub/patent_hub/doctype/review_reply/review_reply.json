@@ -1,12 +1,12 @@
 {
  "actions": [],
- "allow_rename": 1,
- "autoname": "field:patent_title",
  "creation": "2026-02-06 12:41:00.221359",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
   "patent_title",
+  "column_break_iamo",
+  "patent_id",
   "\u4e0a\u4f20_section",
   "table_upload_review",
   "table_upload_pdoc",
@@ -138,7 +138,8 @@
   {
    "fieldname": "reviewreply_id",
    "fieldtype": "Data",
-   "label": "ReviewReply ID"
+   "label": "ReviewReply ID",
+   "unique": 1
   },
   {
    "fieldname": "reviewreply_started_at",
@@ -242,19 +243,31 @@
    "fieldname": "patent_title",
    "fieldtype": "Data",
    "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "\u4e13\u5229\u6807\u9898",
-   "reqd": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_iamo",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "patent_id",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Patent ID",
+   "read_only": 1,
    "unique": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-02-10 01:58:52.152904",
+ "modified": "2026-02-10 08:07:04.585908",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Review Reply",
- "naming_rule": "By fieldname",
+ "naming_rule": "UUID",
  "owner": "Administrator",
  "permissions": [
   {

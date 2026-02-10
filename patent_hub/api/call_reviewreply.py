@@ -364,7 +364,7 @@ def _save_docx_file(doc, docx_bytes: bytes, file_type: str):
 	"""保存 DOCX 文件到 File DocType 并返回 File 文档"""
 	if not isinstance(docx_bytes, (bytes, bytearray)):
 		raise ValueError(f"参数必须是 bytes/bytearray，实际类型: {type(docx_bytes)}")
-	filename = f"{getattr(doc, f'{TASK_KEY}_id')}_{file_type}.docx"
+	filename = f"{getattr(doc, f'{TASK_KEY}_id')}_{file_type}_.docx"
 	try:
 		logger.info(f"保存文件 {filename}，大小: {len(docx_bytes)} 字节")
 		file_doc = save_file(
@@ -390,9 +390,10 @@ def _cleanup_old_docx_files(doc):
 			filters={"attached_to_doctype": doc.doctype, "attached_to_name": doc.name},
 			fields=["name", "file_name"],
 		)
-		id_prefix = getattr(doc, f"{TASK_KEY}_id", "")
+		id_prefix = getattr(doc, f"{TASK_KEY}_id", "")  # e.g. PAT-xxx-R2R-001
 		if not id_prefix:
 			return
+		# 只清理同一批次（相同 step_id 前缀）的文件
 		prefix = id_prefix.rsplit("-", 1)[0]
 		pattern = re.compile(rf"^{re.escape(prefix)}.*\.docx$")
 		files_to_delete = [f for f in all_files if f.get("file_name") and pattern.match(f["file_name"])]

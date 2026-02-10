@@ -1,12 +1,14 @@
 {
  "actions": [],
- "autoname": "field:patent_title",
+ "autoname": "field:patent_id",
  "creation": "2026-02-04 14:13:52.054383",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
   "section_break_drtr",
   "patent_title",
+  "column_break_tami",
+  "patent_id",
   "\u4e0a\u4f20\u4e13\u5229\u7533\u8bf7\u4e66_section",
   "table_upload_patentability",
   "is_patent_patentability",
@@ -33,13 +35,13 @@
   "total_cost_patentability",
   "column_break_paub",
   "total_time_s_patentability",
+  "\u53ef\u4e13\u5229\u6027_section",
+  "patent_patentability_analysis",
   "\u5206\u6790\u641c\u7d22_section",
-  "patent_doc",
   "patent_core_problem_analysis",
   "patent_search_keywords",
   "patent_prior_art",
-  "\u53ef\u4e13\u5229\u6027_section",
-  "patent_patentability_analysis",
+  "patent_doc",
   "\u7cfb\u7edf\u65e5\u5fd7_section",
   "patentability_id",
   "patentability_started_at",
@@ -112,15 +114,13 @@
    "label": "patent_prior_art"
   },
   {
-   "collapsible": 1,
    "fieldname": "\u53ef\u4e13\u5229\u6027_section",
-   "fieldtype": "Section Break",
-   "label": "\u53ef\u4e13\u5229\u6027"
+   "fieldtype": "Section Break"
   },
   {
    "fieldname": "patent_patentability_analysis",
    "fieldtype": "Long Text",
-   "label": "patent_patentability_analysis"
+   "label": "\u53ef\u4e13\u5229\u6027"
   },
   {
    "collapsible": 1,
@@ -244,21 +244,33 @@
    "fieldname": "patent_title",
    "fieldtype": "Data",
    "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "\u4e13\u5229\u6807\u9898",
-   "reqd": 1,
-   "unique": 1
+   "reqd": 1
   },
   {
    "default": "1",
    "fieldname": "is_patent_patentability",
    "fieldtype": "Check",
    "label": "\u662f\u4e13\u5229\u7533\u8bf7\u4e66\uff1f"
+  },
+  {
+   "fieldname": "patent_id",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Patent ID",
+   "read_only": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "column_break_tami",
+   "fieldtype": "Column Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-02-10 02:16:45.960853",
+ "modified": "2026-02-10 08:30:20.040172",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Patentability",

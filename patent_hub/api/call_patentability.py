@@ -15,6 +15,7 @@ from patent_hub.api._utils import (
 	fail_task_fields,
 	get_attached_files,
 	init_task_fields,
+	universal_compress,
 	universal_decompress,
 	update_task_heartbeat,
 )
@@ -173,12 +174,17 @@ def _job(doctype: str, docname: str, task_key: str, *, force: bool = False):
 			raise ValueError("未找到任务 step_id")
 		tmp_folder = os.path.join(api_endpoint.get_password("server_work_dir"), step_id)
 
+		# 中间文件（读取一次 doc）
+		doc = frappe.get_doc(DOCTYPE, docname)
+		mid_files = _get_patentability_mid_files(doc)
+
 		# 按用户确认，入参统一使用以下键名
 		payload = {
 			"input": {
 				"base64file": base64.b64encode(last_bytes).decode("ascii"),
 				"is_patent": "1" if is_patent else "0",
 				"tmp_folder": tmp_folder,
+				"mid_files": universal_compress(mid_files),
 			}
 		}
 
@@ -269,13 +275,6 @@ async def call_chain_with_retry_async(url: str, payload: dict, max_retries: int 
 	raise Exception("所有重试都失败了")
 
 
-def _first_existing_value(data: dict, keys: list[str]):
-	for key in keys:
-		if key in data and data.get(key) is not None:
-			return data.get(key)
-	return None
-
-
 # -------------------------------
 # 结果处理 / 成功落库
 # -------------------------------
@@ -298,7 +297,7 @@ def _process_api_result(docname: str, result: dict, user: str | None = None):
 
 		res_data = universal_decompress(output.get("res", ""), as_json=True) or {}
 
-		field_mappings = {
+		field_mapping = {
 			"patent_doc": "patent_doc",
 			"patent_core_problem_analysis": "patent_core_problem_analysis",
 			"patent_search_keywords": "patent_search_keywords",
@@ -306,10 +305,11 @@ def _process_api_result(docname: str, result: dict, user: str | None = None):
 			"patent_patentability_analysis": "patent_patentability_analysis",
 		}
 
-		for doc_field, source_keys in field_mappings.items():
-			value = _first_existing_value(res_data, source_keys)
-			if isinstance(value, str):
-				doc.set(doc_field, value)
+		for api_field, doc_field in field_mapping.items():
+			if api_field in res_data:
+				value = res_data.get(api_field)
+				if value is not None:
+					doc.set(doc_field, value)
 
 		# 统一完成（会自动 publish_realtime: patentability_done）
 		complete_task_fields(
@@ -332,3 +332,26 @@ def _handle_task_failure(docname: str, error_msg: str):
 			fail_task_fields(doc, TASK_KEY, error_msg)
 	except Exception as save_error:
 		logger.error(f"[{TASK_LABEL}] 保存失败状态时出错: {save_error}")
+
+
+# -------------------------------
+# 中间文件收集
+# -------------------------------
+def _get_patentability_mid_files(doc) -> list[dict]:
+	"""获取 patentability 中间文件（作为辅助输入）"""
+	field_to_filename = {
+		"patent_core_problem_analysis": "1_core_problem_analysis.txt",
+		"patent_search_keywords": "2.1_search_keywords.txt",
+		"patent_prior_art": "2.2_prior_art.txt",
+		"patent_doc": "patent_doc.md",
+		"patent_patentability_analysis": "patentability.txt",
+	}
+
+	files = []
+	for field, filename in field_to_filename.items():
+		content = getattr(doc, field, "")
+		if isinstance(content, str) and content.strip():
+			files.append({"content": content, "original_filename": filename})
+
+	logger.info(f"[{TASK_LABEL}] 找到 {len(files)} 个中间文件")
+	return files
