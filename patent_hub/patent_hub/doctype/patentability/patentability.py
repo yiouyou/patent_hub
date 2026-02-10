@@ -1,9 +1,13 @@
 # Copyright (c) 2026, sz and contributors
 # For license information, please see license.txt
 
-# import frappe
+import frappe
+from frappe import _
 from frappe.model.document import Document
+from frappe.model.naming import make_autoname
 
 
 class Patentability(Document):
-	pass
+	def autoname(self):
+		# 自动生成主键和 patentability_id：PTB-YYYYMMDD-##
+		self.name = make_autoname("PTB-.YYYY.MM.DD.-.##")

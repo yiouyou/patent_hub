@@ -105,12 +105,12 @@
   {
    "fieldname": "review_reply_txt",
    "fieldtype": "Long Text",
-   "label": "\u5ba1\u67e5\u610f\u89c1\u56de\u590dmd"
+   "label": "\u5ba1\u67e5\u610f\u89c1\u56de\u590d"
   },
   {
    "fieldname": "application_revised_txt",
    "fieldtype": "Long Text",
-   "label": "\u4fee\u6539\u540e\u7684\u7533\u8bf7md"
+   "label": "\u4fee\u6539\u540e\u7684\u7533\u8bf7"
   },
   {
    "fieldname": "\u4e0b\u8f7d\u94fe\u63a5_section",
@@ -120,13 +120,13 @@
   {
    "fieldname": "review_reply_docx_link",
    "fieldtype": "Link",
-   "label": "\u5ba1\u67e5\u610f\u89c1\u56de\u590d",
+   "label": "\u5ba1\u67e5\u610f\u89c1\u56de\u590ddocx",
    "options": "File"
   },
   {
    "fieldname": "application_revised_docx_link",
    "fieldtype": "Link",
-   "label": "\u4fee\u6539\u540e\u7684\u7533\u8bf7",
+   "label": "\u4fee\u6539\u540e\u7684\u7533\u8bf7docx",
    "options": "File"
   },
   {
@@ -250,7 +250,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-02-08 04:26:24.654985",
+ "modified": "2026-02-10 01:58:52.152904",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Review Reply",

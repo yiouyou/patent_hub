@@ -9,6 +9,7 @@
   "patent_title",
   "\u4e0a\u4f20\u4e13\u5229\u7533\u8bf7\u4e66_section",
   "table_upload_patentability",
+  "is_patent_patentability",
   "section_break_tnle",
   "call_patentability",
   "column_break_daem",
@@ -49,7 +50,7 @@
   {
    "fieldname": "\u4e0a\u4f20\u4e13\u5229\u7533\u8bf7\u4e66_section",
    "fieldtype": "Section Break",
-   "label": "\u4e0a\u4f20\u4e13\u5229\u7533\u8bf7\u4e66"
+   "label": "\u4e0a\u4f20docx - \u4e13\u5229\u7533\u8bf7\u4e66/\u76f8\u5173\u6587\u6863"
   },
   {
    "fieldname": "table_upload_patentability",
@@ -246,12 +247,18 @@
    "label": "\u4e13\u5229\u6807\u9898",
    "reqd": 1,
    "unique": 1
+  },
+  {
+   "default": "1",
+   "fieldname": "is_patent_patentability",
+   "fieldtype": "Check",
+   "label": "\u662f\u4e13\u5229\u7533\u8bf7\u4e66\uff1f"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-02-08 04:26:44.931170",
+ "modified": "2026-02-10 02:16:45.960853",
  "modified_by": "Administrator",
  "module": "Patent Hub",
  "name": "Patentability",

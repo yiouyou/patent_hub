@@ -89,7 +89,7 @@ def universal_compress(data: Any) -> str:
 			converted_data = make_json_serializable(data)
 			json_str = json.dumps(converted_data, ensure_ascii=False, separators=(",", ":"))
 			raw_bytes = json_str.encode("utf-8")
-		except (TypeError, ValueError):
+		except TypeError, ValueError:
 			# 如果 JSON 序列化仍然失败，使用 pickle 作为后备方案
 			raw_bytes = pickle.dumps(data)
 	else:
@@ -117,7 +117,7 @@ def universal_decompress(compressed_str: str, as_json: bool = False) -> Any:
 				data = json.loads(json_str)
 				# 还原特殊类型
 				return restore_from_json_serializable(data)
-			except (json.JSONDecodeError, UnicodeDecodeError):
+			except json.JSONDecodeError, UnicodeDecodeError:
 				# JSON 解析失败，使用 pickle
 				return pickle.loads(raw_bytes)
 		else:
@@ -193,6 +193,8 @@ TASK_TIMEOUTS = {
 	"align2tex2docx": 300,
 	"code2png": 300,
 	"md2docx": 300,
+	"reviewreply": 300,
+	"patentability": 300,
 }
 
 # 建议心跳间隔
@@ -303,6 +305,12 @@ DOCTYPE_TASKS = {
 	],
 	"Md2docx": [
 		("md2docx", "Md2docx"),
+	],
+	"Review Reply": [
+		("reviewreply", "ReviewReply"),
+	],
+	"Patentability": [
+		("patentability", "Patentability"),
 	],
 }
 
